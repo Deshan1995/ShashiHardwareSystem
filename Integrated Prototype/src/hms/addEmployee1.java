@@ -1,0 +1,784 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package hms;
+
+import DBclass.DBconnection1;
+import DBclass.me;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.Timer;
+import net.proteanit.sql.DbUtils;
+/**
+ *
+ * @author DELL-PC
+ */
+public class addEmployee1 extends javax.swing.JInternalFrame {
+    
+       String s;
+       Connection  conn = null;
+       PreparedStatement pst = null,pst1=null;
+       ResultSet rs = null,rs1=null;
+       byte[] person_image = null;
+       byte [] ss;
+       String selectedb=null;
+       
+
+    /**
+     * Creates new form addEmployee
+     */
+    public addEmployee1() {
+        
+        initComponents();
+        
+        conn=DBconnection1.connect();
+        auto();
+        datevalid.setVisible(false);
+        afname.setText("First Name");
+        alname.setText("Surname");
+        ButtonGroup group = new ButtonGroup();
+        group.add(aft);
+        group.add(apt);
+        aft.setSelected(true);
+        
+        DateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy");
+        Calendar cal = Calendar.getInstance();
+        
+        adate.setSelectableDateRange(cal.getTime(),cal.getTime());
+        
+
+        
+        
+        tableload();
+        showtime();
+
+        
+    }
+    
+    
+    
+    void showtime(){
+        new Timer(0,new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Date d=new Date();
+                SimpleDateFormat s=new SimpleDateFormat("hh:mm:ss a");
+                time.setText(s.format(d));
+            }
+        }).start();
+    }
+    
+    public void auto(){
+
+            ArrayList<String> list = new ArrayList<String>();
+            try {
+            String sql = "SELECT employee_id FROM Employee";
+            
+            pst=conn.prepareStatement(sql);
+            
+            rs1 = pst.executeQuery();
+            while(rs1.next())
+            {
+                list.add(rs1.getString("employee_id"));
+            }
+            
+            
+           String a = list.get(list.size()-1);
+           String ino[]=a.split("E");
+                
+                int no=Integer.parseInt(ino[1]);
+                no=no+1;
+                System.out.println(a);
+              aid.setText("E"+no);
+           
+            
+            System.out.println(a);
+        } catch (Exception e) {
+            
+            System.out.println(e);
+            
+        }
+    
+    }
+   public void clear()
+   {
+    aid.setText("");
+        afname.setText("");
+        alname.setText("");
+        auname.setText("");
+        alang.setText("");
+        aage.setText("");
+        anic.setText("");
+        aadd.setText("");
+        aphn.setText("");
+        ((JTextField)adate.getDateEditor().getUiComponent()).setText("");
+        apic.setText("");
+        auto();
+   }
+    
+    public void tableload()
+    {
+            conn=DBconnection1.connect();
+        String sql = "select * from Employee";
+        try{
+        pst = conn.prepareStatement(sql);
+        rs = pst.executeQuery();
+        
+        jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        }
+        catch(Exception e)
+         {
+                
+         }
+        finally
+        {
+            try {
+                pst.close();
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(updateEmployee.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+       
+    }
+    
+    
+    public ImageIcon ResizeImage(String imgPath){
+        ImageIcon MyImage = new ImageIcon(imgPath);
+        Image img = MyImage.getImage();
+        Image newImage = img.getScaledInstance(jLabel2.getWidth(), jLabel2.getHeight(),Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImage);
+        return image;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        aage = new javax.swing.JTextField();
+        alname = new javax.swing.JTextField();
+        aphn = new javax.swing.JTextField();
+        afname = new javax.swing.JTextField();
+        aid = new javax.swing.JTextField();
+        apic = new javax.swing.JTextField();
+        alang = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        aadd = new javax.swing.JTextArea();
+        anic = new javax.swing.JTextField();
+        adeg = new javax.swing.JComboBox<>();
+        aft = new javax.swing.JRadioButton();
+        apt = new javax.swing.JRadioButton();
+        adate = new com.toedter.calendar.JDateChooser();
+        auname = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        datevalid = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        time = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+
+        setPreferredSize(new java.awt.Dimension(1218, 685));
+        getContentPane().setLayout(null);
+
+        aage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        aage.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                aageKeyTyped(evt);
+            }
+        });
+        getContentPane().add(aage);
+        aage.setBounds(170, 280, 90, 30);
+
+        alname.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        alname.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                alnameMouseClicked(evt);
+            }
+        });
+        alname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                alnameKeyTyped(evt);
+            }
+        });
+        getContentPane().add(alname);
+        alname.setBounds(310, 120, 100, 30);
+
+        aphn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        aphn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                aphnMouseClicked(evt);
+            }
+        });
+        aphn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                aphnKeyTyped(evt);
+            }
+        });
+        getContentPane().add(aphn);
+        aphn.setBounds(170, 500, 240, 30);
+
+        afname.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        afname.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                afnameMouseClicked(evt);
+            }
+        });
+        afname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                afnameKeyTyped(evt);
+            }
+        });
+        getContentPane().add(afname);
+        afname.setBounds(170, 120, 100, 30);
+
+        aid.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        getContentPane().add(aid);
+        aid.setBounds(170, 70, 100, 30);
+
+        apic.setEditable(false);
+        apic.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        apic.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                apicMouseClicked(evt);
+            }
+        });
+        getContentPane().add(apic);
+        apic.setBounds(590, 120, 180, 30);
+
+        alang.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        alang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                alangMouseClicked(evt);
+            }
+        });
+        alang.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                alangKeyTyped(evt);
+            }
+        });
+        getContentPane().add(alang);
+        alang.setBounds(170, 226, 240, 30);
+
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setOpaque(false);
+
+        aadd.setColumns(20);
+        aadd.setRows(5);
+        aadd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        jScrollPane1.setViewportView(aadd);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(170, 380, 240, 100);
+
+        anic.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        anic.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                anicMouseClicked(evt);
+            }
+        });
+        getContentPane().add(anic);
+        anic.setBounds(168, 327, 240, 30);
+
+        adeg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Cashier", "Driver", "Worker", "Stock Keeper", "Agency Manager" }));
+        getContentPane().add(adeg);
+        adeg.setBounds(170, 550, 240, 30);
+
+        aft.setText("Full Time");
+        aft.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aftActionPerformed(evt);
+            }
+        });
+        getContentPane().add(aft);
+        aft.setBounds(180, 610, 90, 23);
+
+        apt.setText("Part Time");
+        getContentPane().add(apt);
+        apt.setBounds(310, 610, 100, 23);
+
+        adate.setBackground(new java.awt.Color(204, 204, 255));
+        adate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        adate.setOpaque(false);
+        getContentPane().add(adate);
+        adate.setBounds(590, 70, 240, 30);
+
+        auname.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        auname.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                aunameMouseClicked(evt);
+            }
+        });
+        getContentPane().add(auname);
+        auname.setBounds(170, 177, 240, 30);
+
+        jButton1.setText("Browse");
+        jButton1.setBorder(null);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(770, 120, 60, 30);
+
+        jTable1.setBackground(new java.awt.Color(204, 255, 204));
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(460, 380, 680, 200);
+
+        jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 3));
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(590, 180, 240, 180);
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel6.setText("Full name          :-   ");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(30, 120, 130, 30);
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setText("Username         :-");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(30, 170, 130, 30);
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setText("Language         :-");
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(30, 220, 130, 30);
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel9.setText("Age                   :-");
+        getContentPane().add(jLabel9);
+        jLabel9.setBounds(30, 270, 130, 30);
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel10.setText("NIC No             :-");
+        getContentPane().add(jLabel10);
+        jLabel10.setBounds(30, 320, 130, 30);
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel11.setText("Address            :-");
+        getContentPane().add(jLabel11);
+        jLabel11.setBounds(30, 370, 120, 30);
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel14.setText("Phone no          :-");
+        getContentPane().add(jLabel14);
+        jLabel14.setBounds(30, 500, 130, 30);
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel15.setText("Designation      :-");
+        getContentPane().add(jLabel15);
+        jLabel15.setBounds(30, 550, 130, 30);
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel16.setText("Status               :-");
+        getContentPane().add(jLabel16);
+        jLabel16.setBounds(30, 610, 130, 30);
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel13.setText("Employee ID    :-");
+        getContentPane().add(jLabel13);
+        jLabel13.setBounds(30, 70, 130, 30);
+        getContentPane().add(datevalid);
+        datevalid.setBounds(850, 70, 50, 40);
+
+        jPanel9.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel9.setLayout(null);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Add Employees");
+        jPanel9.add(jLabel1);
+        jLabel1.setBounds(10, 0, 243, 44);
+
+        time.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jPanel9.add(time);
+        time.setBounds(1025, 0, 130, 50);
+
+        getContentPane().add(jPanel9);
+        jPanel9.setBounds(0, 0, 1160, 50);
+
+        jLabel3.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel3.setText("All fields are required*");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(290, 70, 140, 30);
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel17.setText("Adding date       :-");
+        getContentPane().add(jLabel17);
+        jLabel17.setBounds(460, 70, 130, 30);
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel12.setText("Photograph        :-");
+        getContentPane().add(jLabel12);
+        jLabel12.setBounds(460, 120, 130, 30);
+
+        jButton3.setText("Back");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3);
+        jButton3.setBounds(480, 600, 100, 40);
+
+        jButton4.setText("Clear");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton4);
+        jButton4.setBounds(750, 600, 100, 40);
+
+        jButton2.setText("Save");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2);
+        jButton2.setBounds(1010, 600, 100, 40);
+
+        jLabel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 2));
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(448, 60, 700, 590);
+
+        jLabel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 2));
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(10, 60, 440, 590);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void alnameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alnameMouseClicked
+        alname.setText("");
+    }//GEN-LAST:event_alnameMouseClicked
+
+    private void aphnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aphnMouseClicked
+        
+    }//GEN-LAST:event_aphnMouseClicked
+
+    private void afnameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_afnameMouseClicked
+        afname.setText("");
+    }//GEN-LAST:event_afnameMouseClicked
+
+    private void apicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_apicMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_apicMouseClicked
+
+    private void alangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alangMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_alangMouseClicked
+
+    private void anicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_anicMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_anicMouseClicked
+
+    private void aftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aftActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_aftActionPerformed
+
+    private void aunameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aunameMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_aunameMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         JFileChooser filechooser = new JFileChooser();
+         filechooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+         FileNameExtensionFilter filter = new FileNameExtensionFilter("*.IMAGE","jpg","gif","png");
+         filechooser.addChoosableFileFilter(filter);
+         int result = filechooser.showSaveDialog(null);
+         
+         
+         if(result == JFileChooser.APPROVE_OPTION)
+         {
+             File selectedfile = filechooser.getSelectedFile();
+             String path = selectedfile.getAbsolutePath();
+             jLabel2.setIcon(ResizeImage(path));
+             
+             apic.setText(path.toString());
+             s=apic.getText();
+         }
+         else if(result == JFileChooser.CANCEL_OPTION)
+         {
+             System.out.println("no data");
+         }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void aageKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_aageKeyTyped
+        char c = evt.getKeyChar();
+        
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+         JOptionPane.showMessageDialog(null, "Only numbers are allowed");
+        }   
+    }//GEN-LAST:event_aageKeyTyped
+
+    private void aphnKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_aphnKeyTyped
+        char c = evt.getKeyChar();
+        
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+         JOptionPane.showMessageDialog(null, "Only numbers are allowed");
+        }
+        String check = aphn.getText()+c;
+        
+        if(check.length()>10)
+        {
+            evt.consume();
+         JOptionPane.showMessageDialog(null, "Phone number must contain only 10 digits");
+        }
+    }//GEN-LAST:event_aphnKeyTyped
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        
+     clear();   
+        
+
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        
+//        System.out.println(adate.getDate().toString().equals(""));
+         if(aid.getText().equals("")||afname.getText().equals("")||alname.getText().equals("")||auname.getText().equals("")||alang.getText().equals("")||aage.getText().equals("")|| anic.getText().equals("")|| aadd.getText().equals("")||aphn.getText().equals("")||apic.getText().toString().equals(""))
+            {
+                
+                JOptionPane.showMessageDialog(null,"All the fields are required");
+            }
+            else
+            {
+                
+          try
+            {
+         if(adate.getDate()==null)
+         {
+         JOptionPane.showMessageDialog(null,"All the fields are required");
+         }
+         else
+         {
+        if(me.nicCheck(anic.getText()))
+        {
+                if(me.phnCheck(aphn.getText()))
+                {
+           
+           
+                conn=DBconnection1.connect();
+                String sql = "INSERT INTO Employee(employee_id,first_name,last_name,username,language,age,nic_no,address,phone_no,designation,status,addded_date,photograph) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                InputStream is = new FileInputStream(new File(s));
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+                byte[] buf = new byte[1024];
+
+                for(int readNum;(readNum=is.read(buf))!= -1;)
+                {
+
+                    bos.write(buf,0,readNum);
+
+                }
+                person_image = bos.toByteArray();
+
+                if(aft.isSelected())
+                {
+                    selectedb=aft.getText();
+                }
+                else if(apt.isSelected())
+                {
+                    selectedb=apt.getText();
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null,"Select a status");
+                }
+
+                pst = conn.prepareStatement(sql);
+                pst.setString(1,aid.getText());
+                pst.setString(2,afname.getText());
+                pst.setString(3,alname.getText());
+                pst.setString(4,auname.getText());
+                pst.setString(5,alang.getText());
+                pst.setString(6,aage.getText());
+                pst.setString(7,anic.getText());
+                pst.setString(8,aadd.getText());
+                pst.setString(9,aphn.getText());
+                pst.setString(10,adeg.getSelectedItem().toString());
+                pst.setString(11,selectedb);
+                pst.setString(12,((JTextField)adate.getDateEditor().getUiComponent()).getText());
+                
+                pst.setBytes(13, person_image);
+                
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null,"Employee added successfully");
+                tableload();
+                clear();
+                }
+                else
+                {
+                JOptionPane.showMessageDialog(null,"Invalid Phone Number");
+                }
+         }   else
+        JOptionPane.showMessageDialog(null,"Invalid NIC");
+         }
+            
+        }
+            catch(Exception e)
+            {
+                System.out.println(e);
+            }
+            finally
+            {
+                try {
+                    pst.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(addEmployee1.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+         
+        
+           
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+          
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void afnameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_afnameKeyTyped
+        char c = evt.getKeyChar();
+        
+        if(Character.isDigit(c))
+        {
+            evt.consume();
+         JOptionPane.showMessageDialog(null, "Numbers not allowed");
+        }   
+    }//GEN-LAST:event_afnameKeyTyped
+
+    private void alnameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_alnameKeyTyped
+        char c = evt.getKeyChar();
+        
+        if(Character.isDigit(c))
+        {
+            evt.consume();
+         JOptionPane.showMessageDialog(null, "Numbers not allowed");
+        }   
+    }//GEN-LAST:event_alnameKeyTyped
+
+    private void alangKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_alangKeyTyped
+        char c = evt.getKeyChar();
+        
+        if(Character.isDigit(c))
+        {
+            evt.consume();
+         JOptionPane.showMessageDialog(null, "Numbers not allowed");
+        }   
+    }//GEN-LAST:event_alangKeyTyped
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea aadd;
+    private javax.swing.JTextField aage;
+    private com.toedter.calendar.JDateChooser adate;
+    private javax.swing.JComboBox<String> adeg;
+    private javax.swing.JTextField afname;
+    private javax.swing.JRadioButton aft;
+    private javax.swing.JTextField aid;
+    private javax.swing.JTextField alang;
+    private javax.swing.JTextField alname;
+    private javax.swing.JTextField anic;
+    private javax.swing.JTextField aphn;
+    private javax.swing.JTextField apic;
+    private javax.swing.JRadioButton apt;
+    private javax.swing.JTextField auname;
+    private javax.swing.JLabel datevalid;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel time;
+    // End of variables declaration//GEN-END:variables
+}
