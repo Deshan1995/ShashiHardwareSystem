@@ -5,7 +5,8 @@
  */
 package Customer_and_Order;
 
-import Customer_and_Order.dbConnection;
+
+import DBconnection.DBconnect;
 import Delivery.models.OrderDelivery;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -63,7 +64,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
     
     public Order_sub() {
         initComponents();
-        conn = dbConnection.open();     //establish db connection
+        //conn = dbConnection.open();     //establish db connection
+        conn = DBconnect.connectDb();
         System.out.println("Connected to database");
         
         txtA_itemDes.setEditable(false);

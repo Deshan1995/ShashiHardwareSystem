@@ -5,6 +5,7 @@
  */
 package Customer_and_Order;
 
+import DBconnection.DBconnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +36,8 @@ public class customer_sub extends javax.swing.JInternalFrame {
     public customer_sub() {
         initComponents();
         
-        conn = dbConnection.open();     //establish db connection
+        //conn = dbConnection.open();     //establish db connection
+        conn = DBconnect.connectDb();
         System.out.println("Connected to database");
         
         rdBtn_ID.setSelected(true);
