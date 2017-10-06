@@ -6,7 +6,8 @@
 package Supplier;
 
 //import DBconnection.javaconnect;
-import DBconnection.javaconnect;
+//import DBconnection.javaconnect;
+import DBconnection.DBconnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,7 +45,8 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
     public SupplierDetails() {
         initComponents();
         TextID.setEditable(false);
-        conn1=javaconnect.ConnectDB();
+        //conn1=javaconnect.ConnectDB();
+        conn1 = DBconnect.ConnectDb();
         LoadingSupplierDetailsTable();
         AddButton.setEnabled(false);
         ButtonItemDetails.setEnabled(false);
