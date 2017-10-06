@@ -5,7 +5,8 @@
  */
 package Supplier;
 
-import DBconnection.javaconnect;
+//import DBconnection.javaconnect;
+import DBconnection.DBconnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,7 +45,8 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
      */
     public CustormizeOrders() {
         initComponents();
-        conn1=javaconnect.ConnectDB();
+        //conn1=javaconnect.ConnectDB();
+        conn1 = DBconnect.ConnectDb();
         LoadingCustomizedOrderTable();
         TextTotal.setEditable(false);
         jButton1.setEnabled(false);
