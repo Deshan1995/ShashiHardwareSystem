@@ -54,11 +54,35 @@ int tt;
     public static void callAddCusForm(){
         
         x.setVisible(false);
-        y=new customer_sub();
-        y.btn_backToOrder.setVisible(true);
+        
+        if(y==null)
+            y=new customer_sub();
+        
+       
+        y.btn_assignNewCus.setVisible(true);
+        y.btn_assignLastCus.setVisible(true);
+        y.btn_backToOrder1.setVisible(true);
+        y.btn_backToOrder2.setVisible(true);
+        
         jDesktopPane1.add(y).setVisible(true);
     }
-    
+    public static void callAddCusSearchForm(){
+        
+              
+        
+        x.setVisible(false);
+        
+        if(y==null)
+            y=new customer_sub();
+        
+        y.showSearchTab();
+        y.btn_assignNewCus.setVisible(true);
+        y.btn_assignLastCus.setVisible(true);
+        y.btn_backToOrder1.setVisible(true);
+        y.btn_backToOrder2.setVisible(true);
+        
+        jDesktopPane1.add(y).setVisible(true);
+    }
     public static void reload(){
 //        
 //        x.setVisible(false);
@@ -70,6 +94,8 @@ int tt;
         x = new Order_sub();
         jDesktopPane1.add(x).setVisible(true);
     }
+    
+    
     
     public static void callOrderFormAgain(){
         

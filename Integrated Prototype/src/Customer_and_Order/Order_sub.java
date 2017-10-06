@@ -5,7 +5,6 @@
  */
 package Customer_and_Order;
 
-
 import DBconnection.DBconnect;
 import Delivery.models.OrderDelivery;
 import java.awt.event.ItemEvent;
@@ -44,8 +43,11 @@ public class Order_sub extends javax.swing.JInternalFrame {
     
     Connection conn=null;
     String delID=null;
+    Float delCharge=0f;
     
     String cusID=null;
+    Float pastLoan=0f;
+    
     String cashAmount =null;
     String chequeAmount = null;
     String chequeNum = null;
@@ -64,8 +66,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
     
     public Order_sub() {
         initComponents();
-        //conn = dbConnection.open();     //establish db connection
-        conn = DBconnect.connectDb();
+        
+        conn = DBconnect.connectDb();    //establish db connection
         System.out.println("Connected to database");
         
         txtA_itemDes.setEditable(false);
@@ -86,6 +88,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         //lbl_cusResult.setVisible(false);
         
         txt_nowPaying.setEditable(false);
+        loadItemsBoughtTable1();
         
         
         btn_giveLoan.setEnabled(false);
@@ -102,6 +105,35 @@ public class Order_sub extends javax.swing.JInternalFrame {
         validateDeliveID();
         
      
+    }
+    
+    public void loadItemsBoughtTable1(){
+        PreparedStatement ps =null;
+        ResultSet rs = null;
+    
+        try{
+            ps=conn.prepareStatement("SELECT itemNo,itemID,description,qty,unitPrice,unitDiscount,netItemPrice FROM ItemsBought_temp");
+            rs=ps.executeQuery();
+            tbl_itemBought.setModel(DbUtils.resultSetToTableModel(rs));
+
+        }catch(Exception ex){
+            System.out.println(ex);
+        }finally{
+            try{            
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }
+    
     }
     
     public void finalize() throws SQLException {
@@ -164,34 +196,85 @@ public class Order_sub extends javax.swing.JInternalFrame {
     
     public void updateTot(){
         
-        Float unitPrice = parseFloat(txt_unitPrice.getText());
-        Float unitDis = parseFloat(txt_unitDis.getText());
-        Float qty = parseFloat(txt_qty.getText());
-        Float entryTot = qty*unitPrice;
-        Float entryTotDis = qty*unitDis;
+        PreparedStatement ps =null;
+        ResultSet rs=null;
+        String subTotal="0";
+        String discount="0";
+        String netValue="0";       
+    
+        try{
+            ps=conn.prepareStatement("select sum(qty*unitPrice) as subTotal,\n" +
+                                "sum(qty*unitDiscount) as discount ,\n" +
+                                "sum(qty*unitPrice-qty*unitDiscount) as netValue\n" +
+                                "from ItemsBought_temp");
+            rs=ps.executeQuery();
+            rs.next();
+            subTotal=rs.getString(1);
+            discount=rs.getString(2);
+            netValue=rs.getString(3);        
+            
+        }catch(Exception e){
+            System.out.println(e);
+        }finally{
         
-        Float totItem=Float.parseFloat(txt_total.getText())- entryTot;
-        Float totDis = Float.parseFloat(txt_totDis.getText())- entryTotDis;
-        Float netValue = totItem-totDis;
-        Float other = Float.parseFloat(txt_other.getText());
-        Float total = netValue+other;
+            try{            
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
+            
+        }
+        /////////////////////////////////////////////////////////////////
+
+ 
+        //set values for the left side payment details
+        Float totalF = Float.parseFloat(netValue)+this.delCharge;
+        String total = totalF.toString();        
         
-        txt_total.setText(totItem.toString());
-        txt_totDis.setText(totDis.toString());
+        txt_total.setText(subTotal.toString());
+        txt_totDis.setText(discount.toString());
         txt_netValue.setText(netValue.toString());
-        lbl_total.setText(total.toString());
+        txt_other.setText(this.delCharge.toString());
+        lbl_total.setText(total);
         
-        Float pre = parseFloat(txt_pre.getText());
-        Float totToPay = total+pre;
+        //Set values for the right side payment details
+        Float totToPay;
+        if(chkbx_addPastLoan.isSelected())
+            totToPay = totalF+this.pastLoan;
+        else 
+            totToPay=totalF;
         
+        txt_pre.setText(this.pastLoan.toString());
         txt_totToBePaid.setText(totToPay.toString());
-        txt_remaining.setText(totToPay.toString());
-        
-        
-        
+
         
     }
     
+    public void updatePayDetails(){
+        
+        //setting now paying value
+        Float nowPaying=0f;
+        if((this.cashAmount==null)&&(this.chequeAmount==null))           
+            nowPaying = 0f;
+        else if(this.chequeAmount==null)
+            nowPaying = Float.parseFloat(this.cashAmount);
+        else if(this.cashAmount==null)
+            nowPaying = Float.parseFloat(this.chequeAmount);
+        txt_nowPaying.setText(nowPaying.toString());
+        
+        //setting remaining value
+        Float remaining = Float.parseFloat(txt_totToBePaid.getText())-nowPaying;
+        txt_remaining.setText(remaining.toString());
+    }
+    /*
     
     public void findTot(){
         
@@ -247,7 +330,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         
         
         
-    }
+    }  */
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The content of this method is always regenerated by the Form Editor.
@@ -326,6 +409,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         lbl_cusResult = new javax.swing.JLabel();
         btn_removeCus = new javax.swing.JButton();
         btn_addCus = new javax.swing.JButton();
+        btn_addCus1 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbl_itemBought = new javax.swing.JTable();
         jPanel12 = new javax.swing.JPanel();
@@ -993,6 +1077,14 @@ public class Order_sub extends javax.swing.JInternalFrame {
             }
         });
 
+        btn_addCus1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_addCus1.setText("<html><center> Search and<br/>Assign</center> </html>");
+        btn_addCus1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_addCus1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -1016,9 +1108,11 @@ public class Order_sub extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_removeCus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_addCus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btn_addCus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_addCus1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lbl_cusResult, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 255, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 147, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(157, 157, 157))
         );
@@ -1031,7 +1125,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btn_assignCus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btn_addCus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_removeCus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btn_removeCus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_addCus1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1042,9 +1137,9 @@ public class Order_sub extends javax.swing.JInternalFrame {
                     .addComponent(jLabel11)
                     .addComponent(txt_cusName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbl_cusResult, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(lbl_cusStatus)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1085,7 +1180,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_total.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_total.setText("0.00");
         jPanel12.add(txt_total);
-        txt_total.setBounds(150, 40, 120, 23);
+        txt_total.setBounds(180, 40, 120, 23);
 
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel25.setText("Less Discount");
@@ -1095,7 +1190,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_totDis.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_totDis.setText("0.00");
         jPanel12.add(txt_totDis);
-        txt_totDis.setBounds(150, 80, 120, 23);
+        txt_totDis.setBounds(180, 80, 120, 23);
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel24.setText("Net Value");
@@ -1105,17 +1200,17 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_netValue.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_netValue.setText("0.00");
         jPanel12.add(txt_netValue);
-        txt_netValue.setBounds(150, 120, 120, 23);
+        txt_netValue.setBounds(180, 120, 120, 23);
 
         jLabel29.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel29.setText("Other Charges");
+        jLabel29.setText("Delivery Charge");
         jPanel12.add(jLabel29);
-        jLabel29.setBounds(40, 190, 101, 17);
+        jLabel29.setBounds(40, 190, 108, 17);
 
         txt_other.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_other.setText("0.00");
         jPanel12.add(txt_other);
-        txt_other.setBounds(150, 190, 120, 23);
+        txt_other.setBounds(180, 190, 120, 23);
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel13.setText("Total");
@@ -1125,7 +1220,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         lbl_total.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lbl_total.setText("0.00");
         jPanel12.add(lbl_total);
-        lbl_total.setBounds(160, 240, 150, 22);
+        lbl_total.setBounds(180, 240, 150, 22);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setText("Total to be Paid");
@@ -1322,7 +1417,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
                 .addGap(23, 23, 23)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21)
-                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1332,7 +1427,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1684, Short.MAX_VALUE)
+            .addGap(0, 1692, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1345,7 +1440,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1684, Short.MAX_VALUE)
+            .addGap(0, 1692, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1358,7 +1453,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1684, Short.MAX_VALUE)
+            .addGap(0, 1692, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1538,16 +1633,16 @@ public class Order_sub extends javax.swing.JInternalFrame {
             ps.setString(7, orderID);
             ps.execute();
             
-            ps=conn.prepareStatement("SELECT itemNo,itemID,description,qty,unitPrice,unitDiscount,netItemPrice FROM ItemsBought_temp");
-            rs=ps.executeQuery();
-            
             
         }catch(Exception e){
             System.out.println(e);
         }finally {
             
-            tbl_itemBought.setModel(DbUtils.resultSetToTableModel(rs));
-            findTot();
+            
+            //findTot();
+            updateTot();
+            updatePayDetails();
+            loadItemsBoughtTable1();
             
             try{            
                 if (ps != null) {
@@ -1724,14 +1819,16 @@ public class Order_sub extends javax.swing.JInternalFrame {
         btn_confirmCheque.setEnabled(false);
         
         
-        Float remaining = Float.parseFloat(txt_remaining.getText()) - Float.parseFloat(txt_amountCheque.getText()) ;
-        txt_remaining.setText(remaining.toString());
+        //Float remaining = Float.parseFloat(txt_remaining.getText()) - Float.parseFloat(txt_amountCheque.getText()) ;
+        //txt_remaining.setText(remaining.toString());
         
-        Float nowPaying = Float.parseFloat(txt_nowPaying.getText())+ Float.parseFloat(txt_amountCash1.getText());
-        txt_nowPaying.setText(nowPaying.toString());
+        //Float nowPaying = Float.parseFloat(txt_nowPaying.getText())+ Float.parseFloat(txt_amountCash1.getText());
+        //txt_nowPaying.setText(nowPaying.toString());
         
         this.chequeAmount = txt_amountCheque.getText();
         this.chequeNum = txt_numCheque.getText();
+        
+        updatePayDetails();
         
         txt_numCheque.setEditable(false);
         txt_amountCheque.setEditable(false);
@@ -1740,23 +1837,21 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
     private void btn_confirmCashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_confirmCashActionPerformed
 
-        Float remaining = Float.parseFloat(txt_remaining.getText()) - Float.parseFloat(txt_amountCash1.getText()) ;
-
+        //setting values for the paying panel
+        //Float remaining = Float.parseFloat(txt_remaining.getText()) - Float.parseFloat(txt_amountCash1.getText()) ;
         Float balanceCash = Float.parseFloat(txt_cash1.getText()) - Float.parseFloat(txt_amountCash1.getText());
-
-        txt_remaining.setText(remaining.toString());
-
+        //txt_remaining.setText(remaining.toString());
         txt_balanceCash1.setText(balanceCash.toString());
-
         lbl_confirmCash.setText("Paid by Cash!");
         
         
         
         ///set value for Now Paying
-        Float nowPaying = Float.parseFloat(txt_nowPaying.getText())+ Float.parseFloat(txt_amountCash1.getText());
-        txt_nowPaying.setText(nowPaying.toString());
+        /*Float nowPaying = Float.parseFloat(txt_nowPaying.getText())+ Float.parseFloat(txt_amountCash1.getText());
+        txt_nowPaying.setText(nowPaying.toString());*/
         
         this.cashAmount=txt_amountCash1.getText();
+        updatePayDetails();
         
         //locking txtfields
         
@@ -1778,18 +1873,34 @@ public class Order_sub extends javax.swing.JInternalFrame {
         
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String pastLoan="0";
+        String pastLoan_S="0";
         
         try{
            ps=conn.prepareStatement("select totalOutstanding from customer where cusID like '"+this.cusID +"'");
            rs=ps.executeQuery();
            rs.next();
-           pastLoan = rs.getString("totalOutstanding");
-           txt_pre.setText(pastLoan);
+           pastLoan_S = rs.getString("totalOutstanding");
+           txt_pre.setText(pastLoan_S);
+           this.pastLoan=Float.parseFloat(pastLoan_S);
             
         }catch(Exception e){
             System.out.println(e);
             
+        }finally {
+            
+            try{            
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
         }
         
         txt_cusID.setEditable(false);
@@ -1818,11 +1929,6 @@ public class Order_sub extends javax.swing.JInternalFrame {
             return;
         }
         
-        updateTot();
-        
-        
-        
-        
         
         /////////////////////////////
          String itemNo = this.itemNo;
@@ -1843,8 +1949,10 @@ public class Order_sub extends javax.swing.JInternalFrame {
             System.out.println(e);
         }finally {
             
-            tbl_itemBought.setModel(DbUtils.resultSetToTableModel(rs));
-            findTot();
+            updateTot();
+            updatePayDetails();
+            loadItemsBoughtTable1();
+            
             
             try{            
                 if (ps != null) {
@@ -1882,36 +1990,54 @@ public class Order_sub extends javax.swing.JInternalFrame {
         try{
            
                 
-                ps = conn.prepareStatement("SELECT * FROM Customer WHERE cusID LIKE '%"+key+"%'");
+                ps = conn.prepareStatement("SELECT * FROM Customer WHERE cusID ='"+key+"'");
                 rs = ps.executeQuery();
                 
-                
+                /*
                 while(rs.next()){
                     count++;
                     System.out.println(count);
                 }
-                
-                rs = ps.executeQuery();
-                rs.next(); //////////////////////////////////////
-                
-                if((count==1)&&(key.length()>9)){      
+                */
+                //rs = ps.executeQuery();
+                if(rs.next()){
                     
-                    txt_cusName.setText(rs.getString("name"));
-                    lbl_cusResult.setText("Results Found!");
-                    btn_assignCus.setEnabled(true);
-                    
+                        txt_cusName.setText(rs.getString("name"));
+                        lbl_cusResult.setText("Results Found!");
+                        btn_assignCus.setEnabled(true);
+                 
+                }else if(key.length()>9){
+                
+                        txt_cusName.setText("");
+                        lbl_cusResult.setText("No Results Found!");
+                       // btn_removeCus.doClick();
+                        btn_assignCus.setEnabled(false);
                 }else{
-                    txt_cusName.setText("");
-                    lbl_cusResult.setText("");
-                   // btn_removeCus.doClick();
+                        txt_cusName.setText("");
+                        lbl_cusResult.setText("");
+                       // btn_removeCus.doClick();
+                        btn_assignCus.setEnabled(false);
                     
-                    btn_assignCus.setEnabled(false);
                 }
                 
         }catch(Exception e){
             
             System.out.println(e);
             System.out.println("Landed to catch block");
+        }finally{
+            try{            
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
         }
                 
         
@@ -1923,19 +2049,16 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_cusName.setEditable(true);
         txt_cusID.setEditable(true);
         
-        
-        
-        
-        
         lbl_cusStatus.setText("Customer Details Not Added");
-        
-        
         
         if(chkbx_addPastLoan.isSelected()){
             chkbx_addPastLoan.doClick();
         }
+        
         txt_pre.setText("");
         this.cusID=null;
+        this.pastLoan=0f;
+        
         
         chkbx_addPastLoan.setEnabled(false);        
         
@@ -1943,8 +2066,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         //////////////////////////////////////
         btn_assignCus.setEnabled(false);
         btn_addCus.setEnabled(true);
-        
-            btn_removeCus.setEnabled(false);
+        btn_removeCus.setEnabled(false);
         
     }//GEN-LAST:event_btn_removeCusActionPerformed
 
@@ -1993,8 +2115,31 @@ public class Order_sub extends javax.swing.JInternalFrame {
         int x= JOptionPane.showConfirmDialog(null, "Are you sure you want to clear the form?");
         
         if(x==0){  
+            PreparedStatement ps_clr = null;
+            
+            try{
+                ps_clr = conn.prepareStatement("DELETE FROM ItemsBought_temp"); 
+                ps_clr.execute();
+                ps_clr = conn.prepareStatement("DELETE FROM sqlite_sequence WHERE name = 'ItemsBought_temp';");
+                ps_clr.execute();
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }finally{
+                //deleting items temp table
+                Order.reload();                
+                try{
+                
+                    if (ps_clr != null) {ps_clr.close();}
+                    conn.setAutoCommit(true);
+
+                }catch(Exception e){
+                    System.out.println(e);
+                }
+            }
+            
+            
         
-        Order.reload();
         
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -2031,6 +2176,21 @@ public class Order_sub extends javax.swing.JInternalFrame {
         }catch (Exception ex){
 
             ex.printStackTrace();
+        }finally {
+            
+            try{            
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
         }
         
         txt_itemID.setEditable(false);
@@ -2071,16 +2231,34 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_addressTxtActionPerformed
 
     private void addressTxtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_addressTxtKeyPressed
+        PreparedStatement stm=null;
+        ResultSet rs = null;
+        
         try {
             // TODO add your handling code here:
             String address = addressTxt.getText();
             String SQL = "SELECT * FROM OrderDelivery WHERE address like'%"+address+"'";
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery(SQL);
+            stm = conn.prepareStatement(SQL);
+            rs = stm.executeQuery(SQL);
             orderDelTable.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException ex) {
             //Logger.getLogger(OrderDeliveryInt.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
+        }finally {
+            
+            try{            
+                if (stm != null) {
+                    stm.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
         }
     }//GEN-LAST:event_addressTxtKeyPressed
 
@@ -2129,7 +2307,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
             int res= addDelivery();
             if(res>0){
-                JOptionPane.showMessageDialog(this, "Added Success");
+                JOptionPane.showMessageDialog(this, "Added Successfully");
             }
         } catch (SQLException ex) {
             //Logger.getLogger(OrderDeliveryInt.class.getName()).log(Level.SEVERE, null, ex);
@@ -2170,9 +2348,15 @@ public class Order_sub extends javax.swing.JInternalFrame {
             orderDeliveryInt.setVisible(true);
         }
         else{
-            orderDeliveryInt.setVisible(true);
+            orderDeliveryInt.setVisible(false);
+            this.delCharge=0f;
+            this.delID=null;
         }
     }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void btn_addCus1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addCus1ActionPerformed
+        Order.callAddCusSearchForm();
+    }//GEN-LAST:event_btn_addCus1ActionPerformed
 
 
     public void loadOrderDeliverTable() {
@@ -2254,11 +2438,14 @@ public class Order_sub extends javax.swing.JInternalFrame {
         String driver = driverIdTxt.getSelectedItem().toString();
         String dis = distanceTxt.getText();
         String status = statuscombo.getSelectedItem().toString();
-        double tot = Double.parseDouble(totalTxt.getText());
+        Float tot = Float.parseFloat(totalTxt.getText());
+        
         
         String SQL="INSERT INTO OrderDelivery VALUES ('"+did+"','"+oid+"','"+addrs+"', '"+ddate+"','"+vehino+"','"+driver+"','"+dis+"','"+busy+"','"+road+"','"+fr+"','"+status+"','"+tot+"')";
         Statement stm=conn.createStatement(); 
         int res = stm.executeUpdate(SQL);
+        
+        this.delCharge=tot;
         
         return res;
     }
@@ -2375,6 +2562,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressTxt;
     private javax.swing.JButton btn_addCus;
+    private javax.swing.JButton btn_addCus1;
     private javax.swing.JButton btn_addEntry;
     private javax.swing.JButton btn_assignCus;
     private javax.swing.JButton btn_confirmCash1;
