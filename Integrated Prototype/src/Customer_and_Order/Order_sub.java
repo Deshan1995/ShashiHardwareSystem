@@ -107,6 +107,53 @@ public class Order_sub extends javax.swing.JInternalFrame {
      
     }
     
+    public String getItemCategory(String ItemID){
+        
+        String category=null;        
+        String key=null;
+        
+        PreparedStatement ps_category=null;
+        ResultSet rs_category = null;
+        
+         try{
+            if(ItemID.length()>=3)
+                key = ItemID.substring(0, 3);
+            else
+                key = ItemID;
+            
+            System.out.println(key);
+            
+            ps_category = conn.prepareStatement("select category from ItemCodes where keyword like '%"+key+"%'");         
+            rs_category = ps_category.executeQuery();
+            rs_category.next();
+            category = rs_category.getString("category");
+         }catch (Exception e){
+            
+            System.out.print(e + "Error finding item category");
+            //ex.printStackTrace();
+         }finally {
+            
+            try{            
+                if (ps_category != null) 
+                { 
+                   ps_category.close();
+                }
+                if (rs_category != null) 
+                { 
+                   rs_category.close();
+                } 
+                          
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
+         }
+         
+        return category; 
+    }
+    
+    
     public void loadItemsBoughtTable1(){
         PreparedStatement ps =null;
         ResultSet rs = null;
@@ -864,6 +911,11 @@ public class Order_sub extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbl_availableList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_availableListMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tbl_availableList);
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
@@ -1112,7 +1164,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_addCus1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lbl_cusResult, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 147, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(157, 157, 157))
         );
@@ -1137,9 +1189,9 @@ public class Order_sub extends javax.swing.JInternalFrame {
                     .addComponent(jLabel11)
                     .addComponent(txt_cusName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbl_cusResult, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(lbl_cusStatus)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1180,7 +1232,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_total.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_total.setText("0.00");
         jPanel12.add(txt_total);
-        txt_total.setBounds(180, 40, 120, 23);
+        txt_total.setBounds(150, 40, 120, 23);
 
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel25.setText("Less Discount");
@@ -1190,7 +1242,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_totDis.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_totDis.setText("0.00");
         jPanel12.add(txt_totDis);
-        txt_totDis.setBounds(180, 80, 120, 23);
+        txt_totDis.setBounds(150, 80, 120, 23);
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel24.setText("Net Value");
@@ -1200,17 +1252,17 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_netValue.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_netValue.setText("0.00");
         jPanel12.add(txt_netValue);
-        txt_netValue.setBounds(180, 120, 120, 23);
+        txt_netValue.setBounds(150, 120, 120, 23);
 
         jLabel29.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel29.setText("Delivery Charge");
+        jLabel29.setText("Other Charges");
         jPanel12.add(jLabel29);
-        jLabel29.setBounds(40, 190, 108, 17);
+        jLabel29.setBounds(40, 190, 101, 17);
 
         txt_other.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_other.setText("0.00");
         jPanel12.add(txt_other);
-        txt_other.setBounds(180, 190, 120, 23);
+        txt_other.setBounds(150, 190, 120, 23);
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel13.setText("Total");
@@ -1220,7 +1272,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         lbl_total.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lbl_total.setText("0.00");
         jPanel12.add(lbl_total);
-        lbl_total.setBounds(180, 240, 150, 22);
+        lbl_total.setBounds(160, 240, 150, 22);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setText("Total to be Paid");
@@ -1417,7 +1469,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
                 .addGap(23, 23, 23)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21)
-                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1427,7 +1479,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1692, Short.MAX_VALUE)
+            .addGap(0, 1684, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1440,7 +1492,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1692, Short.MAX_VALUE)
+            .addGap(0, 1684, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1453,7 +1505,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1692, Short.MAX_VALUE)
+            .addGap(0, 1684, Short.MAX_VALUE)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1503,24 +1555,10 @@ public class Order_sub extends javax.swing.JInternalFrame {
         String itemName=null;
         String q=null;
         
-        String category=null;
+        String category=getItemCategory(itemID);
+        System.out.println(category);
         
         try{
-            if(itemID.length()>=3)
-                key = itemID.substring(0, 3);
-            else
-                key = itemID;
-            
-            System.out.println(key);
-            
-            ps_category = conn.prepareStatement("select category from ItemCodes where keyword like '%"+key+"%'");  
-          //ps_category = conn.prepareStatement("select category from ItemCodes where keyword like ?");  
-           // ps_category.setString(1,key );
-            rs_category = ps_category.executeQuery();
-            rs_category.next();
-            category = rs_category.getString("category");
-            System.out.println(category);
-           
             
             if(category.equals("Paint&Thinner")){
                 q = "SELECT ItemID,Catergory,BrandName,ColourCode FROM Paint_Thinner WHERE ItemID LIKE '%"+itemID+"%'";                
@@ -1531,7 +1569,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
             }else if(category.equals("Waterpipe&Fittings")){
                 q = "SELECT ItemID , ItemName,BrandName,Size,Qty FROM WaterPipe_Fitting WHERE ItemID LIKE '%"+itemID+"%'";
             }else if(category.equals("Chemical&Farming")){
-                q = "SELECT ItemID,ItemName,BrandName,Duration,ExpireDate,Qty FROM Chemical_Farming WHERE ItemID LIKE '%"+itemID+"%'";
+                q = "SELECT ItemID,ItemName,BrandName,Duration,Qty FROM Chemical_Farming WHERE ItemID LIKE '%"+itemID+"%'";
             }else if(category.equals("Other")){
                 q = "SELECT ItemID,ItemName,BrandName,Colour,Size,Qty FROM OtherItem WHERE ItemID LIKE '%"+itemID+"%'";
             }
@@ -1556,7 +1594,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
                 }else if(category.equals("Waterpipe&Fittings")){
                     itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("Size");
                 }else if(category.equals("Chemical&Farming")){
-                    itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("ExpireDate");
+                    itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName");
                 }else if(category.equals("Other")){
                     itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("Colour")+" "+ rs_itemList.getString("Size");
                 }
@@ -2150,48 +2188,13 @@ public class Order_sub extends javax.swing.JInternalFrame {
         String itemNum = tbl_itemBought.getValueAt(r, 0).toString();
         this.itemNo=itemNum;
         
-        PreparedStatement ps=null;
-        ResultSet rs = null;
+        txt_itemID.setText(tbl_itemBought.getValueAt(r, 1).toString());
+        txtA_itemDes.setText(tbl_itemBought.getValueAt(r, 2).toString());
+        txt_qty.setText(tbl_itemBought.getValueAt(r, 3).toString());
+        txt_unitPrice.setText(tbl_itemBought.getValueAt(r, 4).toString());
+        txt_unitDis.setText(tbl_itemBought.getValueAt(r, 5).toString());
         
-        try{
 
-            ps = conn.prepareStatement("select * from ItemsBought_temp where itemNo=?");
-
-            ps.setString(1,itemNum );
-
-            rs = ps.executeQuery();
-
-            if(rs.next()){
-             
-                txt_itemID.setText(rs.getString("itemID"));
-                txtA_itemDes.setText(rs.getString("description"));
-                txt_qty.setText(rs.getString("qty"));
-
-                txt_unitPrice.setText(rs.getString("unitPrice"));
-                txt_unitDis.setText(rs.getString("unitDiscount"));
-           
-
-            }
-
-        }catch (Exception ex){
-
-            ex.printStackTrace();
-        }finally {
-            
-            try{            
-                if (ps != null) {
-                    ps.close();
-                }
-                if (rs != null) {
-                    rs.close();
-                }
-                
-                conn.setAutoCommit(true);
-                
-            }catch(Exception e){
-                System.out.println(e);
-            }
-        }
         
         txt_itemID.setEditable(false);
         txtA_itemDes.setEditable(false);
@@ -2357,6 +2360,36 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private void btn_addCus1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addCus1ActionPerformed
         Order.callAddCusSearchForm();
     }//GEN-LAST:event_btn_addCus1ActionPerformed
+
+    private void tbl_availableListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_availableListMouseClicked
+        int r = tbl_availableList.getSelectedRow();
+
+        String itemID = tbl_availableList.getValueAt(r, 0).toString();
+        String description = tbl_availableList.getValueAt(r, 1).toString();
+        
+        String category=getItemCategory(itemID);
+        System.out.println(category+" catergry found in tableclick event");
+        String itemName =null;        
+        
+        if(category.equals("Paint&Thinner")){
+            itemName= tbl_availableList.getValueAt(r, 1).toString()+" "+ tbl_availableList.getValueAt(r, 2).toString()+" "+ tbl_availableList.getValueAt(r,3).toString();
+        }else if(category.equals("Construction")){
+            itemName= tbl_availableList.getValueAt(r, 1).toString()+" "+ tbl_availableList.getValueAt(r, 2).toString()+" "+ tbl_availableList.getValueAt(r, 3).toString()+" "+ tbl_availableList.getValueAt(r, 4).toString();
+        }else if(category.equals("Roofing&Fitting")){
+            itemName= tbl_availableList.getValueAt(r, 1).toString()+" "+ tbl_availableList.getValueAt(r, 3).toString()+" "+ tbl_availableList.getValueAt(r, 2).toString()+" "+ tbl_availableList.getValueAt(r, 4).toString()+" "+ tbl_availableList.getValueAt(r, 5).toString();
+        }else if(category.equals("Waterpipe&Fittings")){
+            itemName= tbl_availableList.getValueAt(r, 1).toString()+" "+ tbl_availableList.getValueAt(r, 2).toString()+" "+ tbl_availableList.getValueAt(r, 3).toString();
+        }else if(category.equals("Chemical&Farming")){
+            itemName= tbl_availableList.getValueAt(r, 1).toString()+" "+ tbl_availableList.getValueAt(r, 2).toString();
+        }else if(category.equals("Other")){
+            itemName= tbl_availableList.getValueAt(r, 1).toString()+" "+ tbl_availableList.getValueAt(r, 2).toString()+" "+ tbl_availableList.getValueAt(r, 3).toString()+" "+ tbl_availableList.getValueAt(r, 4).toString();
+        }
+
+        txt_itemID.setText(itemID);
+        txtA_itemDes.setText(itemName);
+            
+        
+    }//GEN-LAST:event_tbl_availableListMouseClicked
 
 
     public void loadOrderDeliverTable() {
