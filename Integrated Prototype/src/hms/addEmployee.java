@@ -280,6 +280,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
         getContentPane().add(afname);
         afname.setBounds(170, 120, 100, 30);
 
+        aid.setEditable(false);
         aid.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         getContentPane().add(aid);
         aid.setBounds(170, 70, 100, 30);
