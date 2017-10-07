@@ -5,7 +5,7 @@
 package hms;
 
 import DBclass.DBconnection1;
-import hms.DBClass.DBconnection;
+//import hms.DBClass.DBconnection;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
