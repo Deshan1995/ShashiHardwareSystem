@@ -954,47 +954,15 @@ public class customer_sub extends javax.swing.JInternalFrame {
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {                                     
         int r = jTable2.getSelectedRow();
 
-        String cusID = jTable2.getValueAt(r, 0).toString();
+        //String cusID = jTable2.getValueAt(r, 0).toString();
+        txt_cusID2.setText(jTable2.getValueAt(r, 0).toString());
+        txt_cusName2.setText(jTable2.getValueAt(r, 1).toString());
+        txtA_cusAdd2.setText(jTable2.getValueAt(r, 2).toString());
 
-        try{
-
-            PreparedStatement ps = conn.prepareStatement("select * from Customer where cusID=?");
-
-            ps.setString(1,cusID );
-
-            ResultSet rs = ps.executeQuery();
-
-            if(rs.next()){
-             
-                txt_cusID2.setText(rs.getString("cusID"));
-                txt_cusName2.setText(rs.getString("name"));
-                txtA_cusAdd2.setText(rs.getString("address"));
-
-                txt_regDate2.setText(rs.getString("regDate"));
-                txt_noOfVisits2.setText(rs.getString("noOfVisits"));
-                txt_totPaid2.setText(rs.getString("totalPaid"));
-                txt_totDebt2.setText(rs.getString("totalOutstanding"));
-
-            }
-
-        }catch (Exception ex){
-
-            ex.printStackTrace();
-        }finally{
-            try{            
-                if (ps != null) {
-                    ps.close();
-                }
-                if (rs != null) {
-                    rs.close();
-                }
-                
-                conn.setAutoCommit(true);
-                
-            }catch(Exception e){
-                System.out.println(e);
-            }
-        }
+        txt_regDate2.setText(jTable2.getValueAt(r, 3).toString());
+        txt_noOfVisits2.setText(jTable2.getValueAt(r, 4).toString());
+        txt_totPaid2.setText(jTable2.getValueAt(r, 5).toString());
+        txt_totDebt2.setText(jTable2.getValueAt(r, 6).toString());
 
     }                                    
 
