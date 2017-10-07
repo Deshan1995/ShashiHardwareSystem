@@ -230,7 +230,7 @@ public class EmployeeMain extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         jDesktopPane1.removeAll();
-        addEmployee1 em = new addEmployee1();
+        addEmployee em = new addEmployee();
         jDesktopPane1.add(em).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

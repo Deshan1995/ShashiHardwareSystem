@@ -5,7 +5,7 @@
  */
 package hms;
 
-import DBclass.DBconnection1;
+import DBconnection.DBconnect;
 import DBclass.me;
 import java.io.File;
 import javax.swing.JFileChooser;
@@ -56,7 +56,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
         
         initComponents();
         
-        conn=DBconnection1.connect();
+        conn=DBconnect.connectDb();
         auto();
         datevalid.setVisible(false);
         afname.setText("First Name");
@@ -143,7 +143,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
     
     public void tableload()
     {
-            conn=DBconnection1.connect();
+            conn=DBconnect.connectDb();
         String sql = "select * from Employee";
         try{
         pst = conn.prepareStatement(sql);
@@ -716,7 +716,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
                 {
            
            
-                conn=DBconnection1.connect();
+                conn=DBconnect.connectDb();
                 String sql = "INSERT INTO Employee(employee_id,first_name,last_name,username,language,age,nic_no,address,phone_no,designation,status,addded_date,photograph) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 InputStream is = new FileInputStream(new File(s));
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
