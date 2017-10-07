@@ -5,7 +5,6 @@
  */
 package Supplier;
 
-//import DBconnection.javaconnect;
 import DBconnection.DBconnect;
 import java.sql.Connection;
 import java.sql.Date;
@@ -47,8 +46,7 @@ public class SupplierOrders extends javax.swing.JInternalFrame {
      */
     public SupplierOrders() {
         initComponents();
-        //conn1=javaconnect.ConnectDB();
-        conn1 = DBconnect.ConnectDb();
+        conn1 = DBconnect.connectDb();
         LoadingSupplierOrdersTable();
         TextTotal.setEditable(false);
         jButton1.setEnabled(false);

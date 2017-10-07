@@ -5,8 +5,6 @@
  */
 package Supplier;
 
-//import DBconnection.javaconnect;
-//import DBconnection.javaconnect;
 import DBconnection.DBconnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-//import java.sql.Statement;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
@@ -34,10 +31,12 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
     PreparedStatement pst7 = null;
     PreparedStatement pst8 = null;
     PreparedStatement pst9 = null;
+    PreparedStatement pst10 = null;
     ResultSet rs1 = null;
     ResultSet rs2 = null;
     ResultSet rs3 = null;
     ResultSet rs4 = null;
+    ResultSet rs5 = null;
 
     /**
      * Creates new form SupplierDetails
@@ -45,8 +44,7 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
     public SupplierDetails() {
         initComponents();
         TextID.setEditable(false);
-        //conn1=javaconnect.ConnectDB();
-        conn1 = DBconnect.ConnectDb();
+        conn1 = DBconnect.connectDb();
         LoadingSupplierDetailsTable();
         AddButton.setEnabled(false);
         ButtonItemDetails.setEnabled(false);
@@ -128,6 +126,98 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
         return true;
        //Phone Validation Ends
     }
+    
+    public String GetSelectedCategories(){
+        String catgry = "";
+        
+        if(PaintCheckBox.isSelected()){
+            catgry = catgry + "Paint ,\n";
+        }
+        if(BathroomCheckBox.isSelected()){
+            catgry = catgry + "Bathroom_Fittings ,\n";
+        }
+        if(CementCheckBox.isSelected()){
+            catgry = catgry + "Cement ,\n";
+        }
+        if(RoofingCheckBox.isSelected()){
+            catgry = catgry + "Roofing_Items ,\n";
+        }
+        if(ConstructionCheckBox.isSelected()){
+            catgry = catgry + "Construction_Items ,\n";
+        }
+        if(WaterCheckBox.isSelected()){
+            catgry = catgry + "Water_Pipe_Fittings ,\n";
+        }
+        if(ChemicalsCheckBox.isSelected()){
+            catgry = catgry + "Chemicals ,\n";
+        }
+        if(FertilizerCheckBox.isSelected()){
+            catgry = catgry + "Fertilizers ,\n";
+        }
+        if(TankCheckBox.isSelected()){
+            catgry = catgry + "Water_Tanks ,\n";
+        }
+        if(OtherCheckBox.isSelected()){
+            catgry = catgry + "Other ,\n";
+        }
+        
+        return catgry;
+    }
+    
+    public void SetSelectedCategories(){
+         int row = jTable1.getSelectedRow();
+         
+         String category = jTable1.getValueAt(row,3).toString();
+         String Catgry[] = category.split(" ");  
+         
+         for(int i=0; i<Catgry.length; i++){
+             if(Catgry[i].equals("Paint_Thinner ")){
+                 PaintCheckBox.setSelected(true);
+             }
+             else if(Catgry[i].equals("Bathroom_Fittings ")){
+                 BathroomCheckBox.setSelected(true);
+             }
+             else if(Catgry[i].equals("Cement ")){
+                 CementCheckBox.setSelected(true);
+             }
+             else if(Catgry[i].equals("Roofing_Items ")){
+                 RoofingCheckBox.setSelected(true);
+             }
+             else if(Catgry[i].equals("Construction_Items ")){
+                 ConstructionCheckBox.setSelected(true);
+             }
+             else if(Catgry[i].equals("Water_Pipe_Fittings ")){
+                 WaterCheckBox.setSelected(true);
+             }
+             else if(Catgry[i].equals("Chamicals ")){
+                 ChemicalsCheckBox.setSelected(true);
+             }
+             else if(Catgry[i].equals("Fertilizers ")){
+                 FertilizerCheckBox.setSelected(true);
+             }
+             else if(Catgry[i].equals("Water_Tanks ")){
+                 TankCheckBox.setSelected(true);
+             }
+             else if(Catgry[i].equals("Other ")){
+                 OtherCheckBox.setSelected(true);
+             }
+         }
+             
+    }
+    
+    public void ClearCheckBoxes(){
+        PaintCheckBox.setSelected(false);
+        BathroomCheckBox.setSelected(false);
+        CementCheckBox.setSelected(false);
+        RoofingCheckBox.setSelected(false);
+        ConstructionCheckBox.setSelected(false);
+        WaterCheckBox.setSelected(false);
+        ChemicalsCheckBox.setSelected(false);
+        FertilizerCheckBox.setSelected(false);
+        TankCheckBox.setSelected(false);
+        OtherCheckBox.setSelected(false);
+       
+    }
  
     /**
      * This method is called from within the constructor to initialize the form.
@@ -174,13 +264,21 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        TextCategories = new javax.swing.JTextArea();
         jScrollPane4 = new javax.swing.JScrollPane();
         TextAddress = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         TextPhone = new javax.swing.JTextField();
         ButtonItemDetails = new javax.swing.JButton();
+        PaintCheckBox = new javax.swing.JCheckBox();
+        BathroomCheckBox = new javax.swing.JCheckBox();
+        CementCheckBox = new javax.swing.JCheckBox();
+        RoofingCheckBox = new javax.swing.JCheckBox();
+        ConstructionCheckBox = new javax.swing.JCheckBox();
+        WaterCheckBox = new javax.swing.JCheckBox();
+        ChemicalsCheckBox = new javax.swing.JCheckBox();
+        FertilizerCheckBox = new javax.swing.JCheckBox();
+        TankCheckBox = new javax.swing.JCheckBox();
+        OtherCheckBox = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
 
@@ -459,11 +557,6 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Item Categories");
 
-        TextCategories.setColumns(20);
-        TextCategories.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        TextCategories.setRows(5);
-        jScrollPane3.setViewportView(TextCategories);
-
         TextAddress.setColumns(20);
         TextAddress.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         TextAddress.setRows(5);
@@ -486,6 +579,36 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
                 ButtonItemDetailsActionPerformed(evt);
             }
         });
+
+        PaintCheckBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        PaintCheckBox.setText("Paint/Thinner");
+
+        BathroomCheckBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        BathroomCheckBox.setText("Bathroom Fittings");
+
+        CementCheckBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        CementCheckBox.setText("Cement");
+
+        RoofingCheckBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        RoofingCheckBox.setText("Roofing Items");
+
+        ConstructionCheckBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ConstructionCheckBox.setText("Construction Items");
+
+        WaterCheckBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        WaterCheckBox.setText("Water Pipe Fittings");
+
+        ChemicalsCheckBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ChemicalsCheckBox.setText("Chemicals");
+
+        FertilizerCheckBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        FertilizerCheckBox.setText("Fertilizers");
+
+        TankCheckBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        TankCheckBox.setText("Water Tanks");
+
+        OtherCheckBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        OtherCheckBox.setText("Other");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -519,9 +642,21 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
                         .addGap(23, 23, 23)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(TextName)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
-                            .addComponent(jScrollPane4)
-                            .addComponent(TextPhone))))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                            .addComponent(TextPhone)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(BathroomCheckBox)
+                                    .addComponent(PaintCheckBox)
+                                    .addComponent(CementCheckBox)
+                                    .addComponent(RoofingCheckBox)
+                                    .addComponent(ConstructionCheckBox)
+                                    .addComponent(WaterCheckBox)
+                                    .addComponent(ChemicalsCheckBox)
+                                    .addComponent(FertilizerCheckBox)
+                                    .addComponent(TankCheckBox)
+                                    .addComponent(OtherCheckBox))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(26, 26, 26))
         );
         jPanel1Layout.setVerticalGroup(
@@ -544,11 +679,29 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
+                    .addComponent(PaintCheckBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(BathroomCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(CementCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(RoofingCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ConstructionCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(WaterCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ChemicalsCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(FertilizerCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(TankCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(OtherCheckBox)
+                .addGap(8, 8, 8)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AddButton)
                     .addComponent(ButtonItemDetails))
@@ -558,7 +711,7 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
                     .addComponent(jButton5))
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
-                .addGap(28, 28, 28))
+                .addContainerGap())
         );
 
         jPanel3.setBackground(new java.awt.Color(153, 153, 153));
@@ -597,11 +750,11 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 802, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 823, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -615,8 +768,8 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
         
         String name = TextName.getText();
         String address = TextAddress.getText();
-        String category = TextCategories.getText();
-        //String description = TextDescription.getText();
+        String category = GetSelectedCategories();
+        
         String phone  = TextPhone.getText();
         
         if(id1.equals("") || name.equals("") || address.equals("") || category.equals("") || phone.equals("")){
@@ -637,7 +790,7 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
         TextName.setText("");
         TextAddress.setText("");
         TextID.setText("");
-        TextCategories.setText("");
+        ClearCheckBoxes();
         TextPhone.setText("");
         
         
@@ -669,8 +822,7 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
         int id = Integer.parseInt(TextID.getText());
         String name  = TextName.getText();
         String address  = TextAddress.getText();
-        //String description = TextDescription.getText();
-        String category = TextCategories.getText();
+        String category = GetSelectedCategories();
         String phone = TextPhone.getText();
         
         try{  
@@ -695,8 +847,7 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
        TextID.setText("");
        TextName.setText("");
        TextAddress.setText("");
-       TextCategories.setText("");
-       //TextDescription.setText("");
+       ClearCheckBoxes();
        TextPhone.setText("");
         
         }
@@ -739,8 +890,7 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
        TextID.setText("");
        TextName.setText("");
        TextAddress.setText("");
-       //TextDescription.setText("");
-       TextCategories.setText("");
+       ClearCheckBoxes();
        TextPhone.setText("");
         }
         
@@ -756,15 +906,14 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
        String Location=jTable1.getValueAt(row,2).toString();
        String Category=jTable1.getValueAt(row,3).toString();
        String Phone = jTable1.getValueAt(row,4).toString();
-       //String Description=jTable1.getValueAt(row,4).toString();
-       
+      
        TextID.setText(ID);
        TextID.setEditable(false);
        TextName.setText(Name);
        TextAddress.setText(Location);
-       TextCategories.setText(Category);
+       SetSelectedCategories();
        TextPhone.setText(Phone);
-       //TextDescription.setText(Description);
+       
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -773,9 +922,8 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
        TextID.setText("");
        TextName.setText("");
        TextAddress.setText("");
-       TextCategories.setText("");
+       ClearCheckBoxes();
        TextPhone.setText("");
-       //TextDescription.setText("");
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -990,19 +1138,28 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddButton;
+    private javax.swing.JCheckBox BathroomCheckBox;
     private javax.swing.JTextField BrandID;
     private javax.swing.JTextField BrandName;
     private javax.swing.JButton ButtonItemDetails;
+    private javax.swing.JCheckBox CementCheckBox;
+    private javax.swing.JCheckBox ChemicalsCheckBox;
+    private javax.swing.JCheckBox ConstructionCheckBox;
+    private javax.swing.JCheckBox FertilizerCheckBox;
     private javax.swing.JTextField ItemCode;
     private javax.swing.JTextField ItemName;
     private javax.swing.JLabel LabelSID;
+    private javax.swing.JCheckBox OtherCheckBox;
+    private javax.swing.JCheckBox PaintCheckBox;
+    private javax.swing.JCheckBox RoofingCheckBox;
     private javax.swing.JTextField Size;
+    private javax.swing.JCheckBox TankCheckBox;
     private javax.swing.JTextArea TextAddress;
-    private javax.swing.JTextArea TextCategories;
     private javax.swing.JTextField TextID;
     private javax.swing.JTextField TextName;
     private javax.swing.JTextField TextPhone;
     private javax.swing.JTextField UnitPrice;
+    private javax.swing.JCheckBox WaterCheckBox;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -1030,7 +1187,6 @@ public class SupplierDetails extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;

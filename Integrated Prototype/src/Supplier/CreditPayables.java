@@ -5,7 +5,6 @@
  */
 package Supplier;
 
-//import DBconnection.javaconnect;
 import DBconnection.DBconnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,8 +39,7 @@ public class CreditPayables extends javax.swing.JInternalFrame {
      */
     public CreditPayables() {
         initComponents();
-        //conn1=javaconnect.ConnectDB();
-        conn1 = DBconnect.ConnectDb();
+        conn1 = DBconnect.connectDb();
         LoadingCustomizedOrder_CreditDetails();
         LoadingSupplierOrder_CreditDetails();
     }
