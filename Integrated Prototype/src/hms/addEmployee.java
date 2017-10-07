@@ -37,7 +37,7 @@ import net.proteanit.sql.DbUtils;
  *
  * @author DELL-PC
  */
-public class addEmployee1 extends javax.swing.JInternalFrame {
+public class addEmployee extends javax.swing.JInternalFrame {
     
        String s;
        Connection  conn = null;
@@ -46,12 +46,13 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
        byte[] person_image = null;
        byte [] ss;
        String selectedb=null;
+       int agee=0;
        
 
     /**
      * Creates new form addEmployee
      */
-    public addEmployee1() {
+    public addEmployee() {
         
         initComponents();
         
@@ -130,8 +131,8 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         afname.setText("");
         alname.setText("");
         auname.setText("");
-        alang.setText("");
-        aage.setText("");
+//        alang.setText("");
+//        aage.setText("");
         anic.setText("");
         aadd.setText("");
         aphn.setText("");
@@ -184,13 +185,12 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        aage = new javax.swing.JTextField();
         alname = new javax.swing.JTextField();
         aphn = new javax.swing.JTextField();
         afname = new javax.swing.JTextField();
         aid = new javax.swing.JTextField();
         apic = new javax.swing.JTextField();
-        alang = new javax.swing.JTextField();
+        aage = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         aadd = new javax.swing.JTextArea();
         anic = new javax.swing.JTextField();
@@ -211,6 +211,10 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
+        mm = new javax.swing.JTextField();
+        dd = new javax.swing.JTextField();
+        yyyy = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         datevalid = new javax.swing.JLabel();
@@ -223,20 +227,16 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        anicf = new javax.swing.JComboBox<>();
+        alang = new javax.swing.JComboBox<>();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(1218, 685));
         getContentPane().setLayout(null);
-
-        aage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        aage.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                aageKeyTyped(evt);
-            }
-        });
-        getContentPane().add(aage);
-        aage.setBounds(170, 280, 90, 30);
 
         alname.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         alname.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -264,7 +264,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(aphn);
-        aphn.setBounds(170, 500, 240, 30);
+        aphn.setBounds(170, 510, 240, 30);
 
         afname.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         afname.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -294,19 +294,18 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         getContentPane().add(apic);
         apic.setBounds(590, 120, 180, 30);
 
-        alang.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        alang.addMouseListener(new java.awt.event.MouseAdapter() {
+        aage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                alangMouseClicked(evt);
+                aageMouseClicked(evt);
             }
         });
-        alang.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                alangKeyTyped(evt);
+        aage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aageActionPerformed(evt);
             }
         });
-        getContentPane().add(alang);
-        alang.setBounds(170, 226, 240, 30);
+        getContentPane().add(aage);
+        aage.setBounds(170, 330, 100, 30);
 
         jScrollPane1.setBorder(null);
         jScrollPane1.setOpaque(false);
@@ -314,10 +313,15 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         aadd.setColumns(20);
         aadd.setRows(5);
         aadd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        aadd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                aaddKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(aadd);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(170, 380, 240, 100);
+        jScrollPane1.setBounds(170, 420, 240, 70);
 
         anic.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         anic.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -325,12 +329,17 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
                 anicMouseClicked(evt);
             }
         });
+        anic.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                anicKeyTyped(evt);
+            }
+        });
         getContentPane().add(anic);
-        anic.setBounds(168, 327, 240, 30);
+        anic.setBounds(240, 370, 170, 30);
 
         adeg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Cashier", "Driver", "Worker", "Stock Keeper", "Agency Manager" }));
         getContentPane().add(adeg);
-        adeg.setBounds(170, 550, 240, 30);
+        adeg.setBounds(170, 560, 240, 30);
 
         aft.setText("Full Time");
         aft.addActionListener(new java.awt.event.ActionListener() {
@@ -409,27 +418,79 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setText("Age                   :-");
         getContentPane().add(jLabel9);
-        jLabel9.setBounds(30, 270, 130, 30);
+        jLabel9.setBounds(30, 330, 130, 30);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setText("NIC No             :-");
         getContentPane().add(jLabel10);
-        jLabel10.setBounds(30, 320, 130, 30);
+        jLabel10.setBounds(30, 360, 130, 30);
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel11.setText("Address            :-");
         getContentPane().add(jLabel11);
-        jLabel11.setBounds(30, 370, 120, 30);
+        jLabel11.setBounds(30, 400, 120, 30);
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel14.setText("Phone no          :-");
         getContentPane().add(jLabel14);
-        jLabel14.setBounds(30, 500, 130, 30);
+        jLabel14.setBounds(30, 510, 130, 30);
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel15.setText("Designation      :-");
         getContentPane().add(jLabel15);
-        jLabel15.setBounds(30, 550, 130, 30);
+        jLabel15.setBounds(30, 560, 130, 30);
+
+        mm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        mm.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mmMouseClicked(evt);
+            }
+        });
+        mm.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                mmKeyTyped(evt);
+            }
+        });
+        getContentPane().add(mm);
+        mm.setBounds(170, 290, 50, 30);
+
+        dd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        dd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ddMouseClicked(evt);
+            }
+        });
+        dd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ddKeyTyped(evt);
+            }
+        });
+        getContentPane().add(dd);
+        dd.setBounds(250, 290, 50, 30);
+
+        yyyy.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        yyyy.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                yyyyMouseClicked(evt);
+            }
+        });
+        yyyy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                yyyyActionPerformed(evt);
+            }
+        });
+        yyyy.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                yyyyKeyTyped(evt);
+            }
+        });
+        getContentPane().add(yyyy);
+        yyyy.setBounds(340, 290, 70, 30);
+
+        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel18.setText("Date of birth    :-");
+        getContentPane().add(jLabel18);
+        jLabel18.setBounds(30, 290, 130, 30);
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel16.setText("Status               :-");
@@ -501,6 +562,28 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         getContentPane().add(jButton2);
         jButton2.setBounds(1010, 600, 100, 40);
 
+        getContentPane().add(anicf);
+        anicf.setBounds(170, 370, 70, 30);
+
+        alang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sinhala", "Tamil" }));
+        getContentPane().add(alang);
+        alang.setBounds(170, 220, 130, 30);
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel21.setText("yyyy");
+        getContentPane().add(jLabel21);
+        jLabel21.setBounds(360, 260, 30, 30);
+
+        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel20.setText("dd");
+        getContentPane().add(jLabel20);
+        jLabel20.setBounds(260, 260, 30, 30);
+
+        jLabel19.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel19.setText("mm");
+        getContentPane().add(jLabel19);
+        jLabel19.setBounds(180, 260, 30, 30);
+
         jLabel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 2));
         getContentPane().add(jLabel4);
         jLabel4.setBounds(448, 60, 700, 590);
@@ -527,10 +610,6 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
     private void apicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_apicMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_apicMouseClicked
-
-    private void alangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alangMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_alangMouseClicked
 
     private void anicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_anicMouseClicked
         // TODO add your handling code here:
@@ -567,17 +646,12 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
          }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void aageKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_aageKeyTyped
-        char c = evt.getKeyChar();
-        
-        if(Character.isLetter(c))
-        {
-            evt.consume();
-         JOptionPane.showMessageDialog(null, "Only numbers are allowed");
-        }   
-    }//GEN-LAST:event_aageKeyTyped
-
     private void aphnKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_aphnKeyTyped
+         if(agee<14)
+        {
+            JOptionPane.showMessageDialog(null,"Age must be greater than 14 years");
+            evt.consume();
+        }
         char c = evt.getKeyChar();
         
         if(Character.isLetter(c))
@@ -604,7 +678,23 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         
 //        System.out.println(adate.getDate().toString().equals(""));
-         if(aid.getText().equals("")||afname.getText().equals("")||alname.getText().equals("")||auname.getText().equals("")||alang.getText().equals("")||aage.getText().equals("")|| anic.getText().equals("")|| aadd.getText().equals("")||aphn.getText().equals("")||apic.getText().toString().equals(""))
+
+//        DateFormat dateFormat = new SimpleDateFormat("MM dd, yyyy");
+//        Calendar cal = Calendar.getInstance();
+//        String D1 = dateFormat.format(cal.getTime());
+//        
+//        SimpleDateFormat dy = new SimpleDateFormat("yyyy");
+//        SimpleDateFormat dm = new SimpleDateFormat("MM");
+//        SimpleDateFormat dd = new SimpleDateFormat("dd");
+//        
+//        int year1 = Integer.parseInt(dy.format(D1));
+//        int month1 = Integer.parseInt(dm.format(D1));
+//        int day1= Integer.parseInt(dd.format(D1));
+        
+        
+        
+        
+         if(aid.getText().equals("")||afname.getText().equals("")||alname.getText().equals("")||auname.getText().equals("")||alang.getSelectedItem().toString().equals("")|| anic.getText().equals("")|| aadd.getText().equals("")||aphn.getText().equals("")||apic.getText().toString().equals(""))
             {
                 
                 JOptionPane.showMessageDialog(null,"All the fields are required");
@@ -659,8 +749,8 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
                 pst.setString(2,afname.getText());
                 pst.setString(3,alname.getText());
                 pst.setString(4,auname.getText());
-                pst.setString(5,alang.getText());
-                pst.setString(6,aage.getText());
+                pst.setString(5,alang.getSelectedItem().toString());
+//                pst.setString(6,aage.getText());
                 pst.setString(7,anic.getText());
                 pst.setString(8,aadd.getText());
                 pst.setString(9,aphn.getText());
@@ -693,7 +783,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
                 try {
                     pst.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(addEmployee1.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(addEmployee.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -727,33 +817,151 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         }   
     }//GEN-LAST:event_alnameKeyTyped
 
-    private void alangKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_alangKeyTyped
-        char c = evt.getKeyChar();
+    private void yyyyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_yyyyMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_yyyyMouseClicked
+
+    private void yyyyKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_yyyyKeyTyped
+        aage.removeAllItems();
+        anicf.removeAllItems();
         
-        if(Character.isDigit(c))
+        
+        DateFormat dy = new SimpleDateFormat("yyyy");
+        Calendar cal = Calendar.getInstance();
+        String year1 = dy.format(cal.getTime());
+        
+        DateFormat dm = new SimpleDateFormat("MM");
+        Calendar calm = Calendar.getInstance();
+        String month1 = dm.format(calm.getTime());
+        
+        String a = Character.toString(evt.getKeyChar());
+        
+//        SimpleDateFormat dy = new SimpleDateFormat("yyyy");
+//        SimpleDateFormat dm = new SimpleDateFormat("MM");
+//        SimpleDateFormat dd = new SimpleDateFormat("dd");
+        
+//        int year1 = Integer.parseInt(dy.format(D1));
+//        int month1 = Integer.parseInt(dm.format(D1));
+//        int day1= Integer.parseInt(dd.format(D1));
+        
+        int age = (Integer.parseInt(year1)-Integer.parseInt(yyyy.getText()+a));
+        
+        System.out.print(year1);
+        
+        
+        aage.addItem(Integer.toString(age-1));
+        aage.addItem(Integer.toString(age));
+        aage.addItem(Integer.toString(age+1));
+        
+        if((yyyy.getText()+a).length()>=4)
+        {
+        anicf.addItem((yyyy.getText()+a).substring((year1.length())-2));
+        anicf.addItem(yyyy.getText()+a);
+        }
+        agee = age;
+    }//GEN-LAST:event_yyyyKeyTyped
+
+    private void mmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mmMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mmMouseClicked
+
+    private void mmKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mmKeyTyped
+        
+        try {
+            char c = evt.getKeyChar();  
+        String ch = Character.toString(c);
+        int check = Integer.parseInt(mm.getText()+ch);
+        System.out.println(check);
+        if(check>12)
         {
             evt.consume();
-         JOptionPane.showMessageDialog(null, "Numbers not allowed");
-        }   
-    }//GEN-LAST:event_alangKeyTyped
+         JOptionPane.showMessageDialog(null, "Month should be in between 1 - 12");
+        }
+        } 
+        catch (Exception e) {
+          throw new NumberFormatException("");  
+        }
+        
+        
+    }//GEN-LAST:event_mmKeyTyped
+
+    private void ddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ddMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ddMouseClicked
+
+    private void ddKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ddKeyTyped
+        try {
+            char c = evt.getKeyChar();  
+        String ch = Character.toString(c);
+        int check = Integer.parseInt(dd.getText()+ch);
+        System.out.println(check);
+        if(check>31)
+        {
+            evt.consume();
+         JOptionPane.showMessageDialog(null, "Month should be in between 1 - 12");
+        }
+        } 
+        catch (Exception e) {
+          throw new NumberFormatException("");  
+        }
+    }//GEN-LAST:event_ddKeyTyped
+
+    private void aageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aageActionPerformed
+    
+    }//GEN-LAST:event_aageActionPerformed
+
+    private void yyyyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yyyyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_yyyyActionPerformed
+
+    private void aageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aageMouseClicked
+        
+        
+    }//GEN-LAST:event_aageMouseClicked
+
+    private void anicKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_anicKeyTyped
+        char c = evt.getKeyChar();
+        if(agee<14)
+        {
+            JOptionPane.showMessageDialog(null,"Age must be greater than 14 years");
+            evt.consume();
+        }
+        String check = anic.getText()+c;
+        
+        if(check.length()>8)
+        {
+            evt.consume();
+         JOptionPane.showMessageDialog(null, "you have already entered the maximum number of characters ");
+        }
+    }//GEN-LAST:event_anicKeyTyped
+
+    private void aaddKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_aaddKeyTyped
+         if(agee<14)
+        {
+            JOptionPane.showMessageDialog(null,"Age must be greater than 14 years");
+            evt.consume();
+        }
+    }//GEN-LAST:event_aaddKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea aadd;
-    private javax.swing.JTextField aage;
+    private javax.swing.JComboBox<String> aage;
     private com.toedter.calendar.JDateChooser adate;
     private javax.swing.JComboBox<String> adeg;
     private javax.swing.JTextField afname;
     private javax.swing.JRadioButton aft;
     private javax.swing.JTextField aid;
-    private javax.swing.JTextField alang;
+    private javax.swing.JComboBox<String> alang;
     private javax.swing.JTextField alname;
     private javax.swing.JTextField anic;
+    private javax.swing.JComboBox<String> anicf;
     private javax.swing.JTextField aphn;
     private javax.swing.JTextField apic;
     private javax.swing.JRadioButton apt;
     private javax.swing.JTextField auname;
     private javax.swing.JLabel datevalid;
+    private javax.swing.JTextField dd;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -767,7 +975,11 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -779,6 +991,8 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField mm;
     private javax.swing.JLabel time;
+    private javax.swing.JTextField yyyy;
     // End of variables declaration//GEN-END:variables
 }
