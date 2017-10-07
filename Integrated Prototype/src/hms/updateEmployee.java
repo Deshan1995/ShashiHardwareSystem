@@ -5,7 +5,7 @@
  */
 package hms;
 
-import DBclass.DBconnection1;
+import DBconnection.DBconnect;
 import DBclass.me;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -54,7 +54,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
      */
     public updateEmployee() {
         initComponents();
-        conn=DBconnection1.connect();
+        conn=DBconnect.connectDb();
         tableload();
         ButtonGroup group = new ButtonGroup();
         group.add(usid);

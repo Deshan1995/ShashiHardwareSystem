@@ -5,7 +5,7 @@
  */
 package hms;
 
-import DBclass.DBconnection1;
+import DBconnection.DBconnect;
 import DBclass.me;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +35,7 @@ public class viewAttendance extends javax.swing.JInternalFrame {
      * Creates new form updateEmployee
      */
     public viewAttendance() {
-        conn=DBconnection1.connect();
+        conn=DBconnect.connectDb();
         initComponents();
         jLabel1.setVisible(false);
         jLabel5.setVisible(false);
