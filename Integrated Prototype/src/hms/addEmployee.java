@@ -5,6 +5,7 @@
  */
 package hms;
 
+import DBclass.DBconnection1;
 import DBconnection.DBconnect;
 import DBclass.me;
 import java.io.File;
@@ -56,7 +57,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
         
         initComponents();
         
-        conn=DBconnect.connectDb();
+        conn=DBconnection1.connect();
         auto();
         datevalid.setVisible(false);
         afname.setText("First Name");
@@ -143,7 +144,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
     
     public void tableload()
     {
-            conn=DBconnect.connectDb();
+            conn=DBconnection1.connect();
         String sql = "select * from Employee";
         try{
         pst = conn.prepareStatement(sql);
@@ -711,7 +712,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
          }
          else
          {
-        if(me.nicCheck(anic.getText()))
+        if(me.nicCheck(anicf.getSelectedItem().toString()+anic.getText()))
         {
                 if(me.phnCheck(aphn.getText()))
                 {
@@ -752,7 +753,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
                 pst.setString(4,auname.getText());
                 pst.setString(5,alang.getSelectedItem().toString());
 //                pst.setString(6,aage.getText());
-                pst.setString(7,anic.getText());
+                pst.setString(7,anicf.getSelectedItem().toString()+anic.getText());
                 pst.setString(8,aadd.getText());
                 pst.setString(9,aphn.getText());
                 pst.setString(10,adeg.getSelectedItem().toString());
