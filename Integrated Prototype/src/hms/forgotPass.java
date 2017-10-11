@@ -4,7 +4,7 @@
  */
 package hms;
 
-import DBclass.DBconnection1;
+
 import DBconnection.DBconnect;
 import java.awt.Toolkit;
 import java.sql.Connection;

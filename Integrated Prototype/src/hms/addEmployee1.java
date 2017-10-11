@@ -5,7 +5,6 @@
  */
 package hms;
 
-
 import DBconnection.DBconnect;
 import DBclass.me;
 import java.io.File;
@@ -38,7 +37,7 @@ import net.proteanit.sql.DbUtils;
  *
  * @author DELL-PC
  */
-public class addEmployee extends javax.swing.JInternalFrame {
+public class addEmployee1 extends javax.swing.JInternalFrame {
     
        String s;
        Connection  conn = null;
@@ -53,7 +52,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
     /**
      * Creates new form addEmployee
      */
-    public addEmployee() {
+    public addEmployee1() {
         
         initComponents();
         
@@ -114,11 +113,11 @@ public class addEmployee extends javax.swing.JInternalFrame {
                 
                 int no=Integer.parseInt(ino[1]);
                 no=no+1;
-                System.out.println(list.size());
+                System.out.println(a);
               aid.setText("E"+no);
            
             
-            System.out.println(list.indexOf("E10"));
+            System.out.println(a);
         } catch (Exception e) {
             
             System.out.println(e);
@@ -144,7 +143,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
     
     public void tableload()
     {
-            
+            conn=DBconnect.connectDb();
         String sql = "select * from Employee";
         try{
         pst = conn.prepareStatement(sql);
@@ -281,7 +280,6 @@ public class addEmployee extends javax.swing.JInternalFrame {
         getContentPane().add(afname);
         afname.setBounds(170, 120, 100, 30);
 
-        aid.setEditable(false);
         aid.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         getContentPane().add(aid);
         aid.setBounds(170, 70, 100, 30);
@@ -718,7 +716,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
                 {
            
            
-                
+                conn=DBconnect.connectDb();
                 String sql = "INSERT INTO Employee(employee_id,first_name,last_name,username,language,age,nic_no,address,phone_no,designation,status,addded_date,photograph) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 InputStream is = new FileInputStream(new File(s));
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -785,7 +783,7 @@ public class addEmployee extends javax.swing.JInternalFrame {
                 try {
                     pst.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(addEmployee.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(addEmployee1.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
