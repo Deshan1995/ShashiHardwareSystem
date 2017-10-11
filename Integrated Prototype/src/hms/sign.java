@@ -5,7 +5,7 @@
 package hms;
 
 
-import DBclass.DBconnection1;
+import DBconnection.DBconnect;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,7 +29,7 @@ public class sign extends javax.swing.JFrame {
         super("Sign Up");
         initComponents();
         setLocation((Toolkit.getDefaultToolkit().getScreenSize().width  - getSize().width) / 2, (Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 4);
-        conn=DBconnection1.connect();
+        conn=DBconnect.connectDb();
     }
 
     /**

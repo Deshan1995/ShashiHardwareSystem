@@ -5,7 +5,7 @@
  */
 package hms;
 
-import DBclass.DBconnection1;
+import DBconnection.DBconnect;
 import DBclass.me;
 import java.io.File;
 import javax.swing.JFileChooser;
@@ -55,7 +55,7 @@ public class viewSalaryReport extends javax.swing.JInternalFrame {
         
         initComponents();
         
-        conn=DBconnection1.connect();
+        conn=DBconnect.connectDb();
      
         
     }

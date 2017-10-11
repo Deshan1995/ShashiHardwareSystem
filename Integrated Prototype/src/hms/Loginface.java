@@ -5,8 +5,7 @@
 package hms;
 
 
-import DBclass.DBconnection1;
-import hms.DBClass.DBconnection;
+import DBconnection.DBconnect;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +31,7 @@ public class Loginface extends javax.swing.JFrame {
         super("Login");
         setLocation((Toolkit.getDefaultToolkit().getScreenSize().width  - getSize().width) / 4, (Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 4);
         initComponents();
-        conn=DBconnection1.connect();
+        conn=DBconnect.connectDb();
         error.hide();
     }
 
