@@ -393,7 +393,6 @@ public class Order_sub extends javax.swing.JInternalFrame {
         jPanel10 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        delivDate = new com.toedter.calendar.JDateChooser();
         jLabel16 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
         vehiTxt = new javax.swing.JComboBox();
@@ -449,7 +448,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         btn_assignCus = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        jTextField13 = new javax.swing.JTextField();
+        txt_delID = new javax.swing.JTextField();
         jCheckBox1 = new javax.swing.JCheckBox();
         jLabel12 = new javax.swing.JLabel();
         lbl_cusStatus = new javax.swing.JLabel();
@@ -524,8 +523,6 @@ public class Order_sub extends javax.swing.JInternalFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setText("Address");
 
-        delivDate.setDateFormatString("dd-MM-yyyy");
-
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel16.setText("Date");
 
@@ -560,7 +557,6 @@ public class Order_sub extends javax.swing.JInternalFrame {
                     .addComponent(jLabel34))
                 .addGap(41, 41, 41)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(delivDate, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
                     .addComponent(vehiTxt, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(driverIdTxt, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(addressTxt)
@@ -579,9 +575,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
                     .addComponent(jLabel9)
                     .addComponent(addressTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(delivDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel16))
+                .addComponent(jLabel16)
                 .addGap(31, 31, 31)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel33)
@@ -1064,7 +1058,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel14.setText("Delivery ID");
 
-        jTextField13.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txt_delID.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jCheckBox1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jCheckBox1.setText("Delivery");
@@ -1087,7 +1081,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txt_delID, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(39, 39, 39)
                         .addComponent(jCheckBox1))
                     .addComponent(jLabel12))
@@ -1098,7 +1092,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField13)
+                    .addComponent(txt_delID)
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCheckBox1))
                 .addGap(45, 45, 45)
@@ -2317,8 +2311,10 @@ public class Order_sub extends javax.swing.JInternalFrame {
             System.out.println(ex);
         }
         loadOrderDeliverTable();
-        clear();
+        
         this.delID = delivIdTxt.getText();
+        txt_delID.setText(this.delID);
+        clear();
     }//GEN-LAST:event_confirmbtnActionPerformed
 
     private void totalTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalTxtActionPerformed
@@ -2341,7 +2337,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         String driv = orderDelTable.getValueAt(row, 5).toString();
 
         vehiTxt.setSelectedItem(vehicle);
-        ((JTextField)delivDate.getDateEditor().getUiComponent()).setText(model.getValueAt(row,3).toString());
+       // ((JTextField)delivDate.getDateEditor().getUiComponent()).setText(model.getValueAt(row,3).toString()); --by bhanuka
         driverIdTxt.setSelectedItem(driv);
     }//GEN-LAST:event_orderDelTableMouseClicked
 
@@ -2466,7 +2462,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
         String did = delivIdTxt.getText();
         String oid = null;
         String addrs = addressTxt.getText();
-        String ddate = (((JTextField)delivDate.getDateEditor().getUiComponent()).getText());
+        //String ddate = (((JTextField)delivDate.getDateEditor().getUiComponent()).getText());       --by bhanuka
+        String ddate =null;  // --by bhanuka
         String vehino = vehiTxt.getSelectedItem().toString();
         String driver = driverIdTxt.getSelectedItem().toString();
         String dis = distanceTxt.getText();
@@ -2486,7 +2483,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
     public void clear(){
         delivIdTxt.setText(null);
         addressTxt.setText(null);
-        delivDate.setDate(null);
+        //delivDate.setDate(null);  --by bhanuka
         vehiTxt.setSelectedItem(null);
         driverIdTxt.setSelectedItem(null);
         distanceTxt.setText(null);
@@ -2531,7 +2528,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
     
     public String getMap(String destination){
         try {
-            String origin= "Shashi+Enterprises,no+12,Nuwara+Eliya+Road,Kappetipola";
+            //String origin= "Shashi+Enterprises,no+12,Nuwara+Eliya+Road,Kappetipola";
+            String origin = "SLIIT,Kandy+rd,Malabe";
             destination = destination.replace(' ', '+');
             HttpURLConnection connection = null;
             URL url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="+origin+"&destinations="+destination+"&key="+API_KEY);
@@ -2561,15 +2559,17 @@ public class Order_sub extends javax.swing.JInternalFrame {
         char[] arr = new char[100];
         for (String line : jTextArea1.getText().split("\\n")){
             count++;
+            //System.out.println(line);
             if(count == 8){
                 int len = line.length();
                 line.getChars(28, len-6, arr, 0);
                 dis = Double.parseDouble(String.valueOf(arr));       
-    
+                
                 return dis;
             }
-        }       
-    
+            
+        }      
+            
         return -1;
     }
     
@@ -2607,7 +2607,6 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JButton calbutton;
     private javax.swing.JCheckBox chkbx_addPastLoan;
     private javax.swing.JButton confirmbtn;
-    private com.toedter.calendar.JDateChooser delivDate;
     private javax.swing.JTextField delivIdTxt;
     private javax.swing.JTextField distanceTxt;
     private javax.swing.JComboBox driverIdTxt;
@@ -2672,7 +2671,6 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField13;
     private javax.swing.JLabel lbl_confirmCash;
     private javax.swing.JLabel lbl_confirmCheque;
     private javax.swing.JLabel lbl_cusResult;
@@ -2693,6 +2691,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txt_cash1;
     private javax.swing.JTextField txt_cusID;
     private javax.swing.JTextField txt_cusName;
+    private javax.swing.JTextField txt_delID;
     private javax.swing.JTextField txt_itemID;
     private javax.swing.JTextField txt_netValue;
     private javax.swing.JTextField txt_nowPaying;

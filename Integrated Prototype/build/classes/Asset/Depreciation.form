@@ -180,7 +180,7 @@
                       <Component id="btn_insert" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btn_clear" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="106" max="32767" attributes="0"/>
+                  <EmptySpace pref="100" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

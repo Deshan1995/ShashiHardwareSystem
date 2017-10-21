@@ -242,7 +242,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
                 diff = year - Integer.parseInt(year1);
                         
                        
-		if(depre_method.equals("Straight Line")){ 
+		if(depre_method.equals("Straight. Line")){ 
 		
                     val = Double.toString(cost-(annual_depre*diff));
                                  
