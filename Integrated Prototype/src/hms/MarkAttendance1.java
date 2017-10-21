@@ -5,7 +5,7 @@
  */
 package hms;
 
-import DBclass.DBconnection1;
+import DBconnection.DBconnect;
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,7 +40,7 @@ String s;
      * Creates new form MarkAttendance1
      */
     public MarkAttendance1() {
-        conn=DBconnection1.connect();
+        conn=DBconnect.connectDb();
         setExtendedState(MAXIMIZED_BOTH);
 
         initComponents();

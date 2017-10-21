@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package hms;
-import DBclass.DBconnection1;
+import DBconnection.DBconnect;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -43,7 +43,7 @@ public class assignSalaries extends javax.swing.JInternalFrame {
     public assignSalaries() {
         
             initComponents();
-            conn=DBconnection1.connect();
+            conn=DBconnect.connectDb();
             tableload();
             to.setEnabled(false);
             int size =jTable2.getRowCount();
