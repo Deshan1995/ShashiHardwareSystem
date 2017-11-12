@@ -5,14 +5,14 @@
  */
 package Customer_and_Order;
 
-import java.sql.Connection;
-
 /**
  *
  * @author Bhanuka Yapa
  */
 public class Order extends javax.swing.JFrame {
-int tt;
+
+    
+    int tt;
     /**
      * Creates new form Order
      */
@@ -55,7 +55,7 @@ int tt;
         
         x.setVisible(false);
         
-        if(y==null)
+        if(y==null)                             //checking whether object y is created
             y=new customer_sub();
         
        
@@ -64,7 +64,12 @@ int tt;
         y.btn_backToOrder1.setVisible(true);
         y.btn_backToOrder2.setVisible(true);
         
-        jDesktopPane1.add(y).setVisible(true);
+        if(y.getParent()==null)                 //checking whether object y has been added to the DesktopPane earlier
+           jDesktopPane1.add(y).setVisible(true);
+        else{
+            y.setVisible(true);                       
+        }
+        
     }
     public static void callAddCusSearchForm(){
         
@@ -75,13 +80,19 @@ int tt;
         if(y==null)
             y=new customer_sub();
         
-        y.showSearchTab();
+        
         y.btn_assignNewCus.setVisible(true);
         y.btn_assignLastCus.setVisible(true);
         y.btn_backToOrder1.setVisible(true);
         y.btn_backToOrder2.setVisible(true);
         
-        jDesktopPane1.add(y).setVisible(true);
+        if(y.getParent()==null)                 
+           jDesktopPane1.add(y).setVisible(true);
+        else{
+            y.setVisible(true);                       
+        }
+        
+        y.showSearchTab();
     }
     public static void reload(){
 //        
@@ -95,11 +106,16 @@ int tt;
         jDesktopPane1.add(x).setVisible(true);
     }
     
-    
+    static void assignCustomer(String text) {
+        x.txt_cusID.setText(text);
+        x.btn_assignCus.doClick();
+    }
     
     public static void callOrderFormAgain(){
         
+        y.setVisible(false);
         x.setVisible(true);
+        
         /*y=new customer_sub();
         jDesktopPane1.add(y).setVisible(true);*/
     }
