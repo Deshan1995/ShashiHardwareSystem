@@ -7,6 +7,7 @@ package Customer_and_Order;
 
 import DBconnection.DBconnect;
 import Delivery.models.OrderDelivery;
+import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.BufferedReader;
@@ -24,6 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -69,6 +71,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
         
         conn = DBconnect.connectDb();    //establish db connection
         System.out.println("Connected to database");
+        
+        loadAvailableItemList();
         
         txtA_itemDes.setEditable(false);
         
@@ -280,7 +284,13 @@ public class Order_sub extends javax.swing.JInternalFrame {
             
         }
         /////////////////////////////////////////////////////////////////
-
+        //in case user removes all the items, have to avoid null exception
+        if(subTotal==null)
+            subTotal="0";
+        if(discount==null)
+            discount="0";
+        if(netValue==null)
+            netValue="0";
  
         //set values for the left side payment details
         Float totalF = Float.parseFloat(netValue)+this.delCharge;
@@ -309,17 +319,136 @@ public class Order_sub extends javax.swing.JInternalFrame {
         
         //setting now paying value
         Float nowPaying=0f;
-        if((this.cashAmount==null)&&(this.chequeAmount==null))           
-            nowPaying = 0f;
-        else if(this.chequeAmount==null)
-            nowPaying = Float.parseFloat(this.cashAmount);
-        else if(this.cashAmount==null)
-            nowPaying = Float.parseFloat(this.chequeAmount);
+        Float cashF=0f;
+        Float chequeF=0f;
+        
+        if(this.cashAmount!=null){
+            cashF=Float.parseFloat(this.cashAmount);
+        }
+        if(this.chequeAmount!=null){
+            chequeF=Float.parseFloat(this.chequeAmount);
+        }
+        
+        nowPaying=cashF+chequeF;        
         txt_nowPaying.setText(nowPaying.toString());
         
         //setting remaining value
         Float remaining = Float.parseFloat(txt_totToBePaid.getText())-nowPaying;
         txt_remaining.setText(remaining.toString());
+        
+        //setting amounts for "pay by" boxes
+        updatePayByBoxes();
+            
+    }
+    public void updatePayByBoxes(){
+        Float remaining = Float.parseFloat(txt_remaining.getText());
+        
+        if((this.cashAmount==null)&&(this.chequeAmount==null)){
+            txt_amountCash1.setText(remaining.toString());
+            txt_amountCheque.setText(remaining.toString());
+        }else if(this.chequeAmount==null){
+            txt_amountCheque.setText(remaining.toString());
+        }else if(this.cashAmount==null){
+            txt_amountCash1.setText(remaining.toString());
+        }
+    }
+    void loadAvailableItemList(){
+        
+        PreparedStatement ps_category=null;
+        ResultSet rs_category = null;        
+        PreparedStatement ps_itemList= null;
+        ResultSet rs_itemList = null;
+        
+        String itemID = txt_itemID.getText();
+        String key=null;
+        
+        String itemName=null;
+        String q=null;
+        
+        String category=getItemCategory(itemID);
+        System.out.println(category);
+        
+        try{
+            
+            if(category.equals("Paint&Thinner")){
+                q = "SELECT ItemID,Catergory,BrandName,ColourCode FROM Paint_Thinner WHERE ItemID LIKE '%"+itemID+"%'";                
+            }else if(category.equals("Construction")){
+                q = "SELECT ItemID,ItemName,BrandName,size,length FROM Construction WHERE ItemID LIKE '%"+itemID+"%'";
+            }else if(category.equals("Roofing&Fitting")){
+                q = "SELECT ItemID, Catergary,Type,BrandName,size,Colour, Qty FROM Roofing_Fitting WHERE ItemID LIKE '%"+itemID+"%'";
+            }else if(category.equals("Waterpipe&Fittings")){
+                q = "SELECT ItemID , ItemName,BrandName,Size,Qty FROM WaterPipe_Fitting WHERE ItemID LIKE '%"+itemID+"%'";
+            }else if(category.equals("Chemical&Farming")){
+                q = "SELECT ItemID,ItemName,BrandName,Duration,Qty FROM Chemical_Farming WHERE ItemID LIKE '%"+itemID+"%'";
+            }else if(category.equals("Other")){
+                q = "SELECT ItemID,ItemName,BrandName,Colour,Size,Qty FROM OtherItem WHERE ItemID LIKE '%"+itemID+"%'";
+            }
+            //ps_itemList.setString(1, itemID);
+            ps_itemList = conn.prepareStatement(q);
+            rs_itemList = ps_itemList.executeQuery();
+            
+            int count =0;
+            while(rs_itemList.next()){
+                count++;
+            }
+            System.out.println("count "+count);
+            rs_itemList = ps_itemList.executeQuery();
+            
+            if(count==1){
+                if(category.equals("Paint&Thinner")){
+                    itemName= rs_itemList.getString("Catergory")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("ColourCode");
+                }else if(category.equals("Construction")){
+                    itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("size")+" "+ rs_itemList.getString("length");
+                }else if(category.equals("Roofing&Fitting")){
+                    itemName= rs_itemList.getString("Catergary")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("Type")+" "+ rs_itemList.getString("size")+" "+ rs_itemList.getString("Colour");
+                }else if(category.equals("Waterpipe&Fittings")){
+                    itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("Size");
+                }else if(category.equals("Chemical&Farming")){
+                    itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName");
+                }else if(category.equals("Other")){
+                    itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("Colour")+" "+ rs_itemList.getString("Size");
+                }
+                
+                txtA_itemDes.setText(itemName);
+            }else
+                txtA_itemDes.setText("");
+            
+            rs_itemList = ps_itemList.executeQuery();
+            tbl_availableList.setModel(DbUtils.resultSetToTableModel(rs_itemList));
+                
+                
+        }catch(IndexOutOfBoundsException e){
+            System.out.print("IndexOutOfBoundsException thrown\n");
+        
+        }catch (Exception e){
+            
+            System.out.print(e + " MAIN");
+            //ex.printStackTrace();
+        }  finally {
+            
+            try{            
+                if (ps_category != null) {
+                    ps_category.close();
+                }
+                if (rs_category != null) {
+                    rs_category.close();
+                }
+                if (ps_itemList != null) {
+                    ps_itemList.close();
+                }
+                if (rs_itemList != null) {
+                    rs_itemList.close();
+                }
+                
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }  
+        
+        
+
     }
     /*
     
@@ -1226,7 +1355,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_total.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_total.setText("0.00");
         jPanel12.add(txt_total);
-        txt_total.setBounds(150, 40, 120, 23);
+        txt_total.setBounds(180, 40, 120, 23);
 
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel25.setText("Less Discount");
@@ -1236,7 +1365,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_totDis.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_totDis.setText("0.00");
         jPanel12.add(txt_totDis);
-        txt_totDis.setBounds(150, 80, 120, 23);
+        txt_totDis.setBounds(180, 80, 120, 23);
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel24.setText("Net Value");
@@ -1246,7 +1375,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_netValue.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_netValue.setText("0.00");
         jPanel12.add(txt_netValue);
-        txt_netValue.setBounds(150, 120, 120, 23);
+        txt_netValue.setBounds(180, 120, 120, 23);
 
         jLabel29.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel29.setText("Other Charges");
@@ -1256,7 +1385,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_other.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_other.setText("0.00");
         jPanel12.add(txt_other);
-        txt_other.setBounds(150, 190, 120, 23);
+        txt_other.setBounds(180, 190, 120, 23);
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel13.setText("Total");
@@ -1266,22 +1395,22 @@ public class Order_sub extends javax.swing.JInternalFrame {
         lbl_total.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lbl_total.setText("0.00");
         jPanel12.add(lbl_total);
-        lbl_total.setBounds(160, 240, 150, 22);
+        lbl_total.setBounds(180, 240, 150, 22);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setText("Total to be Paid");
         jPanel12.add(jLabel8);
-        jLabel8.setBounds(360, 80, 120, 16);
+        jLabel8.setBounds(390, 80, 120, 16);
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel19.setText("Now Paying");
         jPanel12.add(jLabel19);
-        jLabel19.setBounds(360, 130, 110, 16);
+        jLabel19.setBounds(390, 130, 110, 16);
 
         jLabel28.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel28.setText("Remaining to be paid");
         jPanel12.add(jLabel28);
-        jLabel28.setBounds(360, 200, 160, 16);
+        jLabel28.setBounds(390, 200, 160, 16);
 
         txt_remaining.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_remaining.setText("0.00");
@@ -1415,7 +1544,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
             }
         });
         jPanel12.add(chkbx_addPastLoan);
-        chkbx_addPastLoan.setBounds(360, 40, 140, 25);
+        chkbx_addPastLoan.setBounds(390, 40, 140, 25);
 
         txt_nowPaying.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txt_nowPaying.setText("0.00");
@@ -1538,101 +1667,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
     private void txt_itemIDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_itemIDKeyReleased
         
-        PreparedStatement ps_category=null;
-        ResultSet rs_category = null;        
-        PreparedStatement ps_itemList= null;
-        ResultSet rs_itemList = null;
-        
-        String itemID = txt_itemID.getText();
-        String key=null;
-        
-        String itemName=null;
-        String q=null;
-        
-        String category=getItemCategory(itemID);
-        System.out.println(category);
-        
-        try{
-            
-            if(category.equals("Paint&Thinner")){
-                q = "SELECT ItemID,Catergory,BrandName,ColourCode FROM Paint_Thinner WHERE ItemID LIKE '%"+itemID+"%'";                
-            }else if(category.equals("Construction")){
-                q = "SELECT ItemID,ItemName,BrandName,size,length FROM Construction WHERE ItemID LIKE '%"+itemID+"%'";
-            }else if(category.equals("Roofing&Fitting")){
-                q = "SELECT ItemID, Catergary,Type,BrandName,size,Colour, Qty FROM Roofing_Fitting WHERE ItemID LIKE '%"+itemID+"%'";
-            }else if(category.equals("Waterpipe&Fittings")){
-                q = "SELECT ItemID , ItemName,BrandName,Size,Qty FROM WaterPipe_Fitting WHERE ItemID LIKE '%"+itemID+"%'";
-            }else if(category.equals("Chemical&Farming")){
-                q = "SELECT ItemID,ItemName,BrandName,Duration,Qty FROM Chemical_Farming WHERE ItemID LIKE '%"+itemID+"%'";
-            }else if(category.equals("Other")){
-                q = "SELECT ItemID,ItemName,BrandName,Colour,Size,Qty FROM OtherItem WHERE ItemID LIKE '%"+itemID+"%'";
-            }
-            //ps_itemList.setString(1, itemID);
-            ps_itemList = conn.prepareStatement(q);
-            rs_itemList = ps_itemList.executeQuery();
-            
-            int count =0;
-            while(rs_itemList.next()){
-                count++;
-            }
-            System.out.println("count "+count);
-            rs_itemList = ps_itemList.executeQuery();
-            
-            if(count==1){
-                if(category.equals("Paint&Thinner")){
-                    itemName= rs_itemList.getString("Catergory")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("ColourCode");
-                }else if(category.equals("Construction")){
-                    itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("size")+" "+ rs_itemList.getString("length");
-                }else if(category.equals("Roofing&Fitting")){
-                    itemName= rs_itemList.getString("Catergary")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("Type")+" "+ rs_itemList.getString("size")+" "+ rs_itemList.getString("Colour");
-                }else if(category.equals("Waterpipe&Fittings")){
-                    itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("Size");
-                }else if(category.equals("Chemical&Farming")){
-                    itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName");
-                }else if(category.equals("Other")){
-                    itemName= rs_itemList.getString("ItemName")+" "+ rs_itemList.getString("BrandName")+" "+ rs_itemList.getString("Colour")+" "+ rs_itemList.getString("Size");
-                }
-                
-                txtA_itemDes.setText(itemName);
-            }else
-                txtA_itemDes.setText("");
-            
-            rs_itemList = ps_itemList.executeQuery();
-            tbl_availableList.setModel(DbUtils.resultSetToTableModel(rs_itemList));
-                
-                
-        }catch(IndexOutOfBoundsException e){
-            System.out.print("IndexOutOfBoundsException thrown\n");
-        
-        }catch (Exception e){
-            
-            System.out.print(e + " MAIN");
-            //ex.printStackTrace();
-        }  finally {
-            
-            try{            
-                if (ps_category != null) {
-                    ps_category.close();
-                }
-                if (rs_category != null) {
-                    rs_category.close();
-                }
-                if (ps_itemList != null) {
-                    ps_itemList.close();
-                }
-                if (rs_itemList != null) {
-                    rs_itemList.close();
-                }
-                
-                conn.setAutoCommit(true);
-                
-            }catch(Exception e){
-                System.out.println(e);
-            }
-        }  
-        
-        
-
+        loadAvailableItemList();
     }//GEN-LAST:event_txt_itemIDKeyReleased
 
     private void btn_addEntryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addEntryActionPerformed
@@ -1843,6 +1878,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
        Order.reload();
        
         }
+        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void btn_confirmChequeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_confirmChequeActionPerformed
@@ -2111,12 +2147,14 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
             txt_totToBePaid.setText(totToPay.toString());
             txt_remaining.setText(remainToPay.toString());
+            updatePayByBoxes();
         }else{
             Float totToPay = Float.parseFloat(txt_totToBePaid.getText()) - Float.parseFloat(txt_pre.getText());
             Float remainToPay = Float.parseFloat(txt_remaining.getText()) -  Float.parseFloat(txt_pre.getText());
 
             txt_totToBePaid.setText(totToPay.toString());
             txt_remaining.setText(remainToPay.toString());
+            updatePayByBoxes();
         }
     }//GEN-LAST:event_chkbx_addPastLoanActionPerformed
 
@@ -2125,6 +2163,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
         this.loanAmount= txt_remaining.getText();
         
         txt_remaining.setText(txt_remaining.getText() + " - LOAN"); 
+        txt_remaining.setForeground(Color.red);
+        
         
         btn_confirmCash1.setEnabled(false);
         btn_confirmCheque.setEnabled(false);
@@ -2138,6 +2178,13 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
         txt_numCheque.setEditable(false);
         txt_amountCheque.setEditable(false);
+        
+        if(this.chequeAmount==null){
+            txt_amountCheque.setText("");
+        }
+        if(this.cashAmount==null){
+            txt_amountCash1.setText("");
+        }
         
         
     }//GEN-LAST:event_btn_giveLoanActionPerformed
@@ -2597,7 +2644,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JButton btn_addCus;
     private javax.swing.JButton btn_addCus1;
     private javax.swing.JButton btn_addEntry;
-    private javax.swing.JButton btn_assignCus;
+    protected javax.swing.JButton btn_assignCus;
     private javax.swing.JButton btn_confirmCash1;
     private javax.swing.JButton btn_confirmCheque;
     private javax.swing.JButton btn_giveLoan;
@@ -2668,7 +2715,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    protected javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lbl_confirmCash;
@@ -2689,7 +2736,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txt_amountCheque;
     private javax.swing.JTextField txt_balanceCash1;
     private javax.swing.JTextField txt_cash1;
-    private javax.swing.JTextField txt_cusID;
+    protected javax.swing.JTextField txt_cusID;
     private javax.swing.JTextField txt_cusName;
     private javax.swing.JTextField txt_delID;
     private javax.swing.JTextField txt_itemID;

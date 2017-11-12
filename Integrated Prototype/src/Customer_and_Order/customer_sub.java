@@ -1000,7 +1000,8 @@ public class customer_sub extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btn_backToOrder2ActionPerformed
 
     private void btn_assignNewCusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_assignNewCusActionPerformed
-        // TODO add your handling code here:
+        Order.assignCustomer(txt_cusID2.getText());
+        
     }//GEN-LAST:event_btn_assignNewCusActionPerformed
 
     private void btn_backToOrder1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backToOrder1ActionPerformed
@@ -1012,7 +1013,15 @@ public class customer_sub extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btn_assignLastCusActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        int r = jTable2.getSelectedRow();       
+        
+        int r=-1;
+        r = jTable2.getSelectedRow();       
+               
+        if(r==-1){
+            JOptionPane.showMessageDialog(null,"Please choose a customer first!","No Input", JOptionPane.INFORMATION_MESSAGE);
+
+            return;
+        }
         String ID = jTable2.getValueAt(r, 0).toString();
         
         try{
