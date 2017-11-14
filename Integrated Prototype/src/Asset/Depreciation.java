@@ -408,7 +408,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         txt_cost = new javax.swing.JTextField();
-        cmb_category = new javax.swing.JComboBox<>();
+        cmb_category = new javax.swing.JComboBox<String>();
         txt_assetId = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
@@ -418,13 +418,12 @@ public class Depreciation extends javax.swing.JInternalFrame {
         txt_Description = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txt_depreId = new javax.swing.JTextField();
+        jTextField1 = new javax.swing.JTextField();
         btn_clear = new javax.swing.JButton();
         btn_search_depre = new javax.swing.JButton();
         btn_refresh = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-
-        Asset.setSize(new java.awt.Dimension(850, 300));
 
         asset.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -691,7 +690,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
         });
 
         cmb_category.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        cmb_category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Computer ", "Furniture", "Machinary", "Property", "Vehicle" }));
+        cmb_category.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Computer ", "Furniture", "Machinary", "Property", "Vehicle" }));
         cmb_category.setBorder(null);
 
         txt_assetId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -735,6 +734,8 @@ public class Depreciation extends javax.swing.JInternalFrame {
         txt_depreId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_depreId.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
+        jTextField1.setText("jTextField1");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -767,6 +768,10 @@ public class Depreciation extends javax.swing.JInternalFrame {
                             .addComponent(txt_assetId, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                             .addComponent(txt_depreId))))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -795,7 +800,8 @@ public class Depreciation extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txt_salvageValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28))
+                .addGap(8, 8, 8)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         btn_clear.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -1320,6 +1326,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTextField1;
     private com.toedter.calendar.JDateChooser purchase_date;
     private javax.swing.JTextField txt_Description;
     private javax.swing.JTextField txt_Rate;
