@@ -43,7 +43,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
         calendar();
         auto();
         Notification();
-      // depreciation();
+        depreciation();
     }
     public void tableUpdate(){
            
@@ -132,14 +132,12 @@ public class Depreciation extends javax.swing.JInternalFrame {
     public void calendar()
     { 
         Calendar cal=new GregorianCalendar();
-        year= cal.get(Calendar.YEAR);
+        //year= cal.get(Calendar.YEAR);
         month=cal.get(Calendar.MONTH)+1;
         //day=cal.get(Calendar.DAY_OF_MONTH);
        // lbl_date.setText(year+"/"+month+"/"+day);
-       //year=2027;
+       year=2021;
        day=7;
-       
-    
     }
     
     public void showtime(){
@@ -213,8 +211,8 @@ public class Depreciation extends javax.swing.JInternalFrame {
     }
     
     public void depreciation(){
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat df = new SimpleDateFormat("yyyy");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat df = new SimpleDateFormat("MM");
 
             java.util.Date d1 = null;
             int diff = 0;
@@ -238,13 +236,13 @@ public class Depreciation extends javax.swing.JInternalFrame {
 		depre_method = rs.getString("Depreciation_Method");
 
 		d1 = format.parse(date);
-                String year1 = df.format(d1);
-                diff = year - Integer.parseInt(year1);
+                String month1 = df.format(d1);
+                diff = month - Integer.parseInt(month1);
                         
                        
 		if(depre_method.equals("Straight Line")){ 
 		
-                    val = Double.toString(cost-(annual_depre*diff));
+                    val = Double.toString(cost-((annual_depre/12.0)*diff));
                                  
                 }
 		else if(depre_method.equals("Declining Balance")){
