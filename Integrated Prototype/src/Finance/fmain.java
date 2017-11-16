@@ -57,7 +57,7 @@ public class fmain extends javax.swing.JFrame {
 
         jButton4.setBackground(new java.awt.Color(153, 153, 153));
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton4.setText("Handle payments");
+        jButton4.setText("Handle Cheques");
         jButton4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(51, 51, 51), 4, true));
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
