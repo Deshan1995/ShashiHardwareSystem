@@ -46,6 +46,8 @@ public class pettycash extends javax.swing.JInternalFrame {
         conn = DBconnect.connectDb();
         tableload();
         autoincrement();
+        double bal = SelectLastBalance();
+          bal1.setText(Double.toString(bal));
         
     }
  
@@ -105,7 +107,9 @@ public class pettycash extends javax.swing.JInternalFrame {
         String dd=((JTextField)jDateChooser1.getDateEditor().getUiComponent()).getText();
         String dd1=((JTextField)jDateChooser2.getDateEditor().getUiComponent()).getText();
         
-        String sql = "select * from Petty_Cash where Date BETWEEN '"+dd+"' AND '"+dd1+"'";
+        if(satype.getSelectedItem().toString().equals("Expence"))
+        {
+        String sql = "select * from Petty_Cash where Date BETWEEN '"+dd+"' AND '"+dd1+"' AND Amount_Type='Expence'";
         try{
         pst = conn.prepareStatement(sql);
         rs = pst.executeQuery();
@@ -126,7 +130,31 @@ public class pettycash extends javax.swing.JInternalFrame {
                     
                 }
             }
-       
+        }
+        else if(satype.getSelectedItem().toString().equals("Income"))
+        {
+            String sql = "select * from Petty_Cash where Date BETWEEN '"+dd+"' AND '"+dd1+"' AND Amount_Type='Income'";
+        try{
+        pst = conn.prepareStatement(sql);
+        rs = pst.executeQuery();
+        
+        jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        }
+        catch(Exception e){
+                
+            }    
+            finally{
+                try{
+                pst.close();
+                rs.close();
+                }
+                catch(Exception e)
+                {
+                    
+                }
+            }
+        }
     }
     
     
@@ -146,7 +174,7 @@ public class pettycash extends javax.swing.JInternalFrame {
             finally{
                 try{
                 pst.close();
-                rs.close();
+            rs.close();
                 }
                 catch(Exception e)
                 {
@@ -177,6 +205,8 @@ public class pettycash extends javax.swing.JInternalFrame {
         jButton5 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         pid = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        atype = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -191,6 +221,8 @@ public class pettycash extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         search = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
+        satype = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
@@ -199,7 +231,7 @@ public class pettycash extends javax.swing.JInternalFrame {
         jLabel10 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        bal1 = new javax.swing.JLabel();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Petty Cash Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 24), new java.awt.Color(0, 0, 102))); // NOI18N
 
@@ -258,6 +290,11 @@ public class pettycash extends javax.swing.JInternalFrame {
         pid.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         pid.setText("pc1");
 
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel13.setText("Amount Type");
+
+        atype.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Expence", "Income" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -268,25 +305,35 @@ public class pettycash extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(pid, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(work, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jDateChooser3, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
                                     .addComponent(Amount)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(20, 20, 20))))
+                        .addGap(20, 20, 20))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel13))
+                        .addGap(42, 42, 42)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(atype, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(work, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 20, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -295,11 +342,15 @@ public class pettycash extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(pid, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(work, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(atype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Amount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
@@ -320,13 +371,13 @@ public class pettycash extends javax.swing.JInternalFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Petty Cash ID", "Work Type", "Amount", "Date"
+                "Petty Cash ID", "Work Type", "Amount_Type", "Amount", "Date", "Balance"
             }
         ));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -349,7 +400,7 @@ public class pettycash extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -369,6 +420,7 @@ public class pettycash extends javax.swing.JInternalFrame {
             }
         });
 
+        total.setEditable(false);
         total.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -397,6 +449,11 @@ public class pettycash extends javax.swing.JInternalFrame {
             }
         });
 
+        satype.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Expence", "Income" }));
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel12.setText("Amount Type");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -414,24 +471,26 @@ public class pettycash extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(23, 23, 23)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(94, 94, 94)
+                        .addComponent(search)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(search)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(satype, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addGap(19, 19, 19)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -439,7 +498,11 @@ public class pettycash extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
+                .addGap(21, 21, 21)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(satype, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(search)
                     .addComponent(jButton1))
@@ -517,6 +580,8 @@ public class pettycash extends javax.swing.JInternalFrame {
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel11.setText("Balance     Rs.");
 
+        bal1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -526,8 +591,7 @@ public class pettycash extends javax.swing.JInternalFrame {
                 .addGap(0, 37, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(33, 33, 33)
@@ -538,7 +602,8 @@ public class pettycash extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(bal1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(258, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -547,17 +612,17 @@ public class pettycash extends javax.swing.JInternalFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                            .addComponent(bal1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(45, 45, 45)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(134, 134, 134))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
 
         pack();
@@ -567,6 +632,44 @@ public class pettycash extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_workActionPerformed
 
+    public double SelectLastBalance()
+    {
+        double balance1=0;
+        try
+            {
+                
+                s = conn.createStatement();
+                
+                rs = s.executeQuery("SELECT * FROM Petty_Cash");
+                
+                while(rs.next())
+                {
+                   balance1=rs.getDouble("Balance");
+                    
+                
+                }
+                //return balance1;
+            
+            }
+            catch(Exception e)
+            {
+            JOptionPane.showMessageDialog(null,e);
+            }
+            finally{
+                try{
+               
+                rs.close();
+                }
+                catch(Exception e)
+                {
+                    
+                }
+            }
+        return balance1;
+    }
+    
+ 
+    
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
          if(pid.getText().equals("") || work.getText().equals("") || Amount.getText().equals("") || ((JTextField)jDateChooser3.getDateEditor().getUiComponent()).getText().equals(""))
@@ -581,19 +684,37 @@ public class pettycash extends javax.swing.JInternalFrame {
         {
             
            //SimpleDateFormat format=new SimpleDateFormat();   
-          String sql="Insert into Petty_Cash values(?,?,?,?)";  
+          String sql="Insert into Petty_Cash values(?,?,?,?,?,?)";  
           pst=conn.prepareStatement(sql);  
           pst.setString(1,pid.getText());
-          pst.setString(2,work.getText());    
-          pst.setString(3,Amount.getText());
-          pst.setString(4,((JTextField)jDateChooser3.getDateEditor().getUiComponent()).getText());
+          pst.setString(2,work.getText()); 
+          pst.setString(3,atype.getSelectedItem().toString());
+          pst.setDouble(4,Double.parseDouble(Amount.getText()));
+          pst.setString(5,((JTextField)jDateChooser3.getDateEditor().getUiComponent()).getText());
           
+          
+          
+          double balance1=SelectLastBalance();
+          double amt=Double.parseDouble(Amount.getText());
+         
+          if(atype.getSelectedItem().toString().equals("Expence"))
+          {
+              balance1=balance1-amt;
+          }
+          else if(atype.getSelectedItem().toString().equals("Income"))
+          {
+              balance1=balance1+amt;
+          }
+          
+          pst.setDouble(6, balance1);
           
           
           
           pst.execute();
           clear();
           tableload();
+          double bal = SelectLastBalance();
+          bal1.setText(Double.toString(bal));
           JOptionPane.showMessageDialog(null,"Saved");
         }
         catch(Exception e)
@@ -633,11 +754,13 @@ public class pettycash extends javax.swing.JInternalFrame {
         
         String pid1=jTable1.getValueAt(row,0).toString();
         String work1=jTable1.getValueAt(row,1).toString();
-        String Amount1=jTable1.getValueAt(row,2).toString();
-        ((JTextField)jDateChooser3.getDateEditor().getUiComponent()).setText(model.getValueAt(row,3).toString());
+        String atype1=jTable1.getValueAt(row, 2).toString();
+        String Amount1=jTable1.getValueAt(row,3).toString();
+        ((JTextField)jDateChooser3.getDateEditor().getUiComponent()).setText(model.getValueAt(row,4).toString());
         
         pid.setText(pid1);
         work.setText(work1);
+        atype.setSelectedItem(atype1);
         Amount.setText(Amount1);
     }//GEN-LAST:event_jTable1MouseClicked
 
@@ -673,9 +796,11 @@ public class pettycash extends javax.swing.JInternalFrame {
            String dd=((JTextField)jDateChooser1.getDateEditor().getUiComponent()).getText();
         String dd1=((JTextField)jDateChooser2.getDateEditor().getUiComponent()).getText();
         
+        if(satype.getSelectedItem().toString().equals("Expence"))
+        {
         try
         {
-            String sql="Select SUM(Amount) from Petty_Cash where Date BETWEEN '"+dd+"' AND '"+dd1+"' ";
+            String sql="Select SUM(Amount) from Petty_Cash where Date BETWEEN '"+dd+"' AND '"+dd1+"' AND Amount_Type='Expence' ";
                     
                     pst=conn.prepareStatement(sql);
                     rs=pst.executeQuery();
@@ -687,6 +812,27 @@ public class pettycash extends javax.swing.JInternalFrame {
         {
         
             JOptionPane.showMessageDialog(null, e);
+        }
+            }
+        
+        
+        else if(satype.getSelectedItem().toString().equals("Income"))
+        {
+           try
+        {
+            String sql="Select SUM(Amount) from Petty_Cash where Date BETWEEN '"+dd+"' AND '"+dd1+"' AND Amount_Type='Income' ";
+                    
+                    pst=conn.prepareStatement(sql);
+                    rs=pst.executeQuery();
+                    
+                    total.setText(rs.getString("SUM(Amount)"));
+        
+        }
+        catch(Exception e)
+        {
+        
+            JOptionPane.showMessageDialog(null, e);
+        } 
         }
             }
 }  
@@ -712,10 +858,11 @@ public class pettycash extends javax.swing.JInternalFrame {
         try{
             String value1=pid.getText();
             String value2=work.getText();
-            String value3=Amount.getText();
-            String value4=(((JTextField)jDateChooser3.getDateEditor().getUiComponent()).getText());
+           String value3=atype.getSelectedItem().toString();
+            String value4=Amount.getText();
+            String value5=(((JTextField)jDateChooser3.getDateEditor().getUiComponent()).getText());
             
-            String sql="Update Petty_Cash set Petty_Cash_ID='"+value1+"', Work_Type='"+value2+"' , Amount='"+value3+"' ,Date='"+value4+"' where Petty_Cash_ID='"+value1+"' ";
+            String sql="Update Petty_Cash set Petty_Cash_ID='"+value1+"', Work_Type='"+value2+"' ,Amount_Type='"+value3+"' Amount='"+value4+"' ,Date='"+value5+"' where Petty_Cash_ID='"+value1+"' ";
              pst=conn.prepareStatement(sql);
              pst.execute();
              tableload();
@@ -805,6 +952,8 @@ public class pettycash extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Amount;
+    private javax.swing.JComboBox<String> atype;
+    private javax.swing.JLabel bal1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -819,6 +968,7 @@ public class pettycash extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -836,6 +986,7 @@ public class pettycash extends javax.swing.JInternalFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel pid;
+    private javax.swing.JComboBox<String> satype;
     private javax.swing.JButton search;
     private javax.swing.JTextField total;
     private javax.swing.JTextField work;
