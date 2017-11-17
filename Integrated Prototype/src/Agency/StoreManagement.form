@@ -44,33 +44,31 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="1" attributes="0">
               <Component id="jPanel6" alignment="0" max="32767" attributes="0"/>
-              <Group type="102" alignment="1" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace pref="227" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
                                   <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                   <Component id="jPanel9" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="259" max="-2" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
                                   <Component id="BTNinsert" min="-2" pref="115" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
                                   <Component id="BTNdelete" min="-2" pref="115" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
                                   <Component id="BTNupdate" min="-2" pref="115" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="197" max="-2" attributes="0"/>
-                                  <Component id="JCal" min="-2" pref="65" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="173" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="297" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jScrollPane1" alignment="1" min="-2" pref="1197" max="-2" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="jScrollPane1" min="-2" pref="1197" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -84,19 +82,14 @@
                       <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="BTNinsert" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                              <Component id="BTNdelete" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                              <Component id="BTNupdate" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" min="-2" pref="241" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="JCal" min="-2" pref="28" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="BTNinsert" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                      <Component id="BTNdelete" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                      <Component id="BTNupdate" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="596" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" min="-2" pref="241" max="-2" attributes="0"/>
+                  <EmptySpace pref="600" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -402,8 +395,6 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BTNupdateActionPerformed"/>
           </Events>
-        </Component>
-        <Component class="com.toedter.calendar.JCalendar" name="JCal">
         </Component>
         <Container class="javax.swing.JPanel" name="jPanel6">
           <Properties>
