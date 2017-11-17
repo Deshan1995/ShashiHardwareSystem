@@ -5,7 +5,7 @@
  */
 package Supplier;
 
-import DBconnection.javaconnect;
+import DBconnection.DBconnect;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -46,7 +46,7 @@ public class SupplierOrders extends javax.swing.JInternalFrame {
      */
     public SupplierOrders() {
         initComponents();
-        conn1=javaconnect.ConnectDB();
+        conn1 = DBconnect.connectDb();
         LoadingSupplierOrdersTable();
         TextTotal.setEditable(false);
         jButton1.setEnabled(false);
@@ -56,7 +56,7 @@ public class SupplierOrders extends javax.swing.JInternalFrame {
     }
     
     void LoadingSupplierOrdersTable(){
-        String sql = "SELECT * FROM SupplierOrder";
+        String sql = "SELECT OrderID,SupplierID,OrderStatus,PaymentStatus,TotalAmount,StartDate,EndDate FROM SupplierOrder";
         
         try {
             pst1 = conn1.prepareStatement(sql);
@@ -574,6 +574,7 @@ public class SupplierOrders extends javax.swing.JInternalFrame {
             }
         });
 
+        TextStartDate.setEditable(false);
         TextStartDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         LableOID.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
