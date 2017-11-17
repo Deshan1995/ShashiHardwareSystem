@@ -164,6 +164,11 @@ public class ubills extends javax.swing.JInternalFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Bill Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 24), new java.awt.Color(0, 0, 102))); // NOI18N
 
         pbranch.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        pbranch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                pbranchKeyTyped(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setText("Bill Id");
@@ -180,6 +185,11 @@ public class ubills extends javax.swing.JInternalFrame {
         btype.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btypeActionPerformed(evt);
+            }
+        });
+        btype.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                btypeKeyTyped(evt);
             }
         });
 
@@ -1016,6 +1026,26 @@ public class ubills extends javax.swing.JInternalFrame {
         mstatus.setText(meter);
 
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void pbranchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pbranchKeyTyped
+       char c=evt.getKeyChar();
+       
+       if(Character.isDigit(c))
+       {
+           evt.consume();
+           JOptionPane.showMessageDialog(null,"Enter only Charactors");
+       }
+    }//GEN-LAST:event_pbranchKeyTyped
+
+    private void btypeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btypeKeyTyped
+        char c=evt.getKeyChar();
+       
+       if(Character.isDigit(c))
+       {
+           evt.consume();
+           JOptionPane.showMessageDialog(null,"Enter only Charactors");
+       }
+    }//GEN-LAST:event_btypeKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

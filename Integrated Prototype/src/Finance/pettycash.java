@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,45 +52,82 @@ public class pettycash extends javax.swing.JInternalFrame {
         
     }
  
-        public void autoincrement()
-        {
-            //String sql="Select MAX(Loan_ID) AS loanid from Loan";
-            try
-            {
-                //conn = DBconnect.connectDb();
-                s = conn.createStatement();
-                //pst=conn.prepareStatement(sql);
-                rs = s.executeQuery("SELECT MAX(Petty_Cash_ID) AS pettyid FROM Petty_Cash");
-                
-                String pettyid;
-                
-                while(rs.next())
-                {
-                    pettyid=rs.getString("pettyid");
-                    String lno[]=pettyid.split("pc");
-                    int no=Integer.parseInt(lno[1]);
-                    no = no + 1;
-                    pid.setText("pc"+no);
-                
-                }
-            
-            }
-            catch(Exception e)
-            {
-            JOptionPane.showMessageDialog(null,e);
-            }
-            finally{
-                try{
-               
-                rs.close();
-                }
-                catch(Exception e)
-                {
-                    
-                }
-            }
-        }    
+//        public void autoincrement()
+//        {
+//            try
+//            {
+//                s = conn.createStatement();
+//                
+//                rs = s.executeQuery("SELECT MAX(Petty_Cash_ID) AS pettyid FROM Petty_Cash");
+//                
+//                String pettyid;
+//                
+//                while(rs.next())
+//                {
+//                    pettyid=rs.getString("pettyid");
+//                    String lno[]=pettyid.split("pc");
+//                    int no=Integer.parseInt(lno[1]);
+//                    no = no + 1;
+//                    pid.setText("pc"+no);
+//                
+//                }
+//            
+//            }
+//            catch(Exception e)
+//            {
+//            JOptionPane.showMessageDialog(null,e);
+//            }
+//            finally{
+//                try{
+//               
+//                rs.close();
+//                }
+//                catch(Exception e)
+//                {
+//                    
+//                }
+//            }
+//        }    
         
+    public void autoincrement(){
+      
+    ArrayList<String> list = new ArrayList<String>();
+        try {
+            String sql = "SELECT Petty_Cash_ID as pettyid FROM Petty_Cash";
+            
+            pst=conn.prepareStatement(sql);
+            
+            rs = pst.executeQuery();
+            while(rs.next())
+            {
+                list.add(rs.getString("pettyid"));
+            }
+            
+            
+            String a = list.get(list.size()-1);
+           
+            String ino[]=a.split("pc");
+            
+                
+            int no=Integer.parseInt(ino[1]);
+            no=no+1;
+            pid.setText("pc"+no);
+    
+        } 
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+        finally{
+            try{
+                pst.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
+}
     
     public void clear(){
         pid.setText("");
@@ -250,6 +288,11 @@ public class pettycash extends javax.swing.JInternalFrame {
                 workActionPerformed(evt);
             }
         });
+        work.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                workKeyTyped(evt);
+            }
+        });
 
         Amount.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         Amount.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -307,14 +350,10 @@ public class pettycash extends javax.swing.JInternalFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(pid, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -949,6 +988,16 @@ public class pettycash extends javax.swing.JInternalFrame {
         jDateChooser1.setDate(null);
         jDateChooser2.setDate(null);
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void workKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_workKeyTyped
+        char c=evt.getKeyChar();
+       
+       if(Character.isDigit(c))
+       {
+           evt.consume();
+           JOptionPane.showMessageDialog(null,"Enter only Charactors");
+       }
+    }//GEN-LAST:event_workKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Amount;
