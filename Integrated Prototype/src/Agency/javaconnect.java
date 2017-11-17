@@ -21,7 +21,7 @@ public class javaconnect {
         try{
         
             Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Timansi Lakshika\\Documents\\NetBeansProjects\\HardwareSystem\\hardwaredb.sqlite");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:hardwaredb.sqlite");
             return conn;           
             
         }

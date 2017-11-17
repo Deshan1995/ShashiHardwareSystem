@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
+import DBconnection.DBconnect;
 
 /**
  *
@@ -40,9 +41,9 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                
         
         
-        conn = javaconnect.ConnectDb();
+        conn = DBconnect.connectDb();
         generateID();
-        
+        calcSubTotal();
         //load Table
         
         tableLoad();
@@ -59,6 +60,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         TXTitemCode.setText("");
         TXTdescription.setText("");
         TXTquantity.setText("");
+        TXTitemdiscount.setText("");
         TXTpriceEach.setText("");
         TXTamount.setText("");
         
@@ -70,12 +72,12 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         
         clearItem();
         CMBpaymentMethod.setSelectedIndex(0);
-        TXTpaidAmount.setText("");
+        TXTPaymentAmount.setText("");
         TXTcreditbalance.setText("");
         TXTstoreID.setText("");
         TXTinvoiceNo.setText("");
         TXTphone.setText("");
-        JCALdate.setDate(JCALdate.getDate());
+        //JCALdate.setDate(JCALdate.getDate());
         TXTAbillTo.setText("");
         TXTAdeliverTo.setText("");
         TXTsubtotal.setText("");
@@ -127,8 +129,55 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         }
      
      }
+     double quantity;
+     double previousDiscountAmount;
+     public void calcDiscounts(){
      
+         
+         
+        
+        try {
+            
+            String itemcode = TXTitemCode.getText();
+            quantity = Double.parseDouble(TXTquantity.getText());
+            previousDiscountAmount = Double.parseDouble(TXTitemdiscount.getText());
+         
+         String sql = "SELECT priceeach, discounts FROM items WHERE itemcode = '"+ itemcode +"' ";
+            
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+        
+            double rate = Double.parseDouble(rs.getString("discounts"));
+            double amount = Double.parseDouble(rs.getString("priceeach"));
+            
+            double currentDiscountAmount = (amount * rate/100.0)*quantity;
+                        
+            TXTdiscount.setText(Double.toString(previousDiscountAmount + currentDiscountAmount));
+           
+        }
+        
+        catch (Exception e) {
+            System.out.println("kk");
+        }
+        
+        finally{
+        
+            try{
+            
+                pst.close();
+                rs.close();
+            
+            }
+            
+            catch(Exception e){
+            
+                System.out.println("ll");
+            
+            }
+        
+        }
      
+     }
      
      
      public void tableLoad()
@@ -218,6 +267,23 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         
         }
         
+        finally{
+        
+            try{
+            
+                rs.close();
+                
+            
+            }
+            
+            catch(Exception e){
+        
+                System.out.println(e);
+        
+        }
+        
+        }
+        
     }
     
     /**
@@ -235,7 +301,6 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         jLabel13 = new javax.swing.JLabel();
         TXTinvoiceNo = new javax.swing.JTextField();
         TXTphone = new javax.swing.JTextField();
-        JCALdate = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         TXTAbillTo = new javax.swing.JTextArea();
         jLabel14 = new javax.swing.JLabel();
@@ -258,6 +323,8 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         BTNupdate = new javax.swing.JButton();
         jLabel26 = new javax.swing.JLabel();
         TXTquantity = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        TXTitemdiscount = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane3 = new javax.swing.JScrollPane();
         invoiceTable = new javax.swing.JTable();
@@ -280,7 +347,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         jLabel24 = new javax.swing.JLabel();
         CMBpaymentMethod = new javax.swing.JComboBox();
         jLabel25 = new javax.swing.JLabel();
-        TXTpaidAmount = new javax.swing.JTextField();
+        TXTPaymentAmount = new javax.swing.JTextField();
         jLabel27 = new javax.swing.JLabel();
         TXTcreditbalance = new javax.swing.JTextField();
         BTNpayment = new javax.swing.JButton();
@@ -292,6 +359,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         jLabel29 = new javax.swing.JLabel();
         TXTstoreName = new javax.swing.JTextField();
         LBLpolineno = new javax.swing.JLabel();
+        JDCdate = new com.toedter.calendar.JDateChooser();
 
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -348,6 +416,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel16.setText("Item Code               :");
 
+        TXTpriceEach.setEditable(false);
         TXTpriceEach.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TXTpriceEachActionPerformed(evt);
@@ -360,6 +429,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel18.setText("Quantity                   :");
 
+        TXTdescription.setEditable(false);
         TXTdescription.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TXTdescriptionActionPerformed(evt);
@@ -375,6 +445,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             }
         });
 
+        TXTamount.setEditable(false);
         TXTamount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TXTamountActionPerformed(evt);
@@ -422,38 +493,61 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel20.setText("Discount                   :");
+
+        TXTitemdiscount.setEditable(false);
+        TXTitemdiscount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TXTitemdiscountActionPerformed(evt);
+            }
+        });
+        TXTitemdiscount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                TXTitemdiscountKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTitemdiscountKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TXTamount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TXTpriceEach, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(BTNadd, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(BTNupdate, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BTNdelete, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                             .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(TXTdescription, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-                            .addComponent(TXTitemCode)
-                            .addComponent(TXTquantity)))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(TXTamount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(TXTpriceEach, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(BTNadd, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(30, 30, 30)
-                            .addComponent(BTNupdate, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(BTNdelete, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(TXTdescription, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                                    .addComponent(TXTitemCode)
+                                    .addComponent(TXTquantity)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(TXTitemdiscount)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -477,14 +571,18 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                     .addComponent(TXTpriceEach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(TXTitemdiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel26)
                     .addComponent(TXTamount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(41, 41, 41)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BTNdelete)
                     .addComponent(BTNupdate)
                     .addComponent(BTNadd))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         jSeparator1.setBackground(new java.awt.Color(153, 153, 153));
@@ -662,9 +760,9 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel25.setText("Amount                   :");
 
-        TXTpaidAmount.addActionListener(new java.awt.event.ActionListener() {
+        TXTPaymentAmount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTpaidAmountActionPerformed(evt);
+                TXTPaymentAmountActionPerformed(evt);
             }
         });
 
@@ -679,7 +777,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         });
 
         BTNpayment.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        BTNpayment.setText("Enter");
+        BTNpayment.setText("Pay");
         BTNpayment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BTNpaymentActionPerformed(evt);
@@ -720,7 +818,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(TXTbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(CMBpaymentMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TXTpaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TXTPaymentAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TXTcreditbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
@@ -734,7 +832,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
-                    .addComponent(TXTpaidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TXTPaymentAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel27)
@@ -781,68 +879,71 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(525, 525, 525)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(25, 25, 25)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(78, 78, 78)
+                                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                                .addComponent(LBLpolineno, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                                 .addComponent(BTNsaveNew, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(BTNclear, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                                .addGap(34, 34, 34)
-                                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 775, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                .addComponent(BTNclear, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(25, 25, 25))))
                                     .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(90, 90, 90)
+                                        .addComponent(LBLpolineno, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(76, 76, 76))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                                .addComponent(jLabel28)
-                                                .addGap(57, 57, 57))
-                                            .addComponent(TXTstoreID, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(JCALdate, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jLabel28)
+                                        .addGap(57, 57, 57))
+                                    .addComponent(TXTstoreID, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                                .addComponent(jLabel29)
-                                                .addGap(58, 58, 58))
-                                            .addComponent(TXTstoreName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(59, 59, 59)
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel12)
+                                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(TXTinvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(TXTphone, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(22, 22, 22)
+                                            .addComponent(TXTphone, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                        .addGap(56, 56, 56)
+                                        .addComponent(JDCdate, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel29)
+                                        .addGap(58, 58, 58))
+                                    .addComponent(TXTstoreName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(59, 59, 59)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BTNcopy, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 39, Short.MAX_VALUE)))
+                                    .addComponent(jLabel12)
+                                    .addComponent(TXTinvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BTNcopy, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -867,44 +968,45 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                                     .addGap(21, 21, 21)))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel28)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TXTstoreID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel28)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TXTstoreID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JDCdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(TXTstoreName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel14)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(JCALdate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(25, 25, 25)
-                                .addComponent(jLabel12)
+                                .addComponent(TXTstoreName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(TXTinvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(12, 12, 12)
                         .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(TXTphone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LBLpolineno, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(27, 27, 27)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(BTNsaveNew)
                             .addComponent(BTNclear)))
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 332, Short.MAX_VALUE)
+                .addComponent(LBLpolineno, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(225, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -931,7 +1033,57 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
 
     private void BTNupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNupdateActionPerformed
         
+        int x = JOptionPane.showConfirmDialog(null, "Do you really want to update this record?");
+
+        if(x == 0)
+        {
+
+            String invoiceno = TXTinvoiceNo.getText();
+            String lineno = LBLpolineno.getText();
+            String itemcode = TXTitemCode.getText();
+            String qty = TXTquantity.getText();
+            String description = TXTdescription.getText();
+            String priceeach = TXTpriceEach.getText();
+            String amount = TXTamount.getText();
+
+            String sql = "UPDATE invoice SET invoiceno='"+ invoiceno +"' , itemcode='"+ itemcode +"' ,  quantity='"+ qty +"' , amount='"+ amount +"' ,  description='"+ description +"' ,  priceeach='"+ priceeach +"'    WHERE lineno = '"+ lineno +"'";
+
+            try{
+
+                
+                
+                    pst = conn.prepareStatement(sql);
+                    pst.execute();
+
+                
+
+                //load Table
+                tableLoad();
+
+            }
+
+            catch(Exception e){
+                    System.out.println(e);
+            }
+            
+            finally{
         
+            try{
+            
+                pst.close();
+                
+            
+            }
+            
+            catch(Exception e){
+        
+                System.out.println(e);
+        
+        }
+        
+        }
+
+        }
         
         calcSubTotal();
         
@@ -942,6 +1094,13 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
     private void BTNdeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNdeleteActionPerformed
         
         String lineno = LBLpolineno.getText();
+//        double amount = Double.parseDouble(TXTamount.getText());
+//        double quan = Double.parseDouble(TXTquantity.getText());
+//        double price = Double.parseDouble(TXTpriceEach.getText());;
+//        double disAmount = Double.parseDouble(TXTdiscount.getText());
+//        totDiscount = Double.parseDouble(TXTdiscount.getText());
+//        
+//        
         
         int y = JOptionPane.showConfirmDialog(null,"Do you really want to delete this record?");
 
@@ -957,9 +1116,16 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                 clearItem();
                 calcSubTotal();
 
+//                disAmount = amount - (price * quan);
+//                
+//                totDiscount = totDiscount - disAmount;
+//                
+//                TXTdiscount.setText(Double.toString(totDiscount));
+                
                 //load Table
                 tableLoad();
 
+                
             }
 
             catch(Exception e)
@@ -1059,6 +1225,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                  //load Table
                 tableLoad();
                 calcSubTotal();
+                calcDiscounts();
                 
                 
                 //clear the fields
@@ -1067,7 +1234,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
 
         catch(Exception e) 
         {
-
+            
             System.out.println(e);
 
         }
@@ -1088,7 +1255,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         }
         
         }
-        
+         clearItem();
         
         //}   
     }//GEN-LAST:event_BTNaddActionPerformed
@@ -1102,44 +1269,8 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         
         String itemcode = TXTitemCode.getText();
                
-        String sql = "SELECT i.description, i.priceeach FROM items i WHERE i.itemcode = '"+ itemcode +"' ";
-        /*
-        try{
-        
-            pst = conn.prepareStatement(sql);
-            rs = pst.executeQuery();
-         
-            TXTdescription.setText(rs.getString(String.valueOf("description")));
-            TXTpriceEach.setText(rs.getString(String.valueOf("priceeach")));
-                                 
-            TXTquantity.requestFocus();
-                        
-        }
-        
-        catch(Exception e){
-        
-            System.out.println(e);
-          
-        }
-        
-        finally{
-        
-            try{
-            
-                pst.close();
-                rs.close();
-                        
-            }
-            
-            catch(Exception e){
-        
-                System.out.println("line 880");
-        
-        }
-        
-        }
-        */
-        
+        String sql = "SELECT i.description, i.priceeach, i.discounts FROM items i WHERE i.itemcode = '"+ itemcode +"' ";
+                
         try {
         
             
@@ -1152,6 +1283,9 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             TXTdescription.setText(description);
             String priceeach = rs.getString("priceeach");
             TXTpriceEach.setText(priceeach);
+            String itemdiscounts = rs.getString("discounts");
+            TXTitemdiscount.setText(itemdiscounts);
+            
         
         }
         
@@ -1197,10 +1331,25 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         
         
         
-        String popriceeach = TXTpriceEach.getText();
-        String poquantity = TXTquantity.getText();
+        double popriceeach = Double.parseDouble(TXTpriceEach.getText());
+        double poquantity = Double.parseDouble(TXTquantity.getText());
+        double itemdiscount;
         
-        amount = Double.parseDouble(popriceeach) * Double.parseDouble(poquantity);
+        if(!TXTitemdiscount.getText().isEmpty()){
+        
+            itemdiscount = Double.parseDouble(TXTitemdiscount.getText());
+            
+        
+        }
+        
+        else{
+        
+            itemdiscount=0;
+        
+        }
+        
+        
+        amount = (popriceeach - (popriceeach * itemdiscount/100)) * poquantity;
         
         TXTamount.setText(Double.toString(amount));
         
@@ -1210,12 +1359,12 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_TXTquantityActionPerformed
 
-    private void TXTpaidAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTpaidAmountActionPerformed
+    private void TXTPaymentAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTPaymentAmountActionPerformed
         
         String storename = TXTstoreName.getText();
         String storeid = TXTstoreID.getText();
         String paymentmethod = CMBpaymentMethod.getSelectedItem().toString();
-        double amountpaid = Double.parseDouble(TXTpaidAmount.getText());
+        double amountpaid = Double.parseDouble(TXTPaymentAmount.getText());
         double total = Double.parseDouble(TXTtotal.getText());
         double balance = 0;
         double creditbalance = 0;
@@ -1305,7 +1454,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         
         }
         
-    }//GEN-LAST:event_TXTpaidAmountActionPerformed
+    }//GEN-LAST:event_TXTPaymentAmountActionPerformed
 
     private void TXTcreditbalanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTcreditbalanceActionPerformed
         // TODO add your handling code here:
@@ -1384,8 +1533,9 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
     private void BTNsaveNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNsaveNewActionPerformed
         
         String itemcode = TXTitemCode.getText();
+        String invoiceno = TXTinvoiceNo.getText();
         String query = "INSERT INTO sales (invoiceno,itemcode,description,priceeach,quantity,amount) SELECT invoiceno,itemcode,description,priceeach,quantity,amount FROM invoice";
-        
+        String date = "";
         
         
         try
@@ -1394,13 +1544,13 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                 pst = conn.prepareStatement(query);
                 pst.execute();
                 
-                String sql = "INSERT INTO (invoiceno,storeid,date,deliverto,subtotal,discounts,total) VALUES ('"+ TXTinvoiceNo.getText() +"','"+ TXTstoreID.getText() +"','"+ JCALdate.getDate()+"','"+ TXTAdeliverTo.getText()+"',"+ TXTsubtotal.getText() +"',"+ TXTdiscount.getText() +"',"+ TXTtotal.getText() +"') ";
+                String sql = "INSERT INTO (invoiceno,storeid,date,deliverto,subtotal,discounts,total) VALUES ('"+ TXTinvoiceNo.getText() +"','"+ TXTstoreID.getText() +"','"+ date +"','"+ TXTAdeliverTo.getText()+"',"+ TXTsubtotal.getText() +"',"+ TXTdiscount.getText() +"',"+ TXTtotal.getText() +"') ";
                 
                  //load Table
                 tableLoad();
                 
                 //Clear the Temporary Invoice Table
-                String q = "DELETE FROM invoice WHERE itemcode = '"+ itemcode +"' ";
+                String q = "DELETE FROM invoice WHERE invoiceno = '"+ invoiceno +"' ";
                 pst = conn.prepareStatement(sql);
                 pst.execute();
                 
@@ -1559,15 +1709,32 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
 
     private void BTNpaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNpaymentActionPerformed
         
-        String paymentmethod = CMBpaymentMethod.getSelectedItem().toString();
-        String amountpaid = TXTpaidAmount.getText();
+        int paymentmethod = CMBpaymentMethod.getSelectedIndex();
+        String amountpaid = TXTPaymentAmount.getText();
+        double total = Double.parseDouble(TXTtotal.getText());
         
-        if(paymentmethod == "Cash"){
+        if(paymentmethod == 0){
+        
+            
+            
+            
+            jPanel3.removeAll();
+            ProcessPayment pp = new ProcessPayment();
+            jPanel3.add(pp).setVisible(true);
+        
+        }
+        
+        else if (paymentmethod == 1){
         
             
         
         }
         
+        else{
+        
+            
+        
+        }
         
         
         
@@ -1614,6 +1781,18 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_TXTdiscountKeyTyped
 
+    private void TXTitemdiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTitemdiscountActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TXTitemdiscountActionPerformed
+
+    private void TXTitemdiscountKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTitemdiscountKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TXTitemdiscountKeyPressed
+
+    private void TXTitemdiscountKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTitemdiscountKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TXTitemdiscountKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTNadd;
@@ -1624,10 +1803,11 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
     private javax.swing.JButton BTNsaveNew;
     private javax.swing.JButton BTNupdate;
     private javax.swing.JComboBox CMBpaymentMethod;
-    private com.toedter.calendar.JDateChooser JCALdate;
+    private com.toedter.calendar.JDateChooser JDCdate;
     private javax.swing.JLabel LBLpolineno;
     private javax.swing.JTextArea TXTAbillTo;
     private javax.swing.JTextArea TXTAdeliverTo;
+    private javax.swing.JTextField TXTPaymentAmount;
     private javax.swing.JTextField TXTamount;
     private javax.swing.JTextField TXTbalance;
     private javax.swing.JTextField TXTcreditbalance;
@@ -1635,7 +1815,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
     private javax.swing.JTextField TXTdiscount;
     private javax.swing.JTextField TXTinvoiceNo;
     private javax.swing.JTextField TXTitemCode;
-    private javax.swing.JTextField TXTpaidAmount;
+    private javax.swing.JTextField TXTitemdiscount;
     private javax.swing.JTextField TXTphone;
     private javax.swing.JTextField TXTpriceEach;
     private javax.swing.JTextField TXTquantity;
@@ -1654,6 +1834,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -1681,9 +1862,9 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
     private javax.swing.JSeparator jSeparator4;
     // End of variables declaration//GEN-END:variables
 
-
 double amount;
 private String GenID;
 private int currentInvoiceNumber;
 double subtotal;
+double totDiscount;
 }
