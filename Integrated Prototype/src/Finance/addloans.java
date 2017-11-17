@@ -160,7 +160,7 @@ public class addloans extends javax.swing.JInternalFrame {
                     day1= Integer.parseInt(dd.format(d1));
       
                     diff=day1-3;
-                    System.out.println(day1);
+                    //System.out.println(day1);
                     if((diff<day)&&(day<=day1)) {
                         
                         try{
@@ -209,36 +209,155 @@ public class addloans extends javax.swing.JInternalFrame {
     }
     
     
-        public void autoincrement()
-        {
-            //String sql="Select MAX(Loan_ID) AS loanid from Loan";
-            try
-            {
-                //conn = DBconnect.connectDb();
-                s = conn.createStatement();
-                //pst=conn.prepareStatement(sql);
-                rs = s.executeQuery("SELECT MAX(Loan_ID) AS loanid FROM Loan");
-                
-                String loanid;
-                
-                while(rs.next())
-                {
-                    loanid=rs.getString("loanid");
-                    String lno[]=loanid.split("ln");
-                    int no=Integer.parseInt(lno[1]);
-                    no = no + 1;
-                    lid.setText("ln"+no);
-                
-                }
+//        public void autoincrement()
+//        {
+//            //String sql="Select MAX(Loan_ID) AS loanid from Loan";
+//            try
+//            {
+//                //conn = DBconnect.connectDb();
+//                s = conn.createStatement();
+//                //pst=conn.prepareStatement(sql);
+//                rs = s.executeQuery("SELECT MAX(Loan_ID) AS loanid FROM Loan");
+//                
+//                String loanid;
+//                
+//                while(rs.next())
+//                {
+//                    loanid=rs.getString("loanid");
+//                    String lno[]=loanid.split("ln");
+//                    int no=Integer.parseInt(lno[1]);
+//                    no = no + 1;
+//                    lid.setText("ln"+no);
+//                
+//                }
+//            
+//            }
+//            catch(Exception e)
+//            {
+//            JOptionPane.showMessageDialog(null,e);
+//            }
+//            finally{
+//                try{
+//               
+//                rs.close();
+//                }
+//                catch(Exception e)
+//                {
+//                    
+//                }
+//            }
+//        }    
+    
+    
+    public void autoincrement(){
+      
+    ArrayList<String> list = new ArrayList<String>();
+        try {
+            String sql = "SELECT Loan_ID as loanid FROM Loan";
             
-            }
-            catch(Exception e)
+            pst=conn.prepareStatement(sql);
+            
+            rs = pst.executeQuery();
+            while(rs.next())
             {
-            JOptionPane.showMessageDialog(null,e);
+                list.add(rs.getString("loanid"));
             }
+            
+            
+            String a = list.get(list.size()-1);
+           
+            String ino[]=a.split("ln");
+            
+                
+            int no=Integer.parseInt(ino[1]);
+            no=no+1;
+            lid.setText("ln"+no);
+    
+        } 
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+        finally{
+            try{
+                pst.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
+}
+        int no;
+        int no1;
+public void autoincrementDeduct(){
+    
+        ArrayList<String> list = new ArrayList<String>();
+        try {
+            String a = lid.getText();
+            String lno[]=a.split("ln");
+            no1=Integer.parseInt(lno[1]);
+            System.out.println(no1);
+            String sql = "SELECT Loan_ID as loanid FROM Loan";
+            
+            ps=conn.prepareStatement(sql);
+            
+            rs = ps.executeQuery();
+            while(rs.next())
+            {
+                list.add(rs.getString("loanid"));
+            }
+    
+            for(int i=0;i<=list.size()-1;i++){
+	              
+                String b = list.get(i);
+                String lno1[]=b.split("ln");
+            
+                no=Integer.parseInt(lno1[1]);
+
+		if(no1+1<=no){
+
+                    int j=no1+(i-1);
+                    String id="ln"+j;
+                    System.out.println(id);
+                    String sql1="Update Loan set Loan_ID='"+id+"' where Loan_ID='"+b+"'";
+                    ps=conn.prepareStatement(sql1);
+                    ps.execute();
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+        finally{
+            try{
+                ps.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
+    
+     }
+public void tableloadA()
+    {
+        String slid1=slid.getText();
+        
+        String sql = "select * from Loan where Loan_ID='"+slid1+"'";
+        try{
+        pst = conn.prepareStatement(sql);
+        rs = pst.executeQuery();
+        
+        jTable2.setModel(DbUtils.resultSetToTableModel(rs));
+        
+        }
+        catch(Exception e){
+                
+            }    
             finally{
                 try{
-               
+                pst.close();
                 rs.close();
                 }
                 catch(Exception e)
@@ -246,7 +365,8 @@ public class addloans extends javax.swing.JInternalFrame {
                     
                 }
             }
-        }    
+        
+    }
     
         public void tableload()
         {
@@ -275,6 +395,7 @@ public class addloans extends javax.swing.JInternalFrame {
     }
         public void clear(){
         jTextField1.setText("");
+        slid.setText("");
         jTextField2.setText("");
         jTextField3.setText("");
         jDateChooser1.setDate(null);
@@ -326,6 +447,10 @@ public class addloans extends javax.swing.JInternalFrame {
         jTextField4 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        slid = new javax.swing.JTextField();
+        jButton5 = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -397,8 +522,18 @@ public class addloans extends javax.swing.JInternalFrame {
         jLabel7.setText("End Date");
 
         jTextField1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
 
         jTextField2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField2KeyTyped(evt);
+            }
+        });
 
         jTextField3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
@@ -625,6 +760,47 @@ public class addloans extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 22), new java.awt.Color(0, 0, 102))); // NOI18N
+
+        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton5.setText("Search");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel10.setText("Loan ID");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addComponent(jButton5))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(slid, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(slid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19)
+                .addComponent(jButton5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -634,8 +810,11 @@ public class addloans extends javax.swing.JInternalFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(51, 51, 51))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -653,8 +832,10 @@ public class addloans extends javax.swing.JInternalFrame {
                         .addGap(60, 60, 60)
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 223, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 227, Short.MAX_VALUE))
         );
 
         pack();
@@ -662,6 +843,7 @@ public class addloans extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         jTextField1.setText("");
+        slid.setText("");
         jTextField2.setText("");
         jTextField3.setText("");
         jDateChooser1.setDate(null);
@@ -735,7 +917,7 @@ public class addloans extends javax.swing.JInternalFrame {
         }
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog(null,e);
+            JOptionPane.showMessageDialog(null,"This Loan ID Already inserted");
         }
         finally{
                 try{
@@ -778,7 +960,9 @@ public class addloans extends javax.swing.JInternalFrame {
             pst = conn.prepareStatement(que);
         
             pst.execute();
+            autoincrementDeduct();
             clear();
+            
             tableload();
         } 
        
@@ -891,16 +1075,42 @@ public class addloans extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
 
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        char c=evt.getKeyChar();
+       
+       if(Character.isDigit(c))
+       {
+           evt.consume();
+           JOptionPane.showMessageDialog(null,"Enter only Charactors");
+       }
+    }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+       char c=evt.getKeyChar();
+       
+       if(Character.isDigit(c))
+       {
+           evt.consume();
+           JOptionPane.showMessageDialog(null,"Enter only Charactors");
+       }
+    }//GEN-LAST:event_jTextField2KeyTyped
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        tableloadA();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -913,6 +1123,7 @@ public class addloans extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
@@ -923,6 +1134,7 @@ public class addloans extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField lid;
+    private javax.swing.JTextField slid;
     // End of variables declaration//GEN-END:variables
 
     private void setExtendedState(int MAXIMIZED_BOTH) {
