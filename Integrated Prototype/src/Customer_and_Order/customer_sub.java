@@ -68,7 +68,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
         jTabbedPane1.setSelectedIndex(1);
     }
     
-    public Boolean validateTextfields(){
+    Boolean validateTextfields(){
         
         String id =txt_cusID.getText();
         String name = txt_cusName.getText();
@@ -122,7 +122,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
         
     }
     
-    public Boolean validateUpdatefields(){
+    Boolean validateUpdatefields(){
         
         String id = txt_cusID2.getText();
         String name = txt_cusName2.getText();
@@ -156,7 +156,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
         
     }
     
-    public void loadCustomerTable1(){
+    void loadCustomerTable1(){
     
     try{
         
@@ -776,7 +776,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
                 txtA_cusAdd.setText("");
                 txt_numOfVisits.setText("1");
                 
-            }catch(org.sqlite.SQLiteException e1){
+            }catch(SQLiteException e1){
                  
                 if(e1.toString().contains("[SQLITE_CONSTRAINT_PRIMARYKEY]") ){                   
                     JOptionPane.showMessageDialog(null,"Sorry! This ID is already in the system.","Registration Unsuccessful", JOptionPane.INFORMATION_MESSAGE);

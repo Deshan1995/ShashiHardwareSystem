@@ -108,7 +108,104 @@ public class Order_sub extends javax.swing.JInternalFrame {
         loadOrderDeliverTable();
         validateDeliveID();
         
+        txt_chequeNo_sd.setEnabled(false);
+        //txt_cusID_rt.setBackground(Color.);
+        //txt_cusID_rt.setOpaque(true);
+        
+        loadCusTransactionsTable("");
+        loadInvoiceTable("");
      
+    }
+    
+    void loadInvoiceTable(String orderID){
+        
+        PreparedStatement ps =null;
+        ResultSet rs = null;
+        
+        try{
+            ps=conn.prepareStatement("select ItemNo as Item_No,ItemID as Item_ID,Description,qty,unitPrice,unitDiscount,netItemPrice from ItemsBought where orderID='"+orderID+"'" );
+            rs=ps.executeQuery();
+            tbl_invoice.setModel(DbUtils.resultSetToTableModel(rs));
+        }catch(Exception e){
+            System.out.println(e);
+        }finally{
+            try{            
+                if (ps != null) 
+                { 
+                   ps.close();
+                } 
+                if (rs != null) {
+                    rs.close();
+                }
+                conn.setAutoCommit(true);
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }             
+        
+    }
+    
+    void calculateDebt(String cusID){
+        PreparedStatement ps = null;
+        ResultSet rs=null;
+        try{
+            ps = conn.prepareStatement("select((select sum(amount) from OrderPayment where type='Credit' and cusID=?) + " +
+                                              "(select sum(amount) from OrderPayment where type='Cheque' and status ='Unsuccessful' and cusID=?) - " +
+                                              "(select sum(amount) from OrderPayment where orderID='Settle Debt' and  (status != 'Unsuccessful' or status is null) and cusID=?)) as loan");
+            ps.setString(1, cusID);
+            ps.setString(2, cusID);
+            ps.setString(3, cusID);
+            rs=ps.executeQuery();
+            txt_totDebt.setText(rs.getString("loan"));
+            
+            
+        }catch(Exception e){
+            System.out.println(e);
+        }finally{
+            
+            try{            
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }
+    }
+    void loadCusTransactionsTable(String cusID){
+        
+        PreparedStatement ps =null;
+        ResultSet rs = null;
+        
+        try{
+            ps=conn.prepareStatement("select orderID as Order_ID,Amount,Type,status,dateAndTime from OrderPayment where cusID='"+cusID+"'" );
+            rs=ps.executeQuery();
+            tbl_cusTransactions.setModel(DbUtils.resultSetToTableModel(rs));
+        }catch(Exception e){
+            System.out.println(e);
+        }finally{
+            try{            
+                if (ps != null) 
+                { 
+                   ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }                   
+                conn.setAutoCommit(true);
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }
+        
+       
+        
     }
     
     public String getItemCategory(String ItemID){
@@ -625,8 +722,56 @@ public class Order_sub extends javax.swing.JInternalFrame {
         chkbx_addPastLoan = new javax.swing.JCheckBox();
         txt_nowPaying = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
+        jPanel16 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
+        txt_cusID_sd = new javax.swing.JTextField();
+        jPanel19 = new javax.swing.JPanel();
+        jLabel45 = new javax.swing.JLabel();
+        jLabel46 = new javax.swing.JLabel();
+        jLabel47 = new javax.swing.JLabel();
+        txt_chequeNo_sd = new javax.swing.JTextField();
+        txt_amount_sd = new javax.swing.JTextField();
+        jButton8 = new javax.swing.JButton();
+        cmbx_payType = new javax.swing.JComboBox<>();
+        jPanel20 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        tbl_cusTransactions = new javax.swing.JTable();
+        jLabel48 = new javax.swing.JLabel();
+        txt_totDebt = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
+        jPanel17 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tbl_invoice = new javax.swing.JTable();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel40 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
+        txtA_itemDes_rt = new javax.swing.JTextField();
+        txt_btQty_rt = new javax.swing.JTextField();
+        txt_netUnitPrice_rt = new javax.swing.JTextField();
+        txt_returnDes_rt = new javax.swing.JTextField();
+        jLabel43 = new javax.swing.JLabel();
+        btn_calculate = new javax.swing.JButton();
+        cmbx_type = new javax.swing.JComboBox<>();
+        btn_return = new javax.swing.JButton();
+        jLabel44 = new javax.swing.JLabel();
+        txt_returnQty_rt = new javax.swing.JTextField();
+        jLabel49 = new javax.swing.JLabel();
+        txt_returnPrice_rt = new javax.swing.JTextField();
+        btn_clr_rt = new javax.swing.JButton();
+        jPanel18 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        txt_invoiceID_rt = new javax.swing.JTextField();
+        txt_issuedDate_rt = new javax.swing.JTextField();
+        txt_cusName_rt = new javax.swing.JTextField();
+        jLabel21 = new javax.swing.JLabel();
+        txt_cusID_rt = new javax.swing.JTextField();
+        jLabel22 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -1273,9 +1418,9 @@ public class Order_sub extends javax.swing.JInternalFrame {
                             .addComponent(jLabel10)
                             .addComponent(jLabel11))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txt_cusName, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_cusID, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txt_cusName, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                            .addComponent(txt_cusID))
                         .addGap(27, 27, 27)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -1592,35 +1737,391 @@ public class Order_sub extends javax.swing.JInternalFrame {
                 .addGap(23, 23, 23)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21)
-                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         jTabbedPane1.addTab("Make Order", jPanel5);
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 1684, Short.MAX_VALUE)
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 952, Short.MAX_VALUE)
         );
+
+        jTabbedPane1.addTab("Delivery", jPanel9);
+
+        jPanel6.setLayout(null);
+
+        jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Customer Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel16.setLayout(null);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setText("Customer ID");
+        jPanel16.add(jLabel1);
+        jLabel1.setBounds(60, 30, 100, 16);
+
+        jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton4.setText("Search");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel16.add(jButton4);
+        jButton4.setBounds(600, 30, 100, 40);
+
+        txt_cusID_sd.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txt_cusID_sd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_cusID_sdKeyReleased(evt);
+            }
+        });
+        jPanel16.add(txt_cusID_sd);
+        txt_cusID_sd.setBounds(240, 30, 190, 30);
+
+        jPanel6.add(jPanel16);
+        jPanel16.setBounds(20, 30, 1600, 90);
+
+        jPanel19.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Now Paying", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel19.setLayout(null);
+
+        jLabel45.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel45.setText("Payment Method");
+        jPanel19.add(jLabel45);
+        jLabel45.setBounds(80, 60, 140, 16);
+
+        jLabel46.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel46.setText("Cheque Number");
+        jPanel19.add(jLabel46);
+        jLabel46.setBounds(80, 130, 120, 16);
+
+        jLabel47.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel47.setText("Amount");
+        jPanel19.add(jLabel47);
+        jLabel47.setBounds(670, 70, 100, 16);
+        jPanel19.add(txt_chequeNo_sd);
+        txt_chequeNo_sd.setBounds(290, 120, 190, 30);
+        jPanel19.add(txt_amount_sd);
+        txt_amount_sd.setBounds(810, 60, 190, 30);
+
+        jButton8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton8.setText("Pay Debt");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        jPanel19.add(jButton8);
+        jButton8.setBounds(1350, 40, 150, 100);
+
+        cmbx_payType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Cheque" }));
+        cmbx_payType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbx_payTypeActionPerformed(evt);
+            }
+        });
+        jPanel19.add(cmbx_payType);
+        cmbx_payType.setBounds(290, 60, 190, 22);
+
+        jPanel6.add(jPanel19);
+        jPanel19.setBounds(20, 540, 1600, 190);
+
+        jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Customer's Transactions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel20.setLayout(null);
+
+        tbl_cusTransactions.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane7.setViewportView(tbl_cusTransactions);
+
+        jPanel20.add(jScrollPane7);
+        jScrollPane7.setBounds(50, 50, 1470, 210);
+
+        jLabel48.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel48.setText("Total Debts");
+        jPanel20.add(jLabel48);
+        jLabel48.setBounds(50, 300, 100, 16);
+
+        txt_totDebt.setEditable(false);
+        jPanel20.add(txt_totDebt);
+        txt_totDebt.setBounds(250, 290, 190, 30);
+
+        jPanel6.add(jPanel20);
+        jPanel20.setBounds(20, 150, 1600, 370);
 
         jTabbedPane1.addTab("Settle Debts", jPanel6);
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1684, Short.MAX_VALUE)
+        jPanel7.setLayout(null);
+
+        jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Item Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel17.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        tbl_invoice.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbl_invoice.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_invoiceMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tbl_invoice);
+
+        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel27.setText("Item Description");
+
+        jLabel40.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel40.setText("Bought Quantity");
+
+        jLabel41.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel41.setText("Return Description");
+
+        jLabel42.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel42.setText("Net Unit Price");
+
+        txtA_itemDes_rt.setEditable(false);
+
+        txt_btQty_rt.setEditable(false);
+
+        txt_netUnitPrice_rt.setEditable(false);
+
+        jLabel43.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel43.setText("Return Type");
+
+        btn_calculate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_calculate.setText("Calculate Net Return Price");
+        btn_calculate.setActionCommand("<html><center>Calculate<br/>Net Return Price</center></html>");
+        btn_calculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_calculateActionPerformed(evt);
+            }
+        });
+
+        cmbx_type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Faulty Goods", "Non-Faluty Goods" }));
+
+        btn_return.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_return.setText("Return");
+        btn_return.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_returnActionPerformed(evt);
+            }
+        });
+
+        jLabel44.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel44.setText("Return Quantity");
+
+        jLabel49.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel49.setText("Pay Customer");
+
+        btn_clr_rt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_clr_rt.setText("Clear");
+        btn_clr_rt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_clr_rtActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
+        jPanel17.setLayout(jPanel17Layout);
+        jPanel17Layout.setHorizontalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 1440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel43, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel27)
+                            .addComponent(jLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txt_returnDes_rt)
+                            .addComponent(txtA_itemDes_rt)
+                            .addComponent(cmbx_type, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel17Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btn_calculate, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(421, 421, 421))
+                            .addGroup(jPanel17Layout.createSequentialGroup()
+                                .addGap(149, 149, 149)
+                                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txt_btQty_rt)
+                                    .addComponent(txt_netUnitPrice_rt, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(163, 163, 163)
+                                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel44, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel49, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(33, 33, 33)
+                                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txt_returnQty_rt)
+                                    .addComponent(txt_returnPrice_rt, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(31, 31, 31)
+                                .addComponent(btn_clr_rt)
+                                .addContainerGap(33, Short.MAX_VALUE))))))
+            .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel17Layout.createSequentialGroup()
+                    .addGap(1194, 1194, 1194)
+                    .addComponent(btn_return, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(145, Short.MAX_VALUE)))
         );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 952, Short.MAX_VALUE)
+        jPanel17Layout.setVerticalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel27)
+                            .addComponent(txtA_itemDes_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(44, 44, 44)
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel41)
+                            .addComponent(txt_returnDes_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel40)
+                            .addComponent(txt_btQty_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(44, 44, 44)
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel42)
+                            .addComponent(txt_netUnitPrice_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel44)
+                            .addComponent(txt_returnQty_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_clr_rt, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(39, 39, 39)
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel49)
+                            .addComponent(txt_returnPrice_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(47, 47, 47)
+                .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel43)
+                        .addComponent(cmbx_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_calculate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(64, 64, 64))
+            .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel17Layout.createSequentialGroup()
+                    .addContainerGap(461, Short.MAX_VALUE)
+                    .addComponent(btn_return, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(64, 64, 64)))
         );
+
+        jPanel7.add(jPanel17);
+        jPanel17.setBounds(50, 250, 1570, 540);
+
+        jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Invoice Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel18.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel15.setText("Invoice ID");
+
+        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel18.setText("Customer ID");
+
+        txt_issuedDate_rt.setEditable(false);
+
+        txt_cusName_rt.setEditable(false);
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel21.setText("Issued Date & Time");
+
+        txt_cusID_rt.setEditable(false);
+
+        jLabel22.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel22.setText("Customer Name");
+
+        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton5.setText("Search");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
+        jPanel18.setLayout(jPanel18Layout);
+        jPanel18Layout.setHorizontalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(60, 60, 60)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_cusID_rt, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_invoiceID_rt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 306, Short.MAX_VALUE)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel22)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(95, 95, 95)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_issuedDate_rt)
+                    .addComponent(txt_cusName_rt, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(113, 113, 113)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(189, 189, 189))
+        );
+        jPanel18Layout.setVerticalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel18Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(txt_invoiceID_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_issuedDate_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel21))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel18)
+                            .addComponent(txt_cusName_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel22)
+                            .addComponent(txt_cusID_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel18Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+
+        jPanel7.add(jPanel18);
+        jPanel18.setBounds(50, 40, 1570, 190);
 
         jTabbedPane1.addTab("Return Items", jPanel7);
 
@@ -1739,7 +2240,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
     private void btn_addCusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addCusActionPerformed
         
-        Order.callAddCusForm();
+        Order.callCusAddCusForm();
     }//GEN-LAST:event_btn_addCusActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -1757,6 +2258,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         PreparedStatement ps_items_temp=null;
         PreparedStatement ps_clr=null;
         PreparedStatement ps_payment = null;
+        PreparedStatement cus_update = null;
 
         String orderID=null;
         String cusID = txt_cusID.getText();
@@ -1842,8 +2344,10 @@ public class Order_sub extends javax.swing.JInternalFrame {
                 ps_payment.setString(6,"Initial");   
                 ps_payment.execute();
             }
+            //setting loan value
             
-            if(this.loanAmount != null){
+            
+            if(Float.parseFloat(txt_nowPaying.getText()) <= Float.parseFloat(lbl_total.getText())){ //when customer is paying less than he bought - getting loan
                 ps_payment.setString(1,orderID);
                 ps_payment.setString(2,this.cusID);
                 ps_payment.setString(3,"Credit");
@@ -1851,9 +2355,34 @@ public class Order_sub extends javax.swing.JInternalFrame {
                 ps_payment.setString(5,null);
                 ps_payment.setString(6,null);   
                 ps_payment.execute();
+                
+                //increment cus loan by loanAmount
+                cus_update=conn.prepareStatement("UPDATE Customer SET totalOutstanding=totalOutstanding+? where cusID=?  ");
+                cus_update.setString(1,this.loanAmount);
+                cus_update.setString(2,this.cusID);
+                cus_update.execute();
+                
+            }else{                      //when customer is paying more - paying debt
+                String payLoan =null;
+                Float payLoanF=0f;
+                payLoanF = pastLoan - Float.parseFloat(this.loanAmount);
+                payLoan = payLoanF.toString();
+                
+                ps_payment.setString(1,"Settle Debt");
+                ps_payment.setString(2,this.cusID);
+                ps_payment.setString(3,"Order ID - "+orderID);
+                ps_payment.setString(4,payLoan);
+                ps_payment.setString(5,null);
+                ps_payment.setString(6,null);   
+                ps_payment.execute();
+                
+                //update cus loan by loanAmount
+                cus_update=conn.prepareStatement("UPDATE Customer SET totalOutstanding=? where cusID=?");
+                cus_update.setString(1,this.loanAmount);
+                cus_update.setString(2,this.cusID);
+                cus_update.execute();
             }
-            
-            
+
 
         }catch(Exception e){
             System.out.println(e);
@@ -2162,6 +2691,13 @@ public class Order_sub extends javax.swing.JInternalFrame {
        
         this.loanAmount= txt_remaining.getText();
         
+        //CHECKING WHETHER PAYING MORE
+        if(Float.parseFloat(txt_nowPaying.getText()) <= Float.parseFloat(lbl_total.getText())){
+            JOptionPane.showMessageDialog(null,"Customer is are not paying more. Please remove the tick of an Past Loans first","Warning", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        
         txt_remaining.setText(txt_remaining.getText() + " - LOAN"); 
         txt_remaining.setForeground(Color.red);
         
@@ -2401,7 +2937,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void btn_addCus1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addCus1ActionPerformed
-        Order.callAddCusSearchForm();
+        Order.callCusSearchForm();
     }//GEN-LAST:event_btn_addCus1ActionPerformed
 
     private void tbl_availableListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_availableListMouseClicked
@@ -2433,6 +2969,205 @@ public class Order_sub extends javax.swing.JInternalFrame {
             
         
     }//GEN-LAST:event_tbl_availableListMouseClicked
+
+    private void txt_cusID_sdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cusID_sdKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_cusID_sdKeyReleased
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        String cusID_sd = txt_cusID_sd.getText();
+        loadCusTransactionsTable(cusID_sd);
+        
+        //calculating pending loans of the customer
+        calculateDebt(cusID_sd);
+            
+            
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+
+        String cusID_sd = txt_cusID_sd.getText();       
+        
+        PreparedStatement ps = null;
+        
+        try{
+            ps = conn.prepareStatement("INSERT INTO OrderPayment VALUES (NULL,?,?,?,?,?,?, datetime('now','localtime') )");       
+            ps.setString(1,"Settle Debt");
+            ps.setString(2,cusID_sd);
+            ps.setString(3,cmbx_payType.getSelectedItem().toString());
+            ps.setString(4,txt_amount_sd.getText());
+            if(cmbx_payType.isEnabled()){
+                ps.setString(5,txt_chequeNo_sd.getText());
+                ps.setString(6,"Initial"); 
+            }else{
+                ps.setString(5,null);
+                ps.setString(6,null); 
+            }            
+            ps.execute();
+        }catch(Exception e){
+            System.out.println(e);
+        }finally {  
+            loadCusTransactionsTable(cusID_sd);                                                    
+            calculateDebt(cusID_sd);                        //calculating pending loans of the customer
+            try{            
+                if (ps != null) {
+                    ps.close();
+                }
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
+            
+            txt_chequeNo_sd.setText("");
+            txt_amount_sd.setText("");
+            
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void cmbx_payTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbx_payTypeActionPerformed
+        if(cmbx_payType.getSelectedItem().toString().equals("Cheque")){
+            txt_chequeNo_sd.setText("");
+            txt_chequeNo_sd.setEnabled(true);
+        }else{
+            txt_chequeNo_sd.setText("");
+            txt_chequeNo_sd.setEnabled(false);
+        }
+    }//GEN-LAST:event_cmbx_payTypeActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        loadInvoiceTable(txt_invoiceID_rt.getText());
+        
+        PreparedStatement ps=null;
+        ResultSet rs = null;
+        
+        try{
+            ps=conn.prepareStatement("select o.cusID,c.Name,o.dateAndTime from customer c ,\"order\" o where c.cusID=o.cusID and o.orderID='"+txt_invoiceID_rt.getText()+"'");
+            rs=ps.executeQuery();
+            
+            txt_cusID_rt.setText(rs.getString("cusID"));
+            txt_cusName_rt.setText(rs.getString("Name"));
+            txt_issuedDate_rt.setText(rs.getString("dateAndTime"));        
+            
+        }catch(Exception e){
+            System.out.println(e);
+        }finally {
+            
+            try{            
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
+}
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void tbl_invoiceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_invoiceMouseClicked
+        int r = tbl_invoice.getSelectedRow();
+        
+        txtA_itemDes_rt.setText(tbl_invoice.getValueAt(r, 2).toString());
+        txt_btQty_rt.setText(tbl_invoice.getValueAt(r, 3).toString());        
+        
+        Float unit = Float.parseFloat(tbl_invoice.getValueAt(r, 4).toString());
+        Float unitDis = Float.parseFloat(tbl_invoice.getValueAt(r, 5).toString());
+        Float netUnit = unit- unitDis;
+        txt_netUnitPrice_rt.setText(netUnit.toString());
+        
+        txt_returnDes_rt.setText("");
+        txt_returnQty_rt.setText("");
+        txt_returnPrice_rt.setText("");
+     
+    }//GEN-LAST:event_tbl_invoiceMouseClicked
+
+    private void btn_calculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_calculateActionPerformed
+        int r = tbl_invoice.getSelectedRow();
+
+        Float netUnit = Float.parseFloat(txt_netUnitPrice_rt.getText());
+        Float returnPrice = netUnit* Float.parseFloat(txt_returnQty_rt.getText());
+        txt_returnPrice_rt.setText(returnPrice.toString());
+    }//GEN-LAST:event_btn_calculateActionPerformed
+
+    private void btn_returnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_returnActionPerformed
+        
+        int r = tbl_invoice.getSelectedRow();        
+        String itemNo_ = tbl_invoice.getValueAt(r, 0).toString();
+        String itemID = tbl_invoice.getValueAt(r, 1).toString();
+        String des = tbl_invoice.getValueAt(r, 2).toString();
+        String qty = txt_returnQty_rt.getText();
+        String unitPrice = tbl_invoice.getValueAt(r, 4).toString();
+        String unitDis = tbl_invoice.getValueAt(r, 5).toString();
+        String netItemPrice = txt_returnPrice_rt.getText();
+        String OrderId = txt_invoiceID_rt.getText();
+        Float netUnitPrice = Float.parseFloat(unitPrice)-Float.parseFloat(unitDis);
+         
+        PreparedStatement ps =null;
+        PreparedStatement ps2 =null;
+        
+        try{
+            ps=conn.prepareStatement("insert into ItemsBought (ItemNo,ItemID,Description,qty,unitPrice,unitDiscount,netItemPrice,orderID) values(?,?,?,?,?,?,?,?)" );
+            ps.setString(1, itemNo_ + " **Returned**");
+            ps.setString(2, itemID);
+            ps.setString(3, des);
+            ps.setString(4, qty);
+            ps.setString(5, unitPrice);
+            ps.setString(6, unitDis);
+            ps.setString(7, netItemPrice);
+            ps.setString(8, OrderId);
+            ps.execute();
+            loadInvoiceTable(txt_invoiceID_rt.getText());
+            
+            if(cmbx_type.getSelectedItem().toString().equals("Faulty Goods")){
+                ps2=conn.prepareStatement("insert into returnItem_Faulty values(null,?,?,?,?,?,?,?,?)");
+            }else{
+                ps2=conn.prepareStatement("insert into \"returnItem_Non-Faulty\" values(null,?,?,?,?,?,?,?,?)");
+            }
+            ps2.setString(1, OrderId);
+            ps2.setString(2, itemID);
+            ps2.setString(3, des);
+            ps2.setString(4, qty);
+            ps2.setString(5, netUnitPrice.toString());
+            ps2.setString(6, netItemPrice);
+            ps2.setString(7, txt_returnDes_rt.getText());
+            ps2.setString(8, txt_cusID_rt.getText());
+            ps2.execute();
+            
+        }catch(Exception e){
+            System.out.println(e);
+        }finally{
+            try{            
+                if (ps != null) 
+                { 
+                   ps.close();
+                }                
+                if (ps2 != null) 
+                { 
+                   ps2.close();
+                }
+                
+                conn.setAutoCommit(true);
+            }catch(Exception e){
+                System.out.println(e);
+            }
+            
+            btn_clr_rt.doClick();
+        }
+    }//GEN-LAST:event_btn_returnActionPerformed
+
+    private void btn_clr_rtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clr_rtActionPerformed
+        txt_returnDes_rt.setText("");
+        txt_returnQty_rt.setText("");
+        txt_returnPrice_rt.setText("");
+        txtA_itemDes_rt.setText("");
+        txt_btQty_rt.setText("");
+        txt_netUnitPrice_rt.setText("");
+    }//GEN-LAST:event_btn_clr_rtActionPerformed
 
 
     public void loadOrderDeliverTable() {
@@ -2645,14 +3380,19 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JButton btn_addCus1;
     private javax.swing.JButton btn_addEntry;
     protected javax.swing.JButton btn_assignCus;
+    private javax.swing.JButton btn_calculate;
+    private javax.swing.JButton btn_clr_rt;
     private javax.swing.JButton btn_confirmCash1;
     private javax.swing.JButton btn_confirmCheque;
     private javax.swing.JButton btn_giveLoan;
     private javax.swing.JButton btn_removeCus;
     private javax.swing.JButton btn_removeEntry;
+    private javax.swing.JButton btn_return;
     private javax.swing.JCheckBox busyhBox;
     private javax.swing.JButton calbutton;
     private javax.swing.JCheckBox chkbx_addPastLoan;
+    private javax.swing.JComboBox<String> cmbx_payType;
+    private javax.swing.JComboBox<String> cmbx_type;
     private javax.swing.JButton confirmbtn;
     private javax.swing.JTextField delivIdTxt;
     private javax.swing.JTextField distanceTxt;
@@ -2661,22 +3401,31 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton8;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
@@ -2691,6 +3440,16 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -2703,18 +3462,26 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     protected javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
@@ -2729,17 +3496,29 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox rdConBox;
     private javax.swing.JComboBox statuscombo;
     private javax.swing.JTable tbl_availableList;
+    private javax.swing.JTable tbl_cusTransactions;
+    private javax.swing.JTable tbl_invoice;
     private javax.swing.JTable tbl_itemBought;
     private javax.swing.JTextField totalTxt;
     private javax.swing.JTextArea txtA_itemDes;
+    private javax.swing.JTextField txtA_itemDes_rt;
     private javax.swing.JTextField txt_amountCash1;
     private javax.swing.JTextField txt_amountCheque;
+    private javax.swing.JTextField txt_amount_sd;
     private javax.swing.JTextField txt_balanceCash1;
+    private javax.swing.JTextField txt_btQty_rt;
     private javax.swing.JTextField txt_cash1;
+    private javax.swing.JTextField txt_chequeNo_sd;
     protected javax.swing.JTextField txt_cusID;
+    private javax.swing.JTextField txt_cusID_rt;
+    protected javax.swing.JTextField txt_cusID_sd;
     private javax.swing.JTextField txt_cusName;
+    private javax.swing.JTextField txt_cusName_rt;
     private javax.swing.JTextField txt_delID;
+    private javax.swing.JTextField txt_invoiceID_rt;
+    private javax.swing.JTextField txt_issuedDate_rt;
     private javax.swing.JTextField txt_itemID;
+    private javax.swing.JTextField txt_netUnitPrice_rt;
     private javax.swing.JTextField txt_netValue;
     private javax.swing.JTextField txt_nowPaying;
     private javax.swing.JTextField txt_numCheque;
@@ -2747,6 +3526,10 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txt_pre;
     private javax.swing.JTextField txt_qty;
     private javax.swing.JTextField txt_remaining;
+    private javax.swing.JTextField txt_returnDes_rt;
+    private javax.swing.JTextField txt_returnPrice_rt;
+    private javax.swing.JTextField txt_returnQty_rt;
+    private javax.swing.JTextField txt_totDebt;
     private javax.swing.JTextField txt_totDis;
     private javax.swing.JTextField txt_totToBePaid;
     private javax.swing.JTextField txt_total;

@@ -19,8 +19,8 @@ public class Order extends javax.swing.JFrame {
     
   //  Connection db;
     
-    public static Order_sub x = null;
-    public static customer_sub y =null;
+    private static Order_sub x = null;
+    private static customer_sub y =null;
     
     public Order() {
         initComponents();
@@ -51,7 +51,7 @@ public class Order extends javax.swing.JFrame {
         
     }
     
-    public static void callAddCusForm(){
+    public static void callCusAddCusForm(){
         
         x.setVisible(false);
         
@@ -71,7 +71,7 @@ public class Order extends javax.swing.JFrame {
         }
         
     }
-    public static void callAddCusSearchForm(){
+    public static void callCusSearchForm(){
         
               
         
