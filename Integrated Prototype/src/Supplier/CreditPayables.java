@@ -5,12 +5,14 @@
  */
 package Supplier;
 
-import DBconnection.javaconnect;
+import DBconnection.DBconnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -29,27 +31,27 @@ public class CreditPayables extends javax.swing.JInternalFrame {
     PreparedStatement pst4 = null;
     PreparedStatement pst5 = null;
     PreparedStatement pst6 = null;
+    PreparedStatement pst7 = null;
     ResultSet rs1 = null;
     ResultSet rs2 = null;
     ResultSet rs3 = null;
     ResultSet rs4 = null;
+    ResultSet rs5 = null;
 
     /**
      * Creates new form CreditPayables
      */
     public CreditPayables() {
         initComponents();
-        conn1=javaconnect.ConnectDB();
-        LoadingCustomizedOrder_CreditDetails();
-        LoadingSupplierOrder_CreditDetails();
+        conn1 = DBconnect.connectDb();
+        LoadingCustomizedOrder_CreditPayables();
+        LoadingSupplierOrder_CreditPayables();
     }
     
-    public void LoadingCustomizedOrder_CreditDetails(){
+    public void LoadingCustomizedOrder_CreditPayables(){
         try {
-            //String s = "SELECT OrderID FROM CustomizedOrders WHERE (PaymentStatus = 'Completed') ";
-            String s = "SELECT OrderID,CustomerID,SupplierID,Total FROM CustomizedOrders WHERE PaymentStatus='Not Completed'";
-            //pst1 = conn1.prepareStatement(s);
-            //rs1 = pst1.executeQuery();
+            String s = "SELECT OrderID,CustomerID,SupplierID,Total,TotalPaidAmount FROM CustomizedOrders WHERE PaymentStatus='Not Completed'";
+            
             Statement stm3 = conn1.createStatement();
             rs1 = stm3.executeQuery(s);
             
@@ -108,7 +110,7 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         }
     }
     
-    public void LoadingSupplierOrder_CreditDetails(){
+    public void LoadingSupplierOrder_CreditPayables(){
         try {
             
             String s = "SELECT OrderID,SupplierID,TotalAmount FROM SupplierOrder WHERE PaymentStatus='Not Completed'";
@@ -159,6 +161,39 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null,ex);
         }
     }
+    
+    public void LoadingCustomizedOrder_Installments(){
+        try {
+            String id = txt_LabelOID.getText();
+            
+            String s = "SELECT OrderID,InstallmentNo, PayingAmount,PaymentDate,PaymentType FROM CustomizedOrders_CreditDetails WHERE OrderID='"+id+"'";
+            Statement stm3 = conn1.createStatement();
+            rs2 = stm3.executeQuery(s);
+            
+            jTable3.setModel(DbUtils.resultSetToTableModel(rs2));
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null,ex);
+        }
+    }
+    
+    public void LoadingSupplierOrder_Installments(){
+        try {
+            
+            String s = "SELECT OrderID,InstallmentNo, PayingAmount,PaymentDate,PaymentType FROM SuplierOrders_CreditDetails";
+            Statement stm3 = conn1.createStatement();
+            rs2 = stm3.executeQuery(s);
+            
+            //jTable4.setModel(DbUtils.resultSetToTableModel(rs2));
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null,ex);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -178,6 +213,22 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txt_LabelOID = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        PayingAmount = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        InstallmentNo = new javax.swing.JTextField();
+        PaymentType = new javax.swing.JComboBox<>();
+        PaymentDate = new com.toedter.calendar.JDateChooser();
+        jButton5 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jButton6 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -185,6 +236,23 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable4 = new javax.swing.JTable();
+        LabelOID = new javax.swing.JLabel();
+        InstallmentNo1 = new javax.swing.JTextField();
+        PayingAmount1 = new javax.swing.JTextField();
+        PaymentType1 = new javax.swing.JComboBox<>();
+        PaymentDate1 = new com.toedter.calendar.JDateChooser();
+        jPanel7 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
 
@@ -194,21 +262,26 @@ public class CreditPayables extends javax.swing.JInternalFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "OrderID", "CustomerID", "SupplierID", "Total Credit Amount", "Paid Amount", "Remaining Amount "
+                "OrderID", "CustomerID", "SupplierID", "Total Credit Amount", "TotalPaid Amount"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
@@ -264,48 +337,195 @@ public class CreditPayables extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
+        jPanel5.setBackground(new java.awt.Color(153, 153, 153));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("   Update Credit Levels");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addContainerGap())
+        );
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel5.setText("Order ID");
+
+        txt_LabelOID.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel6.setText("Paying Amount");
+
+        PayingAmount.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel8.setText("Installment Number");
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel9.setText("Payment Date");
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel10.setText("Payment Type");
+
+        InstallmentNo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        PaymentType.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        PaymentType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cheque", "Cash" }));
+
+        jButton5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton5.setText("Add Payment");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Installment No", "Paying Amount", "Payment Date", "Payment Type"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable3);
+
+        jButton6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton6.setText("Update Payment");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1615, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1615, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addGap(56, 56, 56)
+                                        .addComponent(InstallmentNo, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel6)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(212, 212, 212)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txt_LabelOID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(PayingAmount, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel9)
+                                            .addComponent(jLabel10)
+                                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(33, 33, 33)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(PaymentDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(PaymentType, 0, 161, Short.MAX_VALUE))
+                                            .addComponent(jButton6))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane3))))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(129, 129, 129)
+                .addGap(106, 106, 106)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
+                .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(280, Short.MAX_VALUE))
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_LabelOID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(InstallmentNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(31, 31, 31)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel6))
+                            .addComponent(PayingAmount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(37, 37, 37)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(PaymentDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(37, 37, 37)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(PaymentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton5)
+                            .addComponent(jButton6))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         jTabbedPane4.addTab("Customized Order Details", jPanel1);
 
+        jPanel2.setLayout(null);
+
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "OrderID", "SupplierID", "Total Credit Amount", "Paid Amount", "Remaining Credit Amount"
+                "OrderID", "SupplierID", "Total Credit Amount", "Paid Amount"
             }
         ));
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
+
+        jPanel2.add(jScrollPane2);
+        jScrollPane2.setBounds(12, 102, 1607, 240);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Search by Supplier ID: ");
+        jPanel2.add(jLabel2);
+        jLabel2.setBounds(128, 32, 183, 22);
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel2.add(jTextField2);
+        jTextField2.setBounds(321, 29, 168, 28);
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton2.setText("Search");
@@ -314,6 +534,8 @@ public class CreditPayables extends javax.swing.JInternalFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        jPanel2.add(jButton2);
+        jButton2.setBounds(496, 28, 87, 31);
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton4.setText("Refresh");
@@ -322,40 +544,126 @@ public class CreditPayables extends javax.swing.JInternalFrame {
                 jButton4ActionPerformed(evt);
             }
         });
+        jPanel2.add(jButton4);
+        jButton4.setBounds(1040, 28, 93, 31);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(128, 128, 128)
-                        .addComponent(jLabel2)
-                        .addGap(10, 10, 10)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
-                        .addGap(457, 457, 457)
-                        .addComponent(jButton4))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1607, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        jPanel6.setBackground(new java.awt.Color(153, 153, 153));
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("  Update Credit Levels");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 799, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel7)
+                .addContainerGap())
         );
+
+        jPanel2.add(jPanel6);
+        jPanel6.setBounds(0, 350, 1627, 70);
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel11.setText("OrderID");
+        jPanel2.add(jLabel11);
+        jLabel11.setBounds(10, 450, 100, 22);
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel12.setText("Installment No");
+        jPanel2.add(jLabel12);
+        jLabel12.setBounds(10, 510, 140, 22);
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel13.setText("Paying Amount");
+        jPanel2.add(jLabel13);
+        jLabel13.setBounds(10, 570, 140, 22);
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel14.setText("Payment Type");
+        jPanel2.add(jLabel14);
+        jLabel14.setBounds(10, 640, 130, 22);
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel15.setText("Payment Date");
+        jPanel2.add(jLabel15);
+        jLabel15.setBounds(10, 710, 120, 22);
+
+        jButton7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton7.setText("Add Payment");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton7);
+        jButton7.setBounds(10, 770, 160, 31);
+
+        jButton8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton8.setText("Update Payment");
+        jPanel2.add(jButton8);
+        jButton8.setBounds(190, 770, 170, 31);
+
+        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Installment No", "Paying Amount", "Payment Type", "Payment Date"
+            }
+        ));
+        jScrollPane4.setViewportView(jTable4);
+
+        jPanel2.add(jScrollPane4);
+        jScrollPane4.setBounds(370, 430, 1250, 380);
+
+        LabelOID.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel2.add(LabelOID);
+        LabelOID.setBounds(200, 450, 160, 20);
+
+        InstallmentNo1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel2.add(InstallmentNo1);
+        InstallmentNo1.setBounds(200, 510, 160, 28);
+
+        PayingAmount1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel2.add(PayingAmount1);
+        PayingAmount1.setBounds(200, 570, 160, 28);
+
+        PaymentType1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        PaymentType1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cheque", "Cash" }));
+        jPanel2.add(PaymentType1);
+        PaymentType1.setBounds(200, 640, 160, 30);
+        jPanel2.add(PaymentDate1);
+        PaymentDate1.setBounds(200, 710, 160, 22);
+
+        jPanel7.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1064, Short.MAX_VALUE)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 54, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(jPanel7);
+        jPanel7.setBounds(110, 10, 1070, 60);
 
         jTabbedPane4.addTab("Supplier Order Details", jPanel2);
 
@@ -449,32 +757,270 @@ public class CreditPayables extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        LoadingCustomizedOrder_CreditDetails();
+        LoadingCustomizedOrder_CreditPayables();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        LoadingSupplierOrder_CreditDetails();
+        LoadingSupplierOrder_CreditPayables();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        //jButton1.setEnabled(false);
+        int row=jTable1.getSelectedRow();
+            
+        String oid=jTable1.getValueAt(row,0).toString();
+        System.out.print(oid);
+        txt_LabelOID.setText(oid);
+        
+                
+        
+        try {
+            
+            //String ss1 = "SELECT OrderID, PaymentAmount, PaymentType, PaymentDate, InstallmentNo FROM CustomizedOrders_CreditDetails WHERE OrderID=oid";
+            String ss1 = "SELECT * FROM CustomizedOrders_CreditDetails WHERE OrderID='"+oid+"'";
+            pst3 = conn1.prepareStatement(ss1);
+            rs3 = pst3.executeQuery();
+            
+            int row1 = -1;
+            
+            while(rs3.next()){
+                row1++;
+                System.out.println(row1);
+            }
+            
+            if(row1==-1){
+                InstallmentNo.setText(String.valueOf("1"));
+            }
+            else{
+                int instNo = row1+2;
+                InstallmentNo.setText(Integer.toString(instNo));
+                }
+            
+            LoadingCustomizedOrder_Installments();
+            
+            //txt_LabelOID.setText("");
+            //PaymentType.setText("");
+            //PaymentDate.setText("");
+            //PayingAmount.setText("");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        
+        
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+            
+            // TODO add your handling code here:
+            int row=jTable1.getSelectedRow();
+            
+            String oid = txt_LabelOID.getText();
+            String instNo = InstallmentNo.getText();
+            Double PayAmount = Double.parseDouble(PayingAmount.getText());
+            Date pDate = PaymentDate.getDate();
+            String payDate = DateFormat.getDateInstance().format(pDate);
+            String pType = PaymentType.getSelectedItem().toString();
+            Double TotalCredit = Double.parseDouble(jTable1.getValueAt(row,3).toString());
+            Double PreTotalPaid = Double.parseDouble(jTable1.getValueAt(row,4).toString());
+            Double TotalPaid = PayAmount + PreTotalPaid;
+            
+        if(oid.equals("") || instNo.equals("") || PayAmount==0 || payDate.equals("") || pType.equals("")){
+            JOptionPane.showMessageDialog(null,"All the text fields should be filled!","Error!", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            try {
+            String ss2 = "INSERT INTO CustomizedOrders_CreditDetails (OrderID, InstallmentNo, PayingAmount, PaymentDate, PaymentType) VALUES ('"+oid+"','"+instNo+"','"+PayAmount+"','"+payDate+"','"+pType+"')";
+            pst7 = conn1.prepareStatement(ss2);
+            pst7.execute();
+            
+            //System.out.println("Inserted!");
+            
+            LoadingCustomizedOrder_Installments();
+            
+            JOptionPane.showMessageDialog(null,"Payment successfully added!","Added", JOptionPane.INFORMATION_MESSAGE);
+            
+            String ss3 = "UPDATE CustomizedOrders SET TotalPaidAmount = '"+TotalPaid+"' WHERE OrderID='"+oid+"'";
+            pst7 = conn1.prepareStatement(ss3);
+            pst7.execute();
+            LoadingCustomizedOrder_CreditPayables();
+            
+            
+            if(TotalPaid==TotalCredit){
+                //String com = "Completed";
+                String ss4 = "UPDATE CustomizedOrders SET PaymentStatus = 'Completed' WHERE OderID='"+oid+"'";
+                pst7 = conn1.prepareStatement(ss4);
+                pst7.execute();
+                LoadingCustomizedOrder_CreditPayables();
+            }
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null,"Error in adding the payment!","Error!", JOptionPane.INFORMATION_MESSAGE);
+        }finally{
+                try {
+                    pst7.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
+                }
+         }
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        // TODO add your handling code here:
+        int row=jTable2.getSelectedRow();
+            
+        String oid=jTable2.getValueAt(row,0).toString();
+        //System.out.print(oid);
+        LabelOID.setText(oid);
+        
+                
+        
+        try {
+            
+            //String ss1 = "SELECT OrderID, PaymentAmount, PaymentType, PaymentDate, InstallmentNo FROM CustomizedOrders_CreditDetails WHERE OrderID=oid";
+            String ss1 = "SELECT * FROM SuplierOrders_CreditDetails WHERE OrderID='"+oid+"'";
+            pst3 = conn1.prepareStatement(ss1);
+            rs3 = pst3.executeQuery();
+            
+            int row1 = -1;
+            
+            while(rs3.next()){
+                row1++;
+                System.out.println(row1);
+            }
+            
+            if(row1==-1){
+                InstallmentNo1.setText(String.valueOf("1"));
+            }
+            else{
+                int instNo = row1+2;
+                InstallmentNo1.setText(Integer.toString(instNo));
+                }
+            
+            LoadingSupplierOrder_Installments();
+            
+            //txt_LabelOID.setText("");
+            //PaymentType.setText("");
+            //PaymentDate.setText("");
+            //PayingAmount.setText("");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jTable2MouseClicked
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        
+        int row=jTable2.getSelectedRow();
+            
+            String oid1 = LabelOID.getText();
+            String instNo1 = InstallmentNo1.getText();
+            Double PayAmount1 = Double.parseDouble(PayingAmount1.getText());
+            Date pDate1 = PaymentDate1.getDate();
+            String payDate1 = DateFormat.getDateInstance().format(pDate1);
+            String pType1 = PaymentType1.getSelectedItem().toString();
+            Double TotalCredit1 = Double.parseDouble(jTable2.getValueAt(row,2).toString());
+            Double PreTotalPaid1 = Double.parseDouble(jTable2.getValueAt(row,3).toString());
+            Double TotalPaid1 = PayAmount1 + PreTotalPaid1;
+            
+        if(oid1.equals("") || instNo1.equals("") || PayAmount1==0 || payDate1.equals("") || pType1.equals("")){
+            JOptionPane.showMessageDialog(null,"All the text fields should be filled!","Error!", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            try {
+            String ss2 = "INSERT INTO SuplierOrders_CreditDetails (OrderID, InstallmentNo, PayingAmount, PaymentDate, PaymentType) VALUES ('"+oid1+"','"+instNo1+"','"+PayAmount1+"','"+payDate1+"','"+pType1+"')";
+            pst7 = conn1.prepareStatement(ss2);
+            pst7.execute();
+            
+            //System.out.println("Inserted!");
+            
+            LoadingSupplierOrder_Installments();
+            
+            JOptionPane.showMessageDialog(null,"Payment successfully added!","Added", JOptionPane.INFORMATION_MESSAGE);
+            
+            String ss3 = "UPDATE SupplierOrders SET TotalPaidAmount = '"+TotalPaid1+"' WHERE OrderID='"+oid1+"'";
+            pst7 = conn1.prepareStatement(ss3);
+            pst7.execute();
+            LoadingSupplierOrder_CreditPayables();
+            
+            
+            if(TotalCredit1.equals(TotalPaid1)){
+                String com = "Completed";
+                String ss4 = "UPDATE SupplierOrders SET PaymentStatus = '"+com+"' WHERE OderID='"+oid1+"'";
+                pst7 = conn1.prepareStatement(ss4);
+                pst7.execute();
+                LoadingCustomizedOrder_CreditPayables();
+            }
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null,"Error in adding the payment!","Error!", JOptionPane.INFORMATION_MESSAGE);
+        }finally{
+                try {
+                    pst7.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
+                }
+         }
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField InstallmentNo;
+    private javax.swing.JTextField InstallmentNo1;
+    private javax.swing.JLabel LabelOID;
+    private javax.swing.JTextField PayingAmount;
+    private javax.swing.JTextField PayingAmount1;
+    private com.toedter.calendar.JDateChooser PaymentDate;
+    private com.toedter.calendar.JDateChooser PaymentDate1;
+    private javax.swing.JComboBox<String> PaymentType;
+    private javax.swing.JComboBox<String> PaymentType1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTable4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel txt_LabelOID;
     // End of variables declaration//GEN-END:variables
 }

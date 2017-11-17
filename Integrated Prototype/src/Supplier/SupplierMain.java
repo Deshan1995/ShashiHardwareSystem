@@ -5,7 +5,7 @@
  */
 package Supplier;
 
-import DBconnection.javaconnect;
+import DBconnection.DBconnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,7 +29,7 @@ public class SupplierMain extends javax.swing.JFrame {
         
         setExtendedState(SupplierMain.MAXIMIZED_BOTH);
         
-        con1 = javaconnect.ConnectDB();
+        con1 = DBconnect.connectDb();
         
         
     }
