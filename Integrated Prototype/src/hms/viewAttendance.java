@@ -185,7 +185,7 @@ public class viewAttendance extends javax.swing.JInternalFrame {
          }
          else
          {
-             SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
+             SimpleDateFormat format1 = new SimpleDateFormat("MM dd, yyyy");
         
         Date dd1=null;
         Date dd2=null;
@@ -197,8 +197,8 @@ public class viewAttendance extends javax.swing.JInternalFrame {
             
             long difff=dd2.getTime()-dd1.getTime();
             
-            //long hours=diff/(60*60*1000);
-            //long days=hours/24;
+            long hours=difff/(60*60*1000);
+            long days=hours/24;
                     
             if(difff<0){
             

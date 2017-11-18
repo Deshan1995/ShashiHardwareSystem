@@ -66,10 +66,11 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         group.add(apt);
         aft.setSelected(true);
         
+        
         DateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy");
         Calendar cal = Calendar.getInstance();
         
-        adate.setSelectableDateRange(cal.getTime(),cal.getTime());
+        adate.setSelectableDateRange(null,cal.getTime());
         
 
         
@@ -96,6 +97,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
     public void auto(){
 
             ArrayList<String> list = new ArrayList<String>();
+            
             try {
             String sql = "SELECT employee_id FROM Employee";
             
@@ -108,16 +110,33 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
             }
             
             
-           String a = list.get(list.size()-1);
-           String ino[]=a.split("E");
+            int max=0;
+            
+            for(int l=0;l<list.size();l++)
+            {
+                String ino1[]=list.get(l).split("E");
+                int no2=Integer.parseInt(ino1[1]);
+                if(max<no2)
+                {
+                    max=no2;
+                }
+            }
+            
+            
+            
+            
+            
+//           String a = list.get(list.size()-1);
+//           String ino[]=a.split("E");
                 
-                int no=Integer.parseInt(ino[1]);
-                no=no+1;
-                System.out.println(a);
+                int no;
+                        //=Integer.parseInt(ino[1]);
+                no=max+1;
+//                System.out.println(a);
               aid.setText("E"+no);
            
             
-            System.out.println(a);
+//            System.out.println(a);
         } catch (Exception e) {
             
             System.out.println(e);
@@ -136,11 +155,48 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         anic.setText("");
         aadd.setText("");
         aphn.setText("");
-        ((JTextField)adate.getDateEditor().getUiComponent()).setText("");
+        adate.setDate(null);
+//        ((JTextField)adate.getDateEditor().getUiComponent()).setText("");
         apic.setText("");
+        adeg.setSelectedIndex(0);
+        jLabel2.setIcon(null);
+        mcom.setSelectedItem(null);
+        dcom.setSelectedItem(null);
+        anicf.setSelectedItem(null);
+        yyyy.setText("");
         auto();
    }
-    
+    public Boolean Validate(){
+
+        String var_name1 = afname.getText();
+        String var_name2 = alname.getText();
+        String var_name3 = yyyy.getText();
+        
+		
+        //validating for Name
+        for(int i=0; i<var_name1.length(); i++){ 
+            
+            if((!Character.isAlphabetic(var_name1.charAt(i))) && (var_name1.charAt(i)!=' ')){
+                JOptionPane.showMessageDialog(null,"Please Enter a valid First Name. Only the letters characters are allowed.","Invalid Name", JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+        }
+	for(int i=0; i<var_name2.length(); i++){ 
+            
+            if((!Character.isAlphabetic(var_name2.charAt(i))) && (var_name2.charAt(i)!=' ')){
+                JOptionPane.showMessageDialog(null,"Please Enter a valid Last Name. Only the letters characters are allowed.","Invalid Name", JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+        }
+        for(int i=0; i<var_name3.length(); i++){ 
+            
+            if((!Character.isDigit(var_name3.charAt(i)))){
+                JOptionPane.showMessageDialog(null,"Please Enter a valid birth year. Only the numbers characters are allowed.","Invalid Name", JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+        }
+        return true;
+}
     public void tableload()
     {
             conn=DBconnect.connectDb();
@@ -211,8 +267,6 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        mm = new javax.swing.JTextField();
-        dd = new javax.swing.JTextField();
         yyyy = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
@@ -229,6 +283,8 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         jButton2 = new javax.swing.JButton();
         anicf = new javax.swing.JComboBox<>();
         alang = new javax.swing.JComboBox<>();
+        mcom = new javax.swing.JComboBox<>();
+        dcom = new javax.swing.JComboBox<>();
         jLabel21 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
@@ -280,6 +336,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         getContentPane().add(afname);
         afname.setBounds(170, 120, 100, 30);
 
+        aid.setEditable(false);
         aid.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         getContentPane().add(aid);
         aid.setBounds(170, 70, 100, 30);
@@ -305,7 +362,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(aage);
-        aage.setBounds(170, 330, 100, 30);
+        aage.setBounds(170, 330, 150, 30);
 
         jScrollPane1.setBorder(null);
         jScrollPane1.setOpaque(false);
@@ -337,7 +394,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         getContentPane().add(anic);
         anic.setBounds(240, 370, 170, 30);
 
-        adeg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Cashier", "Driver", "Worker", "Stock Keeper", "Agency Manager" }));
+        adeg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---Select Designation---", "Admin", "Cashier", "Driver", "Worker", "Stock Keeper", "Agency Manager" }));
         getContentPane().add(adeg);
         adeg.setBounds(170, 560, 240, 30);
 
@@ -357,6 +414,11 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         adate.setBackground(new java.awt.Color(204, 204, 255));
         adate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         adate.setOpaque(false);
+        adate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                adateKeyTyped(evt);
+            }
+        });
         getContentPane().add(adate);
         adate.setBounds(590, 70, 240, 30);
 
@@ -440,34 +502,6 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         getContentPane().add(jLabel15);
         jLabel15.setBounds(30, 560, 130, 30);
 
-        mm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        mm.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                mmMouseClicked(evt);
-            }
-        });
-        mm.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                mmKeyTyped(evt);
-            }
-        });
-        getContentPane().add(mm);
-        mm.setBounds(170, 290, 50, 30);
-
-        dd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        dd.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ddMouseClicked(evt);
-            }
-        });
-        dd.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                ddKeyTyped(evt);
-            }
-        });
-        getContentPane().add(dd);
-        dd.setBounds(250, 290, 50, 30);
-
         yyyy.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         yyyy.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -485,7 +519,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(yyyy);
-        yyyy.setBounds(340, 290, 70, 30);
+        yyyy.setBounds(330, 290, 80, 30);
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel18.setText("Date of birth    :-");
@@ -526,9 +560,9 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         jLabel3.setBounds(290, 70, 140, 30);
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel17.setText("Adding date       :-");
+        jLabel17.setText("Recruitment date:-");
         getContentPane().add(jLabel17);
-        jLabel17.setBounds(460, 70, 130, 30);
+        jLabel17.setBounds(460, 70, 140, 30);
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel12.setText("Photograph        :-");
@@ -553,7 +587,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         getContentPane().add(jButton4);
         jButton4.setBounds(750, 600, 100, 40);
 
-        jButton2.setText("Save");
+        jButton2.setText("Add");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -569,6 +603,14 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         getContentPane().add(alang);
         alang.setBounds(170, 220, 130, 30);
 
+        mcom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }));
+        getContentPane().add(mcom);
+        mcom.setBounds(170, 290, 70, 30);
+
+        dcom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        getContentPane().add(dcom);
+        dcom.setBounds(250, 290, 70, 30);
+
         jLabel21.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel21.setText("yyyy");
         getContentPane().add(jLabel21);
@@ -577,12 +619,12 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         jLabel20.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel20.setText("dd");
         getContentPane().add(jLabel20);
-        jLabel20.setBounds(260, 260, 30, 30);
+        jLabel20.setBounds(270, 260, 30, 30);
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel19.setText("mm");
         getContentPane().add(jLabel19);
-        jLabel19.setBounds(180, 260, 30, 30);
+        jLabel19.setBounds(190, 260, 30, 30);
 
         jLabel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 2));
         getContentPane().add(jLabel4);
@@ -690,17 +732,24 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
 //        int year1 = Integer.parseInt(dy.format(D1));
 //        int month1 = Integer.parseInt(dm.format(D1));
 //        int day1= Integer.parseInt(dd.format(D1));
+       if(!Validate())
+       {
+           return;
+       }
+        String dob1 = ""+mcom.getSelectedItem().toString()+" "+dcom.getSelectedItem().toString()+", "+yyyy.getText()+"";
+        
+        Date dobd = me.getStringDate(dob1);
         
         
-        
-        
-         if(aid.getText().equals("")||afname.getText().equals("")||alname.getText().equals("")||auname.getText().equals("")||alang.getSelectedItem().toString().equals("")|| anic.getText().equals("")|| aadd.getText().equals("")||aphn.getText().equals("")||apic.getText().toString().equals(""))
+         if(yyyy.getText().equals("")||aid.getText().equals("")||afname.getText().equals("")||alname.getText().equals("")||auname.getText().equals("")||alang.getSelectedItem().toString().equals("")|| anic.getText().equals("")|| aadd.getText().equals("")||aphn.getText().equals("")||apic.getText().toString().equals("")||adeg.getSelectedItem().toString().equals("---Select Designation---"))
             {
                 
                 JOptionPane.showMessageDialog(null,"All the fields are required");
             }
             else
             {
+               
+
                 
           try
             {
@@ -710,14 +759,31 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
          }
          else
          {
+             
         if(me.nicCheck(anicf.getSelectedItem().toString()+anic.getText()))
         {
                 if(me.phnCheck(aphn.getText()))
                 {
+                    if(adate.getDate().after(new Date())){
+            
+                    JOptionPane.showMessageDialog(null,"Please Enter a valid date. You entered a future date!");
+            
+            
+                }
+                else{
+                        
+                if(dobd.compareTo(adate.getDate())>0){
+            
+                JOptionPane.showMessageDialog(null,"Please Enter a valid date. The entered recruitment date is earlier than your date of birth!","Invalid Dates", JOptionPane.INFORMATION_MESSAGE);
+                            
+            
+                }
+                else
+                {
            
            
                 conn=DBconnect.connectDb();
-                String sql = "INSERT INTO Employee(employee_id,first_name,last_name,username,language,age,nic_no,address,phone_no,designation,status,addded_date,photograph) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO Employee(employee_id,first_name,last_name,username,language,birth_day,age,nic_no,address,phone_no,designation,status,addded_date,photograph) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 InputStream is = new FileInputStream(new File(s));
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
@@ -750,30 +816,43 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
                 pst.setString(3,alname.getText());
                 pst.setString(4,auname.getText());
                 pst.setString(5,alang.getSelectedItem().toString());
-//                pst.setString(6,aage.getText());
-                pst.setString(7,anicf.getSelectedItem().toString()+anic.getText());
-                pst.setString(8,aadd.getText());
-                pst.setString(9,aphn.getText());
-                pst.setString(10,adeg.getSelectedItem().toString());
-                pst.setString(11,selectedb);
-                pst.setString(12,((JTextField)adate.getDateEditor().getUiComponent()).getText());
+                pst.setString(6, ""+mcom.getSelectedItem().toString()+" "+dcom.getSelectedItem().toString()+", "+yyyy.getText()+"");
+                pst.setString(7,aage.getSelectedItem().toString());
+                pst.setString(8,anicf.getSelectedItem().toString()+anic.getText());
+                pst.setString(9,aadd.getText());
+                pst.setString(10,aphn.getText());
+                pst.setString(11,adeg.getSelectedItem().toString());
+                pst.setString(12,selectedb);
+                pst.setString(13,((JTextField)adate.getDateEditor().getUiComponent()).getText());
                 
-                pst.setBytes(13, person_image);
+                pst.setBytes(14, person_image);
                 
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(null,"Employee added successfully");
                 tableload();
                 clear();
                 }
+                }
+                }
                 else
                 {
                 JOptionPane.showMessageDialog(null,"Invalid Phone Number");
                 }
+            
          }   else
         JOptionPane.showMessageDialog(null,"Invalid NIC");
          }
             
         }
+            catch(org.sqlite.SQLiteException e)
+            {
+                if(e.toString().contains("[SQLITE_CONSTRAINT_UNIQUE]") ){                   
+                    JOptionPane.showMessageDialog(null,"Sorry! This NIC is already in the system.","Registration Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
+                }else{
+                    System.out.println(e);
+                    JOptionPane.showMessageDialog(null,"Sorry! Something went wrong. Please contact the developing team.","Registration Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
+            }
+            }
             catch(Exception e)
             {
                 System.out.println(e);
@@ -790,7 +869,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
          
         
            
-
+       
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -817,102 +896,9 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         }   
     }//GEN-LAST:event_alnameKeyTyped
 
-    private void yyyyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_yyyyMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_yyyyMouseClicked
-
-    private void yyyyKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_yyyyKeyTyped
-        aage.removeAllItems();
-        anicf.removeAllItems();
-        
-        
-        DateFormat dy = new SimpleDateFormat("yyyy");
-        Calendar cal = Calendar.getInstance();
-        String year1 = dy.format(cal.getTime());
-        
-        DateFormat dm = new SimpleDateFormat("MM");
-        Calendar calm = Calendar.getInstance();
-        String month1 = dm.format(calm.getTime());
-        
-        String a = Character.toString(evt.getKeyChar());
-        
-//        SimpleDateFormat dy = new SimpleDateFormat("yyyy");
-//        SimpleDateFormat dm = new SimpleDateFormat("MM");
-//        SimpleDateFormat dd = new SimpleDateFormat("dd");
-        
-//        int year1 = Integer.parseInt(dy.format(D1));
-//        int month1 = Integer.parseInt(dm.format(D1));
-//        int day1= Integer.parseInt(dd.format(D1));
-        
-        int age = (Integer.parseInt(year1)-Integer.parseInt(yyyy.getText()+a));
-        
-        System.out.print(year1);
-        
-        
-        aage.addItem(Integer.toString(age-1));
-        aage.addItem(Integer.toString(age));
-        aage.addItem(Integer.toString(age+1));
-        
-        if((yyyy.getText()+a).length()>=4)
-        {
-        anicf.addItem((yyyy.getText()+a).substring((year1.length())-2));
-        anicf.addItem(yyyy.getText()+a);
-        }
-        agee = age;
-    }//GEN-LAST:event_yyyyKeyTyped
-
-    private void mmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mmMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mmMouseClicked
-
-    private void mmKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mmKeyTyped
-        
-        try {
-            char c = evt.getKeyChar();  
-        String ch = Character.toString(c);
-        int check = Integer.parseInt(mm.getText()+ch);
-        System.out.println(check);
-        if(check>12)
-        {
-            evt.consume();
-         JOptionPane.showMessageDialog(null, "Month should be in between 1 - 12");
-        }
-        } 
-        catch (Exception e) {
-          throw new NumberFormatException("");  
-        }
-        
-        
-    }//GEN-LAST:event_mmKeyTyped
-
-    private void ddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ddMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ddMouseClicked
-
-    private void ddKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ddKeyTyped
-        try {
-            char c = evt.getKeyChar();  
-        String ch = Character.toString(c);
-        int check = Integer.parseInt(dd.getText()+ch);
-        System.out.println(check);
-        if(check>31)
-        {
-            evt.consume();
-         JOptionPane.showMessageDialog(null, "Month should be in between 1 - 12");
-        }
-        } 
-        catch (Exception e) {
-          throw new NumberFormatException("");  
-        }
-    }//GEN-LAST:event_ddKeyTyped
-
     private void aageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aageActionPerformed
     
     }//GEN-LAST:event_aageActionPerformed
-
-    private void yyyyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yyyyActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_yyyyActionPerformed
 
     private void aageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aageMouseClicked
         
@@ -921,9 +907,9 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
 
     private void anicKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_anicKeyTyped
         char c = evt.getKeyChar();
-        if(agee<14)
+        if(agee<18)
         {
-            JOptionPane.showMessageDialog(null,"Age must be greater than 14 years");
+            JOptionPane.showMessageDialog(null,"Age must be above 18 years");
             evt.consume();
         }
         String check = anic.getText()+c;
@@ -943,6 +929,62 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_aaddKeyTyped
 
+    private void adateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_adateKeyTyped
+        char c = evt.getKeyChar();
+        
+        if(Character.isLetter(c))
+        {
+        JOptionPane.showMessageDialog(null,"Please Select a date");
+        evt.consume();
+        }
+    }//GEN-LAST:event_adateKeyTyped
+
+    private void yyyyKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_yyyyKeyTyped
+        aage.removeAllItems();
+        anicf.removeAllItems();
+
+        DateFormat dy = new SimpleDateFormat("yyyy");
+        Calendar cal = Calendar.getInstance();
+        String year1 = dy.format(cal.getTime());
+
+        DateFormat dm = new SimpleDateFormat("MM");
+        Calendar calm = Calendar.getInstance();
+        String month1 = dm.format(calm.getTime());
+
+        String a = Character.toString(evt.getKeyChar());
+
+        //        SimpleDateFormat dy = new SimpleDateFormat("yyyy");
+        //        SimpleDateFormat dm = new SimpleDateFormat("MM");
+        //        SimpleDateFormat dd = new SimpleDateFormat("dd");
+
+        //        int year1 = Integer.parseInt(dy.format(D1));
+        //        int month1 = Integer.parseInt(dm.format(D1));
+        //        int day1= Integer.parseInt(dd.format(D1));
+
+        int age = (Integer.parseInt(year1)-Integer.parseInt(yyyy.getText()+a));
+
+        System.out.print(year1);
+
+        aage.addItem(Integer.toString(age-1));
+        aage.addItem(Integer.toString(age));
+        aage.addItem(Integer.toString(age+1));
+
+        if((yyyy.getText()+a).length()>=4)
+        {
+            anicf.addItem((yyyy.getText()+a).substring((year1.length())-2));
+            anicf.addItem(yyyy.getText()+a);
+        }
+        agee = age;
+    }//GEN-LAST:event_yyyyKeyTyped
+
+    private void yyyyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yyyyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_yyyyActionPerformed
+
+    private void yyyyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_yyyyMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_yyyyMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea aadd;
@@ -961,7 +1003,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
     private javax.swing.JRadioButton apt;
     private javax.swing.JTextField auname;
     private javax.swing.JLabel datevalid;
-    private javax.swing.JTextField dd;
+    private javax.swing.JComboBox<String> dcom;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -991,7 +1033,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField mm;
+    private javax.swing.JComboBox<String> mcom;
     private javax.swing.JLabel time;
     private javax.swing.JTextField yyyy;
     // End of variables declaration//GEN-END:variables
