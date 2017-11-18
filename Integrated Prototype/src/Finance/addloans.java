@@ -3,7 +3,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package hardware.system;
+package Finance;
 
 import DBconnection.DBconnect;
 import java.awt.Image;
@@ -960,7 +960,7 @@ public void tableloadA()
             pst = conn.prepareStatement(que);
         
             pst.execute();
-            autoincrementDeduct();
+            //autoincrementDeduct();
             clear();
             
             tableload();
