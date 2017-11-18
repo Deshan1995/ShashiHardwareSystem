@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package hardware.system;
+package Finance;
 
 import DBconnection.DBconnect;
 import static java.lang.String.format;
@@ -961,13 +961,12 @@ public class pettycash extends javax.swing.JInternalFrame {
             
             long diff=d2.getTime()-d1.getTime();
             
-            //long hours=diff/(60*60*1000);
-            //long days=hours/24;
+            
                     
             if(diff<0){
             
                 JOptionPane.showMessageDialog(null,"End date Should be Upcomming Date");
-                //jDateChooser1.setDate(null);
+                
                 jDateChooser2.setDate(null);
           }
             else{

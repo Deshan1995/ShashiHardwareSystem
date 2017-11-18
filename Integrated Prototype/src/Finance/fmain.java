@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package hardware.system;
+package Finance;
 
 import javax.swing.JFrame;
 import DBconnection.DBconnect;
