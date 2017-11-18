@@ -116,6 +116,92 @@ public class Order_sub extends javax.swing.JInternalFrame {
         loadInvoiceTable("");
      
     }
+    Boolean validateAmount(String x){
+        if(x.isEmpty()){
+            JOptionPane.showMessageDialog(null,"Please fill the amount","Invalid input", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+                
+        for(int i=0; i<x.length(); i++){
+            
+            if(!Character.isDigit(x.charAt(i))){
+                JOptionPane.showMessageDialog(null,"Please Enter a valid amount. It should contain only numbers.","Invalid Input", JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+        }
+                
+        return true;
+    }
+    Boolean validateInvoice(String x){
+        if(x.isEmpty()){
+            JOptionPane.showMessageDialog(null,"Please fill the Invoice number","Invalid input", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+                
+        for(int i=0; i<x.length(); i++){
+            
+            if(!Character.isDigit(x.charAt(i))){
+                JOptionPane.showMessageDialog(null,"Please Enter a valid invoice number. It should contain only numbers.","Invalid Input", JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+        }
+                
+        return true;
+    }
+    
+    String getCusName(String cusID){
+        PreparedStatement ps=null;
+        ResultSet rs =null;
+        String name=null;
+        
+        try{
+            ps=conn.prepareStatement("select name from customer where cusID='"+cusID+"'");
+            rs=ps.executeQuery();
+            name=rs.getString(name);            
+            
+        }catch(Exception e){
+            System.out.println(e);
+        }finally{
+            try{            
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                
+                conn.setAutoCommit(true);
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
+            
+            return name;
+        }
+    }
+    
+    Boolean validateChequeNo(String x){
+        if(x.isEmpty()){
+            JOptionPane.showMessageDialog(null,"Please fill the cheque number","Invalid input", JOptionPane.INFORMATION_MESSAGE);
+            return false;
+        }
+                
+        for(int i=0; i<x.length(); i++){
+            
+            if(!Character.isDigit(x.charAt(i))){
+                JOptionPane.showMessageDialog(null,"Please Enter a valid cheque Number. Only the numbers are allowed with 6 numbers.","Invalid Input", JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+        }
+        
+        if(x.length()!=6){
+                JOptionPane.showMessageDialog(null,"Please Enter a valid cheque Number. Only the numbers are allowed with 6 numbers.","Invalid Input", JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+        
+        return true;
+        
+    }
     
     void loadInvoiceTable(String orderID){
         
@@ -741,6 +827,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         tbl_cusTransactions = new javax.swing.JTable();
         jLabel48 = new javax.swing.JLabel();
         txt_totDebt = new javax.swing.JTextField();
+        lbl_currentTrans = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -1849,16 +1936,21 @@ public class Order_sub extends javax.swing.JInternalFrame {
         jScrollPane7.setViewportView(tbl_cusTransactions);
 
         jPanel20.add(jScrollPane7);
-        jScrollPane7.setBounds(50, 50, 1470, 210);
+        jScrollPane7.setBounds(60, 90, 1470, 210);
 
         jLabel48.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel48.setText("Total Debts");
         jPanel20.add(jLabel48);
-        jLabel48.setBounds(50, 300, 100, 16);
+        jLabel48.setBounds(60, 340, 100, 16);
 
         txt_totDebt.setEditable(false);
         jPanel20.add(txt_totDebt);
-        txt_totDebt.setBounds(250, 290, 190, 30);
+        txt_totDebt.setBounds(260, 330, 190, 30);
+
+        lbl_currentTrans.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lbl_currentTrans.setText("No customer is selected");
+        jPanel20.add(lbl_currentTrans);
+        lbl_currentTrans.setBounds(60, 40, 440, 20);
 
         jPanel6.add(jPanel20);
         jPanel20.setBounds(20, 150, 1600, 370);
@@ -1933,6 +2025,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
         jLabel49.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel49.setText("Pay Customer");
+
+        txt_returnPrice_rt.setEditable(false);
 
         btn_clr_rt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_clr_rt.setText("Clear");
@@ -2347,7 +2441,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
             //setting loan value
             
             
-            if(Float.parseFloat(txt_nowPaying.getText()) <= Float.parseFloat(lbl_total.getText())){ //when customer is paying less than he bought - getting loan
+            if(Float.parseFloat(txt_nowPaying.getText()) <= Float.parseFloat(lbl_total.getText())){ //when customer is paying less or equal than he bought - getting loan
                 ps_payment.setString(1,orderID);
                 ps_payment.setString(2,this.cusID);
                 ps_payment.setString(3,"Credit");
@@ -2356,13 +2450,13 @@ public class Order_sub extends javax.swing.JInternalFrame {
                 ps_payment.setString(6,null);   
                 ps_payment.execute();
                 
-                //increment cus loan by loanAmount
-                cus_update=conn.prepareStatement("UPDATE Customer SET totalOutstanding=totalOutstanding+? where cusID=?  ");
+                //increment cus loan by loanAmount and cusVists++
+                cus_update=conn.prepareStatement("UPDATE Customer SET totalOutstanding=totalOutstanding+?,noOfVisits=noOfVisits+1 where cusID=?  ");
                 cus_update.setString(1,this.loanAmount);
                 cus_update.setString(2,this.cusID);
                 cus_update.execute();
                 
-            }else{                      //when customer is paying more - paying debt
+            }else{                      //when customer is paying more - paying debt and cusVisits++
                 String payLoan =null;
                 Float payLoanF=0f;
                 payLoanF = pastLoan - Float.parseFloat(this.loanAmount);
@@ -2377,7 +2471,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
                 ps_payment.execute();
                 
                 //update cus loan by loanAmount
-                cus_update=conn.prepareStatement("UPDATE Customer SET totalOutstanding=? where cusID=?");
+                cus_update=conn.prepareStatement("UPDATE Customer SET totalOutstanding=?,noOfVisits=noOfVisits+1 where cusID=?");
                 cus_update.setString(1,this.loanAmount);
                 cus_update.setString(2,this.cusID);
                 cus_update.execute();
@@ -2975,17 +3069,58 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txt_cusID_sdKeyReleased
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        String cusID_sd = txt_cusID_sd.getText();
-        loadCusTransactionsTable(cusID_sd);
+
+        String id =txt_cusID_sd.getText();
+        
+        //validating for empty cusID
+        if(id.isEmpty()){
+            JOptionPane.showMessageDialog(null,"Please type the customer ID before you click on Search","No input", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        //validating cusID
+        
+        for(int i=0; i<id.length(); i++){
+            
+            if(!Character.isDigit(id.charAt(i))){
+                JOptionPane.showMessageDialog(null,"Please Enter a valid Customer ID. Only the numbers are allowed with 10 numbers.","Invalid ID", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+        }
+        
+        if(id.length()!=10){
+                JOptionPane.showMessageDialog(null,"Please Enter a valid Customer ID. Only the numbers are allowed with 10 numbers.","Invalid ID", JOptionPane.INFORMATION_MESSAGE);
+                return;
+        }
+
+        //String cusID_sd = txt_cusID_sd.getText();
+        loadCusTransactionsTable(id);
         
         //calculating pending loans of the customer
-        calculateDebt(cusID_sd);
+        calculateDebt(id);
             
+        String cusName =getCusName(id);
+        if(cusName.isEmpty()){
+            lbl_currentTrans.setText("No customer is selected");
+        }else{
+            lbl_currentTrans.setText("Transaction information of Mr./Mrs. "+cusName);
+        }
+        
             
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
 
+        if(!validateAmount(txt_amount_sd.getText())){
+            return;
+        }
+        if(cmbx_payType.getSelectedItem().toString().equals("Cheque")){
+            if(!validateChequeNo(txt_chequeNo_sd.getText())){
+                return;
+            }
+        }
+        
+        
         String cusID_sd = txt_cusID_sd.getText();       
         
         PreparedStatement ps = null;
@@ -3036,6 +3171,10 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cmbx_payTypeActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        if(!validateInvoice(txt_invoiceID_rt.getText())){
+            return;
+        }
+
         loadInvoiceTable(txt_invoiceID_rt.getText());
         
         PreparedStatement ps=null;
@@ -3095,6 +3234,9 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btn_calculateActionPerformed
 
     private void btn_returnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_returnActionPerformed
+        
+             
+
         
         int r = tbl_invoice.getSelectedRow();        
         String itemNo_ = tbl_invoice.getValueAt(r, 0).toString();
@@ -3487,6 +3629,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lbl_confirmCash;
     private javax.swing.JLabel lbl_confirmCheque;
+    private javax.swing.JLabel lbl_currentTrans;
     private javax.swing.JLabel lbl_cusResult;
     private javax.swing.JLabel lbl_cusStatus;
     private javax.swing.JLabel lbl_orderID;

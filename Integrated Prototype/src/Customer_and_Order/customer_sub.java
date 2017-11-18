@@ -53,7 +53,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
         txt_cusID2.setEditable(false);
         txt_regDate2.setEditable(false);
         txt_noOfVisits2.setEditable(false);
-        txt_totPaid2.setEditable(false);
+        //txt_totPaid2.setEditable(false);
         txt_totDebt2.setEditable(false);
         
         loadCustomerTable1();
@@ -129,7 +129,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
         String add = txtA_cusAdd2.getText();
         String regDate = txt_regDate2.getText();
         String numV = txt_noOfVisits2.getText();
-        String totPaid = txt_totPaid2.getText();
+        //String totPaid = txt_totPaid2.getText();
         String totDebt = txt_totDebt2.getText();
         
         //validating for empty fields
@@ -191,7 +191,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
     
         try{
         
-            ps = conn.prepareStatement("select * from Customer"); 
+            ps = conn.prepareStatement("select cusID, name,address,regDate,noOfVisits,totalOutstanding from customer"); 
             rs = ps.executeQuery();
 
             jTable2.setModel(DbUtils.resultSetToTableModel(rs));
@@ -253,10 +253,8 @@ public class customer_sub extends javax.swing.JInternalFrame {
         txt_cusID2 = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
         txt_regDate2 = new javax.swing.JTextField();
         txt_noOfVisits2 = new javax.swing.JTextField();
-        txt_totPaid2 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         txt_totDebt2 = new javax.swing.JTextField();
@@ -496,9 +494,6 @@ public class customer_sub extends javax.swing.JInternalFrame {
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel14.setText("No. of Visits");
 
-        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel15.setText("Total payments");
-
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton3.setText("Remove");
         jButton3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -568,13 +563,11 @@ public class customer_sub extends javax.swing.JInternalFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txt_regDate2, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txt_noOfVisits2, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_totPaid2, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txt_totDebt2, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(50, 50, 50))
         );
@@ -599,15 +592,12 @@ public class customer_sub extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_totPaid2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel12))
-                        .addGap(40, 40, 40)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_totDebt2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel17))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txt_totDebt2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel17)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -736,7 +726,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Existing Customer", jPanel3);
@@ -959,7 +949,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
         try{
             if(rdBtn_ID.isSelected()){
                 
-                PreparedStatement ps = conn.prepareStatement("SELECT * FROM Customer WHERE cusID LIKE '%"+key+"%'");
+                PreparedStatement ps = conn.prepareStatement("select cusID, name,address,regDate,noOfVisits,totalOutstanding from customer WHERE cusID LIKE '%"+key+"%'");
                 ResultSet rs = ps.executeQuery();
                 jTable2.setModel(DbUtils.resultSetToTableModel(rs));
                 //System.out.println("First if st");
@@ -967,7 +957,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
                 
             }else if(rdBtn_Name.isSelected()){
                 //System.out.println("Else if st");
-                PreparedStatement ps = conn.prepareStatement("SELECT * FROM Customer WHERE name LIKE '%"+key+"%'");
+                PreparedStatement ps = conn.prepareStatement("select cusID, name,address,regDate,noOfVisits,totalOutstanding from customer WHERE name LIKE '%"+key+"%'");
                 ResultSet rs = ps.executeQuery();
                 jTable2.setModel(DbUtils.resultSetToTableModel(rs));
                 
@@ -1025,9 +1015,9 @@ public class customer_sub extends javax.swing.JInternalFrame {
         String ID = jTable2.getValueAt(r, 0).toString();
         
         try{
-        String report = ".\\Customer_Individual.jrxml";
+        String report = ".\\Customer_Indi.jrxml";
                         JasperDesign jd = JRXmlLoader.load(report);
-                        String sql1 = "select * from Customer where cusID='" + ID+ "'";
+                        String sql1 = "select cusID, name,address,regDate,noOfVisits,totalOutstanding from customer where cusID='" + ID+ "'";
                         JRDesignQuery n = new JRDesignQuery();
                         n.setText(sql1);
                         jd.setQuery(n);
@@ -1042,9 +1032,9 @@ public class customer_sub extends javax.swing.JInternalFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try{
-        String report = ".\\Customer_Individual.jrxml";
+        String report = ".\\Customer_Indi.jrxml";
                         JasperDesign jd = JRXmlLoader.load(report);
-                        String sql1 = "select * from Customer";
+                        String sql1 = "select cusID, name,address,regDate,noOfVisits,totalOutstanding from customer";
                         JRDesignQuery n = new JRDesignQuery();
                         n.setText(sql1);
                         jd.setQuery(n);
@@ -1084,8 +1074,8 @@ public class customer_sub extends javax.swing.JInternalFrame {
 
         txt_regDate2.setText(jTable2.getValueAt(r, 3).toString());
         txt_noOfVisits2.setText(jTable2.getValueAt(r, 4).toString());
-        txt_totPaid2.setText(jTable2.getValueAt(r, 5).toString());
-        txt_totDebt2.setText(jTable2.getValueAt(r, 6).toString());
+        //txt_totPaid2.setText(jTable2.getValueAt(r, 5).toString());
+        txt_totDebt2.setText(jTable2.getValueAt(r, 5).toString());
 
     } 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1104,7 +1094,6 @@ public class customer_sub extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel4;
@@ -1136,6 +1125,5 @@ public class customer_sub extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txt_numOfVisits;
     private javax.swing.JTextField txt_regDate2;
     private javax.swing.JTextField txt_totDebt2;
-    private javax.swing.JTextField txt_totPaid2;
     // End of variables declaration//GEN-END:variables
 }
