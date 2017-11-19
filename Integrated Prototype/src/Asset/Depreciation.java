@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package itp;
+package Asset;
 
 
 
+import DBconnection.DBconnect;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
@@ -43,7 +44,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
      */
     public Depreciation() {
         initComponents();
-        conn=javaconnect.ConnecrDb();
+        conn=DBconnect.connectDb();
         tableUpdate();
         calendar();
         auto();
