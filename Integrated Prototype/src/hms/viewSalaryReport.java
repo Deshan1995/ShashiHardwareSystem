@@ -197,6 +197,14 @@ public class viewSalaryReport extends javax.swing.JInternalFrame {
                jTable2.setModel(DbUtils.resultSetToTableModel(rs1));
            } catch (SQLException ex) {
                Logger.getLogger(viewSalaryReport.class.getName()).log(Level.SEVERE, null, ex);
+           }finally
+           {
+               try {
+                   pst1.close();
+                   rs1.close();
+                   
+               } catch (Exception e) {
+               }
            }
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -254,6 +262,14 @@ public class viewSalaryReport extends javax.swing.JInternalFrame {
            } catch (SQLException ex) {
                Logger.getLogger(viewSalaryReport.class.getName()).log(Level.SEVERE, null, ex);
            }
+            finally{
+            try {
+                pst1.close();
+                rs1.close();
+                
+            } catch (Exception e) {
+            }
+        }
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 

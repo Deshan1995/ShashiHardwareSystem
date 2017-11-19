@@ -141,7 +141,15 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
             
             System.out.println(e);
             
-        }
+        }finally
+            {
+                try {
+                    pst.close();
+                    rs1.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(addEmployee1.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
     
     }
    public void clear()
@@ -782,7 +790,7 @@ public class addEmployee1 extends javax.swing.JInternalFrame {
                 {
            
            
-                conn=DBconnect.connectDb();
+                //conn=DBconnect.connectDb();
                 String sql = "INSERT INTO Employee(employee_id,first_name,last_name,username,language,birth_day,age,nic_no,address,phone_no,designation,status,addded_date,photograph) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 InputStream is = new FileInputStream(new File(s));
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();

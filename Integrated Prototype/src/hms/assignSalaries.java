@@ -54,6 +54,9 @@ public class assignSalaries extends javax.swing.JInternalFrame {
             fall.setEnabled(false);
             fspeci.setEnabled(false);
             
+            Date dd = new Date();
+            redate.setSelectableDateRange(null, dd);
+            
             ButtonGroup group = new ButtonGroup();
             group.add(fall);
             group.add(fspeci);
@@ -91,6 +94,7 @@ public class assignSalaries extends javax.swing.JInternalFrame {
             {
                 eidcom.addItem(rs.getString("employee_id"));
                 eidcom1.addItem(rs.getString("employee_id"));
+                eidcom2.addItem(rs.getString("employee_id"));
             }
                     } catch (SQLException ex) {
             Logger.getLogger(assignSalaries.class.getName()).log(Level.SEVERE, null, ex);
@@ -189,7 +193,7 @@ public class assignSalaries extends javax.swing.JInternalFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Assign Salaries & Employee types");
+        jLabel1.setText("Owner Panel");
 
         time.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
@@ -713,7 +717,15 @@ ArrayList<String> list1 = new ArrayList<String>();
                 
               
 
-//              
+//        
+
+if(to.getDate().after(new Date())){
+            
+                    JOptionPane.showMessageDialog(null,"Please Enter a valid date. You entered a future date!");
+            
+            
+                }
+                else{
             //from this point
             Date d1=format.parse(format.format(from.getDate()));
             Date d2=format.parse(format.format(to.getDate()));
@@ -821,6 +833,9 @@ ArrayList<String> list1 = new ArrayList<String>();
 //                
                      rs2.close();
                     pst2.close();
+                    pst.close();
+                    pst1.close();
+                    pst10.close();
                 } catch (Exception e) {
                 }
             }
@@ -977,24 +992,30 @@ ArrayList<String> list1 = new ArrayList<String>();
             try{
             String addQuery="";
             int o=0;
-            
+            int l=0;
+            if(bonus.isSelected()&&fspeci.isSelected())
+                    {
             for(int i1=0;i1<list1.size();i1++)
                 {
                 if(eidcom.getSelectedItem().toString().equals(list1.get(i1)))
                 {
+                l=i1;
                 o=1;
+                System.out.println(list1.get(i1));
                 }
             
-        
+                }
                 }
             
-            if(bonus.isSelected()&&fspeci.isSelected()&&o==1)
+            if(bonus.isSelected()&&fspeci.isSelected()&&o==1&&list.get(i).equals(list1.get(l)))
             {
+                System.out.println(list.get(i)+"m");
             netsal=netsal+Double.parseDouble(bonusv.getText());
             addQuery= "Insert into Salary values ('"+list.get(i)+"','"+basicsal+"','"+bonusv.getText()+"','"+leavebo+"','"+epf+"','"+etf+"','"+leavededuct+"','"+depf+"','"+(netsal-depf)+"','"+D2+"')";
             }
             else if(bonus.isSelected()&&fall.isSelected())
             {
+                System.out.println(list.get(i)+"h");
             netsal=netsal+Double.parseDouble(bonusv.getText());
             addQuery= "Insert into Salary values ('"+list.get(i)+"','"+basicsal+"','"+bonusv.getText()+"','"+leavebo+"','"+epf+"','"+etf+"','"+leavededuct+"','"+depf+"','"+(netsal-depf)+"','"+D2+"')";
             
@@ -1041,6 +1062,7 @@ ArrayList<String> list1 = new ArrayList<String>();
            e.printStackTrace();
        }finally{
                 try {
+                    JOptionPane.showMessageDialog(null,"Salaries of all the employees are calculated and added to the database");
                     pst2.close();
                     
                     pst3.close();
@@ -1051,23 +1073,24 @@ ArrayList<String> list1 = new ArrayList<String>();
                 } catch (Exception e) {
                 } 
         }
+}
         }catch(Exception e){
            JOptionPane.showMessageDialog(null, e); 
            e.printStackTrace();}
         finally{
-                try {
-
-                    
-                       try {
-            conn.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(assignSalaries.class.getName()).log(Level.SEVERE, null, ex);
-        }     
-                    
-                    
-                } catch (Exception e) {
-                    System.out.println("f");
-                }
+//                try {
+//
+//                    
+//                       try {
+//            //conn.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(assignSalaries.class.getName()).log(Level.SEVERE, null, ex);
+//        }     
+//                    
+//                    
+//                } catch (Exception e) {
+//                    System.out.println("f");
+//                }
                    }
         
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -1105,7 +1128,7 @@ ArrayList<String> list1 = new ArrayList<String>();
                   }
                   else
                   {
-		((JTextField)to.getDateEditor().getUiComponent()).setText((month1+1)+" "+day1+", "+year1);
+		((JTextField)to.getDateEditor().getUiComponent()).setText((month1+1)+" "+(day1-1)+", "+year1);
                   }
                   }
                   
@@ -1546,6 +1569,7 @@ ArrayList<String> list1 = new ArrayList<String>();
             String sql = "UPDATE Record SET status=1 where eid='"+eidcom2.getSelectedItem().toString()+"' AND Date = '"+((JTextField)ldate.getDateEditor().getUiComponent()).getText()+"'";
             
             pst=conn.prepareStatement(sql);
+            pst.executeUpdate();
             
         } catch (SQLException ex) {
             ex.printStackTrace();

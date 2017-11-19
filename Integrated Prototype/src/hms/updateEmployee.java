@@ -101,7 +101,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
                     pst.close();
                     rs.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(updateEmployee.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 }
         }
         
@@ -416,6 +416,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         getContentPane().add(jScrollPane2);
         jScrollPane2.setBounds(840, 288, 300, 80);
 
+        udob.setEditable(false);
         udob.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         udob.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -832,7 +833,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         age = (jTable1.getValueAt(row,6).toString());
         nic = (jTable1.getValueAt(row,7).toString());
         addr = (jTable1.getValueAt(row,8).toString()); 
-        phn = "0"+(jTable1.getValueAt(row,9).toString());
+        phn = (jTable1.getValueAt(row,9).toString());
         desig = (jTable1.getValueAt(row,10).toString());
         
         String sql4="SELECT * FROM usertype";
@@ -842,6 +843,14 @@ public class updateEmployee extends javax.swing.JInternalFrame {
                ubc.setText(Double.toString(rs.getDouble("basic_salary")));
            } catch (SQLException ex) {
                Logger.getLogger(updateEmployee.class.getName()).log(Level.SEVERE, null, ex);
+           }finally
+           {
+               try {
+                   pst.close();
+                   rs.close();
+                   
+               } catch (Exception e) {
+               }
            }
         
         

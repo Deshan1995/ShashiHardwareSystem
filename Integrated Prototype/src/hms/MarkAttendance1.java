@@ -263,11 +263,7 @@ String s;
         pst1 = conn.prepareStatement(sql1);
         rs1 = pst1.executeQuery();
         
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
+        
         
         
         if(rs1.next())
@@ -311,6 +307,11 @@ String s;
         } catch (Exception e) {
         }
     }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
