@@ -67,6 +67,13 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         catch (SQLException e) {
             //Logger.getLogger(SupplierOrders.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showConfirmDialog(null,e);
+        }finally{
+            try {
+                pst1.close();
+                rs1.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CustormizeOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -74,7 +81,7 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         try {
             int id = Integer.parseInt(LabelOID.getText());
             
-            String sql = "SELECT ItemCode,ItemName,BrandID,BrandName,Quantity,Price FROM CustomizedOrderItems WHERE OrderID = '"+id+"'";
+            String sql = "SELECT ItemCode,Quantity,Price FROM CustomizedOrderItems WHERE OrderID = '"+id+"'";
             pst2 = conn1.prepareStatement(sql);
             rs2 = pst2.executeQuery();
             jTable2.setModel(DbUtils.resultSetToTableModel(rs2));
@@ -82,6 +89,13 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
             
         } catch (SQLException ex) {
             Logger.getLogger(SupplierOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            try {
+                pst2.close();
+                rs2.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CustormizeOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -97,11 +111,12 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
     
     public void ClearCustomizedOrderItems(){
         TextItemID.setText("");
-        TextItemName.setText("");
+        /*TextItemName.setText("");
         TextBrandID.setText("");
-        TextBrandName.setText("");
+        TextBrandName.setText("");*/
         TextQuantity.setText("");
         TextPrice.setText("");
+        TextPriceTotal.setText("");
     }
     
     public boolean isValidPhone(String phone){
@@ -123,6 +138,8 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         return true;
        //Phone Validation Ends
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -138,19 +155,13 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         jTable2 = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
-        TextItemName = new javax.swing.JTextField();
         TextQuantity = new javax.swing.JTextField();
         TextPriceTotal = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jLabel15 = new javax.swing.JLabel();
-        TextBrandID = new javax.swing.JTextField();
         jButton8 = new javax.swing.JButton();
         OrderID = new javax.swing.JLabel();
-        TextBrandName = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         TextPrice = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -160,6 +171,7 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         CustomerID = new javax.swing.JLabel();
         calculateTotal = new javax.swing.JButton();
         ClearButton = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
@@ -179,29 +191,35 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         BoxOrderStatus = new javax.swing.JComboBox<>();
         BoxPaymentStatus = new javax.swing.JComboBox<>();
         LabelOID = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
         Clear = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        SearchCustomerOrder = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        RefreshCustomerOrderTable = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
+        Demo = new javax.swing.JButton();
 
-        jDialog1.setSize(new java.awt.Dimension(1042, 674));
+        jDialog1.setPreferredSize(new java.awt.Dimension(1052, 540));
+        jDialog1.setSize(new java.awt.Dimension(1052, 540));
 
         jTable2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Item Code", "Item Name", "BrandID", "Brand Name", "Qunantity", "Price"
+                "Item Code", "Qunantity", "Price"
             }
         ));
         jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -217,8 +235,6 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel17.setText("Price");
 
-        TextItemName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-
         TextQuantity.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         TextQuantity.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -227,9 +243,6 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         });
 
         TextPriceTotal.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-
-        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel14.setText("Brand ID");
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel18.setText("Total   = ");
@@ -250,11 +263,6 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel15.setText("Brand Name");
-
-        TextBrandID.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-
         jButton8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton8.setText("Update");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -264,11 +272,6 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         });
 
         OrderID.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-
-        TextBrandName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-
-        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel13.setText("Item Name");
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel12.setText("Item Code");
@@ -316,6 +319,7 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(calculateTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addGap(91, 91, 91)
@@ -325,39 +329,32 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
                         .addGap(66, 66, 66)
                         .addComponent(CustomerID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel14)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel16)
-                            .addComponent(jLabel17))
-                        .addGap(66, 66, 66)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TextPrice)
-                            .addComponent(TextQuantity)
-                            .addComponent(TextBrandName)
-                            .addComponent(TextBrandID)
-                            .addComponent(TextItemName)
-                            .addComponent(TextItemID)))
+                        .addComponent(jLabel12)
+                        .addGap(78, 78, 78)
+                        .addComponent(TextItemID))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(jLabel18)
-                                .addGap(18, 18, 18)
-                                .addComponent(TextPriceTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(ClearButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(calculateTotal))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel17))
+                        .addGap(92, 92, 92)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TextQuantity)
+                            .addComponent(TextPrice)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ClearButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel18)
+                .addGap(18, 18, 18)
+                .addComponent(TextPriceTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -374,19 +371,7 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(TextItemID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(TextItemName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(TextBrandID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(TextBrandName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
+                .addGap(39, 39, 39)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
                     .addComponent(TextQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -401,35 +386,48 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton8)
-                    .addComponent(calculateTotal))
-                .addGap(29, 29, 29)
-                .addComponent(ClearButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                    .addComponent(ClearButton))
+                .addGap(28, 28, 28)
+                .addComponent(calculateTotal)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
                     .addComponent(TextPriceTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
+
+        jButton10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton10.setText("Demo");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
         jDialog1Layout.setHorizontalGroup(
             jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDialog1Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton10, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jDialog1Layout.setVerticalGroup(
             jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDialog1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jDialog1Layout.createSequentialGroup()
+                        .addComponent(jButton10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         setPreferredSize(new java.awt.Dimension(1660, 1000));
@@ -483,6 +481,7 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel3.setText("OrderID");
 
+        TextEndDate.setEditable(false);
         TextEndDate.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -534,6 +533,14 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
 
         LabelOID.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
+        jButton5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton5.setText("New Entry");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -549,7 +556,9 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
                     .addComponent(TextCID, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                     .addComponent(TextSID)
                     .addComponent(LabelOID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(303, 303, 303)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(163, 163, 163)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
@@ -579,8 +588,9 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
                             .addComponent(jLabel4)
                             .addComponent(TextTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
-                            .addComponent(LabelOID, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29)
+                            .addComponent(LabelOID, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton5))
+                        .addGap(27, 27, 27)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel1)
@@ -635,14 +645,6 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton5.setText("New Entry");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-
         Clear.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         Clear.setText("Clear");
         Clear.addActionListener(new java.awt.event.ActionListener() {
@@ -650,39 +652,6 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
                 ClearActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addGap(104, 104, 104)
-                .addComponent(jButton2)
-                .addGap(93, 93, 93)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
-                .addComponent(Clear, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(79, 79, 79)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(68, 68, 68))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton5)
-                    .addComponent(Clear))
-                .addContainerGap())
-        );
-
-        jPanel3.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton4.setText("Add Items");
@@ -692,20 +661,84 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
             }
         });
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jButton4)
+                .addGap(49, 49, 49)
+                .addComponent(jButton1)
+                .addGap(48, 48, 48)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addComponent(jButton3)
+                .addGap(38, 38, 38)
+                .addComponent(Clear, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(Clear)
+                    .addComponent(jButton4))
+                .addContainerGap())
+        );
+
+        jPanel3.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+
+        SearchCustomerOrder.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        SearchCustomerOrder.setText("Search");
+        SearchCustomerOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SearchCustomerOrderActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel7.setText("Customer  Order ID:");
+
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        RefreshCustomerOrderTable.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        RefreshCustomerOrderTable.setText("Refresh");
+        RefreshCustomerOrderTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RefreshCustomerOrderTableActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jButton4)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jLabel7)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(SearchCustomerOrder)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 148, Short.MAX_VALUE)
+                .addComponent(RefreshCustomerOrderTable)
+                .addGap(50, 50, 50))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton4)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SearchCustomerOrder)
+                    .addComponent(jLabel7)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RefreshCustomerOrderTable))
                 .addContainerGap())
         );
 
@@ -716,6 +749,14 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         jLabel20.setForeground(new java.awt.Color(255, 255, 255));
         jLabel20.setText("Customized Orders");
 
+        Demo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        Demo.setText("Demo");
+        Demo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DemoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -723,13 +764,17 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(jLabel20)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Demo, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel20)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(Demo))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
@@ -744,15 +789,16 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 360, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -810,6 +856,12 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null,"Error in placing the order!","Error", JOptionPane.INFORMATION_MESSAGE);
             JOptionPane.showMessageDialog(null,ex);
             
+        } finally{
+            try {
+                pst3.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CustormizeOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -828,7 +880,12 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        if(LabelOID.getText().equals("")){
+            //JOptionPane.showMessageDialog(null,"No record Has been selected to update!");
+            JOptionPane.showMessageDialog(null,"No record has been selected to update!","Error!", JOptionPane.INFORMATION_MESSAGE);
+
+        }
+        else{
         
         int x = JOptionPane.showConfirmDialog(null,"Want to Update?");
         
@@ -855,6 +912,13 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         catch(Exception e){
             //JOptionPane.showConfirmDialog(null,e);
             JOptionPane.showMessageDialog(null,"Error in updating the record!","Error!", JOptionPane.INFORMATION_MESSAGE);
+        }finally{
+            try {
+                pst4.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CustormizeOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         }
         
         LabelOID.setText("");
@@ -867,6 +931,7 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         TextTotal.setText("");
         
         }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -892,6 +957,12 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
                 }
             catch (Exception e) {
                 JOptionPane.showMessageDialog(null,e);
+            } finally{
+                try {
+                    pst5.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(CustormizeOrders.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             
             LabelOID.setText("");
@@ -965,6 +1036,7 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
                 int OID = oid1 + 1;
                 LabelOID.setText(String.valueOf(OID));
             }
+            ClearCustomizedOrderItems();
             
         } catch (SQLException ex) {
             Logger.getLogger(CustormizeOrders.class.getName()).log(Level.SEVERE, null, ex);
@@ -986,15 +1058,16 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
             String ioid = OrderID.getText();
             String cid = CustomerID.getText();
             String iid = TextItemID.getText();
-            String name = TextItemName.getText();
+            /*String name = TextItemName.getText();
             String bid = TextBrandID.getText();
-            String bname = TextBrandName.getText();
+            String bname = TextBrandName.getText();*/
             String qnty = TextQuantity.getText();
             
             double price = Double.parseDouble(TextPrice.getText());
         
             try {    
-                String s1 = "INSERT INTO CustomizedOrderItems (OrderID,CustomerID,ItemCode,ItemName,BrandID,BrandName,Quantity,Price) VALUES ('"+ioid+"','"+cid+"','"+iid+"','"+name+"','"+bid+"','"+bname+"','"+qnty+"','"+price+"')";
+                //String s1 = "INSERT INTO CustomizedOrderItems (OrderID,CustomerID,ItemCode,ItemName,BrandID,BrandName,Quantity,Price) VALUES ('"+ioid+"','"+cid+"','"+iid+"','"+name+"','"+bid+"','"+bname+"','"+qnty+"','"+price+"')";
+                String s1 = "INSERT INTO CustomizedOrderItems (OrderID,CustomerID,ItemCode,Quantity,Price) VALUES ('"+ioid+"','"+cid+"','"+iid+"','"+qnty+"','"+price+"')";
                 pst7 = conn1.prepareStatement(s1);
                 pst7.execute();
                 
@@ -1031,15 +1104,16 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
 
             String ioid = OrderID.getText();
             String iid = TextItemID.getText();
-            String name = TextItemName.getText();
+            /*String name = TextItemName.getText();
             String bid = TextBrandID.getText();
-            String bname = TextBrandName.getText();
+            String bname = TextBrandName.getText();*/
             String qnty = TextQuantity.getText();
 
             double price = Double.parseDouble(TextPrice.getText());
 
             try {
-                String s3 = "UPDATE CustomizedOrderItems SET OrderID = '"+ioid+"',ItemCode = '"+iid+"',ItemName = '"+name+"',BrandID = '"+bid+"',BrandName = '"+bname+"',Quantity = '"+qnty+"',Price = '"+price+"' WHERE (OrderID = '"+ioid+"' AND ItemCode = '"+iid+"')";
+                //String s3 = "UPDATE CustomizedOrderItems SET OrderID = '"+ioid+"',ItemCode = '"+iid+"',ItemName = '"+name+"',BrandID = '"+bid+"',BrandName = '"+bname+"',Quantity = '"+qnty+"',Price = '"+price+"' WHERE (OrderID = '"+ioid+"' AND ItemCode = '"+iid+"')";
+                String s3 = "UPDATE CustomizedOrderItems SET OrderID = '"+ioid+"',ItemCode = '"+iid+"',Quantity = '"+qnty+"',Price = '"+price+"' WHERE (OrderID = '"+ioid+"' AND ItemCode = '"+iid+"')";
                 pst9 = conn1.prepareStatement(s3);
                 pst9.execute();
 
@@ -1071,7 +1145,7 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
             double totalPrice = 0;
             while(rs4.next()){
                 row++;
-                String Price = jTable2.getValueAt(row,5).toString();
+                String Price = jTable2.getValueAt(row,2).toString();
                 double NewPrice = Double.parseDouble(Price);
                 totalPrice = totalPrice + NewPrice;
             }
@@ -1082,6 +1156,13 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             Logger.getLogger(SupplierOrders.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null,ex);
+        } finally{
+            try {
+                pst8.close();
+                rs4.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CustormizeOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_calculateTotalActionPerformed
 
@@ -1124,14 +1205,7 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void ClearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearButtonActionPerformed
-        ClearSupplierOrderWindow();
-        /*
-        TextItemID.setText("");
-        TextItemName.setText("");
-        TextBrandID.setText("");
-        TextBrandName.setText("");
-        TextQuantity.setText("");
-        TextPrice.setText("");*/
+        ClearCustomizedOrderItems();
     }//GEN-LAST:event_ClearButtonActionPerformed
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
@@ -1139,26 +1213,33 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         
         int row=jTable2.getSelectedRow();
        
-       String oid=jTable2.getValueAt(row,0).toString();
-       String cid=jTable2.getValueAt(row,1).toString();
-       String sid=jTable2.getValueAt(row,2).toString();
-       String ICode=jTable2.getValueAt(row,3).toString();
+       //String oid=jTable2.getValueAt(row,0).toString();
+       //String cid=jTable2.getValueAt(row,1).toString();
+       //String sid=jTable2.getValueAt(row,2).toString();
+       /*String ICode=jTable2.getValueAt(row,3).toString();
        String IName=jTable2.getValueAt(row,4).toString();
        String BID=jTable2.getValueAt(row,5).toString();
        String Bname=jTable2.getValueAt(row,6).toString();
        String qnty=jTable2.getValueAt(row,7).toString();
-       String price=jTable2.getValueAt(row,8).toString();
+       String price=jTable2.getValueAt(row,8).toString();*/
+       String ICode=jTable2.getValueAt(row,0).toString();
+       /*String IName=jTable2.getValueAt(row,1).toString();
+       String BID=jTable2.getValueAt(row,2).toString();
+       String Bname=jTable2.getValueAt(row,3).toString();*/
+       String qnty=jTable2.getValueAt(row,1).toString();
+       String price=jTable2.getValueAt(row,2).toString();
        
        
-       OrderID.setText(oid);
-       CustomerID.setText(cid);
-       TextSID.setText(sid);
+       //OrderID.setText(oid);
+       //CustomerID.setText(cid);
+       //TextSID.setText(sid);
        TextItemID.setText(ICode);
-       TextItemName.setText(IName);
+       /*TextItemName.setText(IName);
        TextBrandID.setText(BID);
-       TextBrandName.setText(Bname);
+       TextBrandName.setText(Bname);*/
        TextQuantity.setText(qnty);
        TextPrice.setText(price);
+       TextPriceTotal.setText("");
        
     }//GEN-LAST:event_jTable2MouseClicked
 
@@ -1220,6 +1301,47 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_TextPriceKeyTyped
 
+    private void SearchCustomerOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchCustomerOrderActionPerformed
+        try {
+            String str1 = "SELECT * FROM CustomizedOrders WHERE OrderID='"+jTextField1.getText()+"'";
+            pst3 = conn1.prepareStatement(str1);
+            rs2 = pst3.executeQuery();
+            jTable1.setModel(DbUtils.resultSetToTableModel(rs2));
+        } catch (SQLException ex) {
+            Logger.getLogger(CustormizeOrders.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            try {
+                pst3.close();
+                rs2.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CustormizeOrders.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }//GEN-LAST:event_SearchCustomerOrderActionPerformed
+
+    private void RefreshCustomerOrderTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshCustomerOrderTableActionPerformed
+        // TODO add your handling code here:
+        LoadingCustomizedOrderTable();
+    }//GEN-LAST:event_RefreshCustomerOrderTableActionPerformed
+
+    private void DemoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DemoActionPerformed
+       //LabelOID.setText("");
+       TextCID.setText("0712226665");
+       TextSID.setText("23");
+       //TextTotal.setText("");
+       BoxOrderStatus.setSelectedItem("Pending");
+       BoxPaymentStatus.setSelectedItem("Not Completed");
+       //TextStartDate.setText("");
+       //TextEndDate.setText("");
+    }//GEN-LAST:event_DemoActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        TextItemID.setText("PNT001");
+        TextQuantity.setText("100");
+        TextPrice.setText("200000");
+    }//GEN-LAST:event_jButton10ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> BoxOrderStatus;
@@ -1227,14 +1349,14 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
     private javax.swing.JButton Clear;
     private javax.swing.JButton ClearButton;
     private javax.swing.JLabel CustomerID;
+    private javax.swing.JButton Demo;
     private javax.swing.JLabel LabelOID;
     private javax.swing.JLabel OrderID;
-    private javax.swing.JTextField TextBrandID;
-    private javax.swing.JTextField TextBrandName;
+    private javax.swing.JButton RefreshCustomerOrderTable;
+    private javax.swing.JButton SearchCustomerOrder;
     private javax.swing.JTextField TextCID;
     private javax.swing.JTextField TextEndDate;
     private javax.swing.JTextField TextItemID;
-    private javax.swing.JTextField TextItemName;
     private javax.swing.JTextField TextPrice;
     private javax.swing.JTextField TextPriceTotal;
     private javax.swing.JTextField TextQuantity;
@@ -1243,6 +1365,7 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
     private javax.swing.JTextField TextTotal;
     private javax.swing.JButton calculateTotal;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -1255,9 +1378,6 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
@@ -1267,6 +1387,7 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -1278,5 +1399,6 @@ public class CustormizeOrders extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
