@@ -8,6 +8,7 @@ package DBclass;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -91,6 +92,7 @@ public class me {
                     break;
                 }
                 
+                
                 if(nic.charAt(9)=='V')
                 {
                     valid = true;
@@ -148,10 +150,41 @@ public class me {
             return true;
         }
     }
+    
+    public static Date getStringDate(String date){
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
+        Date longDate =null;
+        try {
+            longDate = (sdf.parse(date));
+            //System.out.println(sdf.format(jDateChooser1.getDate()) );        // TODO add your handling code here:
+        } catch (ParseException ex) {
+            //Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println();
+        }
+        
+        return  longDate;
+
+    }
+    
+    public static Date getStringDate1(String date){
+        SimpleDateFormat sdf = new SimpleDateFormat("MM dd, yyyy");
+        Date longDate =null;
+        try {
+            longDate = (sdf.parse(date));
+            //System.out.println(sdf.format(jDateChooser1.getDate()) );        // TODO add your handling code here:
+        } catch (ParseException ex) {
+            //Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println();
+        }
+        
+        return  longDate;
+
+    }
+
+
+    
 }
 
     
-
-    
-    
+  
 
