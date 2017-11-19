@@ -26,8 +26,8 @@ import net.proteanit.sql.DbUtils;
 public class viewAttendance extends javax.swing.JInternalFrame {
     String s,s1;
        Connection  conn = null;
-       PreparedStatement pst = null,pst1=null,pst3=null;
-       ResultSet rs = null,rs1 = null,rs3=null;
+       PreparedStatement pst = null,pst1=null,pst3=null,pst2=null;
+       ResultSet rs = null,rs1 = null,rs3=null,rs2=null;
        byte[] person_image = null;
        String selectedb=null;
 
@@ -61,6 +61,8 @@ public class viewAttendance extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         id = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         workingdays = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -87,7 +89,7 @@ public class viewAttendance extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jPanel2.add(jScrollPane1);
-        jScrollPane1.setBounds(540, 230, 450, 210);
+        jScrollPane1.setBounds(490, 80, 450, 210);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -115,11 +117,11 @@ public class viewAttendance extends javax.swing.JInternalFrame {
 
         fromdate.setDateFormatString("MM dd, yyyy");
         jPanel2.add(fromdate);
-        fromdate.setBounds(160, 240, 150, 30);
+        fromdate.setBounds(140, 90, 150, 30);
 
         todate.setDateFormatString("MM dd, yyyy");
         jPanel2.add(todate);
-        todate.setBounds(350, 240, 150, 30);
+        todate.setBounds(330, 90, 150, 30);
 
         jButton1.setText("View attendance of all employees");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -128,12 +130,12 @@ public class viewAttendance extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(jButton1);
-        jButton1.setBounds(160, 280, 220, 40);
+        jButton1.setBounds(140, 130, 220, 40);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("EID");
         jPanel2.add(jLabel2);
-        jLabel2.setBounds(160, 360, 40, 30);
+        jLabel2.setBounds(140, 210, 40, 30);
 
         jButton2.setText("View attendance of given employee");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -142,34 +144,50 @@ public class viewAttendance extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(jButton2);
-        jButton2.setBounds(160, 400, 220, 40);
+        jButton2.setBounds(140, 250, 220, 40);
         jPanel2.add(id);
-        id.setBounds(210, 360, 59, 30);
+        id.setBounds(190, 210, 59, 30);
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
+        jPanel2.add(jScrollPane2);
+        jScrollPane2.setBounds(140, 350, 800, 230);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText(" to");
         jPanel2.add(jLabel3);
-        jLabel3.setBounds(320, 250, 20, 20);
+        jLabel3.setBounds(300, 100, 20, 20);
 
         workingdays.setBackground(new java.awt.Color(153, 153, 255));
         workingdays.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         workingdays.setForeground(new java.awt.Color(255, 0, 0));
         jPanel2.add(workingdays);
-        workingdays.setBounds(640, 450, 50, 30);
+        workingdays.setBounds(620, 300, 50, 30);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("WORKING DAYS");
         jPanel2.add(jLabel1);
-        jLabel1.setBounds(700, 450, 180, 30);
+        jLabel1.setBounds(680, 300, 180, 30);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("OUT OF");
         jPanel2.add(jLabel5);
-        jLabel5.setBounds(580, 450, 60, 30);
+        jLabel5.setBounds(560, 300, 60, 30);
 
         jLabel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51), 2));
         jPanel2.add(jLabel6);
-        jLabel6.setBounds(80, 170, 990, 360);
+        jLabel6.setBounds(70, 60, 990, 580);
 
         getContentPane().add(jPanel2);
         jPanel2.setBounds(0, 0, 1170, 650);
@@ -210,15 +228,20 @@ public class viewAttendance extends javax.swing.JInternalFrame {
         String D2 = ((JTextField)todate.getDateEditor().getUiComponent()).getText();
         
         String sql = "SELECT EID, COUNT(EID) AS Attended_Days FROM Record WHERE status = 1 AND Date BETWEEN '"+D1+"' AND '"+D2+"'group by EID";
+        String sqll = "SELECT EID,Date,status From Record where status = 0";
         try {
             pst1 = conn.prepareStatement(sql);
+            pst2 = conn.prepareStatement(sqll);
+            rs2=pst2.executeQuery();
             rs = pst1.executeQuery();
             jTable1.setModel(DbUtils.resultSetToTableModel(rs));
+            jTable2.setModel(DbUtils.resultSetToTableModel(rs2));  
         }catch (Exception e) {
             System.out.println(e);
         }finally{
             try {
                 pst1.close();
+                pst2.close();
                 
             } catch (Exception e) {
             }
@@ -243,6 +266,8 @@ public class viewAttendance extends javax.swing.JInternalFrame {
         }finally{
             try {
                 pst.close();
+                rs.close();
+                rs2.close();
                 
             } catch (Exception e) {
             }
@@ -333,6 +358,7 @@ public class viewAttendance extends javax.swing.JInternalFrame {
                     }finally{
                         try {
                             pst.close();
+                            rs.close();
                             
                         } catch (Exception e) {
                         }
@@ -366,7 +392,9 @@ public class viewAttendance extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     private com.toedter.calendar.JDateChooser todate;
     private javax.swing.JLabel workingdays;
     // End of variables declaration//GEN-END:variables
