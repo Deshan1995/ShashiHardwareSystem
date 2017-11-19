@@ -19,7 +19,7 @@ public class conect {
     public static Connection ConnectDb(){
        try{
            Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\Timansi Lakshika\\Documents\\NetBeansProjects\\HardwareSystem\\hardwaredb.sqlite");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\damith\\Documents\\GitHub\\ShashiHardwareSystem\\Integrated Prototype\\hardwaredb.sqlite");
             System.out.println("Connect");
             
             return conn;
