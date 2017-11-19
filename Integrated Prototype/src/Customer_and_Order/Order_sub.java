@@ -79,6 +79,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
         System.out.println("Connected to database");
         
         txt_delID.setEnabled(false);
+        Date date = new Date();
+        delivDate.setSelectableDateRange(date, null);
         
         loadAvailableItemList();
         
@@ -910,7 +912,46 @@ public class Order_sub extends javax.swing.JInternalFrame {
         chkbx_addPastLoan = new javax.swing.JCheckBox();
         txt_nowPaying = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jPanel9 = new javax.swing.JPanel();
+        jPanel22 = new javax.swing.JPanel();
+        jPanel23 = new javax.swing.JPanel();
+        jLabel56 = new javax.swing.JLabel();
+        jLabel57 = new javax.swing.JLabel();
+        jLabel58 = new javax.swing.JLabel();
+        jLabel59 = new javax.swing.JLabel();
+        jLabel60 = new javax.swing.JLabel();
+        delivIdtxt = new javax.swing.JTextField();
+        idtxt = new javax.swing.JTextField();
+        addrstxt = new javax.swing.JTextField();
+        vehiCombo = new javax.swing.JComboBox();
+        driverCombo = new javax.swing.JComboBox();
+        cancelBtn = new javax.swing.JButton();
+        confirmBtn = new javax.swing.JButton();
+        jLabel61 = new javax.swing.JLabel();
+        typeCombo = new javax.swing.JComboBox();
+        postpnBtn = new javax.swing.JButton();
+        jPanel24 = new javax.swing.JPanel();
+        jLabel62 = new javax.swing.JLabel();
+        jLabel63 = new javax.swing.JLabel();
+        jLabel64 = new javax.swing.JLabel();
+        jLabel65 = new javax.swing.JLabel();
+        allVehiCombo = new javax.swing.JComboBox();
+        avaVehiCombo = new javax.swing.JComboBox();
+        allDriverCombo = new javax.swing.JComboBox();
+        avaDriverCombo = new javax.swing.JComboBox();
+        driverUpdateBtn = new javax.swing.JButton();
+        vehiUpdateBtn = new javax.swing.JButton();
+        jPanel25 = new javax.swing.JPanel();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        itemTable = new javax.swing.JTable();
+        jPanel26 = new javax.swing.JPanel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        supTable = new javax.swing.JTable();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        delivTable = new javax.swing.JTable();
+        jScrollPane13 = new javax.swing.JScrollPane();
+        agencyTable = new javax.swing.JTable();
+        jScrollPane14 = new javax.swing.JScrollPane();
+        orderTable = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -963,57 +1004,13 @@ public class Order_sub extends javax.swing.JInternalFrame {
         jButton5 = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
-        jLabel50 = new javax.swing.JLabel();
-        jLabel52 = new javax.swing.JLabel();
         jLabel53 = new javax.swing.JLabel();
         jLabel54 = new javax.swing.JLabel();
         txt_OrderID_history = new javax.swing.JTextField();
         txt_cusID_history = new javax.swing.JTextField();
         jButton10 = new javax.swing.JButton();
-        date_end = new com.toedter.calendar.JDateChooser();
-        date_start = new com.toedter.calendar.JDateChooser();
         jScrollPane8 = new javax.swing.JScrollPane();
         tbl_history = new javax.swing.JTable();
-        jPanel22 = new javax.swing.JPanel();
-        jPanel23 = new javax.swing.JPanel();
-        jLabel56 = new javax.swing.JLabel();
-        jLabel57 = new javax.swing.JLabel();
-        jLabel58 = new javax.swing.JLabel();
-        jLabel59 = new javax.swing.JLabel();
-        jLabel60 = new javax.swing.JLabel();
-        delivIdtxt = new javax.swing.JTextField();
-        idtxt = new javax.swing.JTextField();
-        addrstxt = new javax.swing.JTextField();
-        vehiCombo = new javax.swing.JComboBox();
-        driverCombo = new javax.swing.JComboBox();
-        cancelBtn = new javax.swing.JButton();
-        confirmBtn = new javax.swing.JButton();
-        jLabel61 = new javax.swing.JLabel();
-        typeCombo = new javax.swing.JComboBox();
-        postpnBtn = new javax.swing.JButton();
-        jPanel24 = new javax.swing.JPanel();
-        jLabel62 = new javax.swing.JLabel();
-        jLabel63 = new javax.swing.JLabel();
-        jLabel64 = new javax.swing.JLabel();
-        jLabel65 = new javax.swing.JLabel();
-        allVehiCombo = new javax.swing.JComboBox();
-        avaVehiCombo = new javax.swing.JComboBox();
-        allDriverCombo = new javax.swing.JComboBox();
-        avaDriverCombo = new javax.swing.JComboBox();
-        driverUpdateBtn = new javax.swing.JButton();
-        vehiUpdateBtn = new javax.swing.JButton();
-        jPanel25 = new javax.swing.JPanel();
-        jScrollPane10 = new javax.swing.JScrollPane();
-        itemTable = new javax.swing.JTable();
-        jPanel26 = new javax.swing.JPanel();
-        jScrollPane11 = new javax.swing.JScrollPane();
-        supTable = new javax.swing.JTable();
-        jScrollPane12 = new javax.swing.JScrollPane();
-        delivTable = new javax.swing.JTable();
-        jScrollPane13 = new javax.swing.JScrollPane();
-        agencyTable = new javax.swing.JTable();
-        jScrollPane14 = new javax.swing.JScrollPane();
-        orderTable = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -2006,480 +2003,6 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Make Order", jPanel5);
 
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1684, Short.MAX_VALUE)
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 952, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Delivery", jPanel9);
-
-        jPanel6.setLayout(null);
-
-        jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Customer Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
-        jPanel16.setLayout(null);
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("Customer ID");
-        jPanel16.add(jLabel1);
-        jLabel1.setBounds(60, 30, 100, 16);
-
-        jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton4.setText("Search");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-        jPanel16.add(jButton4);
-        jButton4.setBounds(600, 30, 100, 40);
-
-        txt_cusID_sd.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txt_cusID_sd.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txt_cusID_sdKeyReleased(evt);
-            }
-        });
-        jPanel16.add(txt_cusID_sd);
-        txt_cusID_sd.setBounds(240, 30, 190, 30);
-
-        jPanel6.add(jPanel16);
-        jPanel16.setBounds(20, 30, 1600, 90);
-
-        jPanel19.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Now Paying", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
-        jPanel19.setLayout(null);
-
-        jLabel45.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel45.setText("Payment Method");
-        jPanel19.add(jLabel45);
-        jLabel45.setBounds(80, 60, 140, 16);
-
-        jLabel46.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel46.setText("Cheque Number");
-        jPanel19.add(jLabel46);
-        jLabel46.setBounds(80, 130, 120, 16);
-
-        jLabel47.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel47.setText("Amount");
-        jPanel19.add(jLabel47);
-        jLabel47.setBounds(670, 70, 100, 16);
-        jPanel19.add(txt_chequeNo_sd);
-        txt_chequeNo_sd.setBounds(290, 120, 190, 30);
-        jPanel19.add(txt_amount_sd);
-        txt_amount_sd.setBounds(810, 60, 190, 30);
-
-        jButton8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton8.setText("Pay Debt");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
-        jPanel19.add(jButton8);
-        jButton8.setBounds(1350, 40, 150, 100);
-
-        cmbx_payType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Cheque" }));
-        cmbx_payType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbx_payTypeActionPerformed(evt);
-            }
-        });
-        jPanel19.add(cmbx_payType);
-        cmbx_payType.setBounds(290, 60, 190, 22);
-
-        jPanel6.add(jPanel19);
-        jPanel19.setBounds(20, 540, 1600, 190);
-
-        jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Customer's Transactions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
-        jPanel20.setLayout(null);
-
-        tbl_cusTransactions.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane7.setViewportView(tbl_cusTransactions);
-
-        jPanel20.add(jScrollPane7);
-        jScrollPane7.setBounds(60, 90, 1470, 210);
-
-        jLabel48.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel48.setText("Total Debts");
-        jPanel20.add(jLabel48);
-        jLabel48.setBounds(60, 340, 100, 16);
-
-        txt_totDebt.setEditable(false);
-        jPanel20.add(txt_totDebt);
-        txt_totDebt.setBounds(260, 330, 190, 30);
-
-        lbl_currentTrans.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        lbl_currentTrans.setText("No customer is selected");
-        jPanel20.add(lbl_currentTrans);
-        lbl_currentTrans.setBounds(60, 40, 440, 20);
-
-        jPanel6.add(jPanel20);
-        jPanel20.setBounds(20, 150, 1600, 370);
-
-        jTabbedPane1.addTab("Settle Debts", jPanel6);
-
-        jPanel7.setLayout(null);
-
-        jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Item Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
-        jPanel17.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jPanel17.setLayout(null);
-
-        tbl_invoice.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tbl_invoice.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbl_invoiceMouseClicked(evt);
-            }
-        });
-        jScrollPane6.setViewportView(tbl_invoice);
-
-        jPanel17.add(jScrollPane6);
-        jScrollPane6.setBounds(40, 60, 1440, 230);
-
-        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel27.setText("Item Description");
-        jPanel17.add(jLabel27);
-        jLabel27.setBounds(107, 346, 115, 17);
-
-        jLabel40.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel40.setText("Bought Quantity");
-        jPanel17.add(jLabel40);
-        jLabel40.setBounds(600, 346, 124, 17);
-
-        jLabel41.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel41.setText("Return Description");
-        jPanel17.add(jLabel41);
-        jLabel41.setBounds(107, 410, 139, 17);
-
-        jLabel42.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel42.setText("Net Unit Price");
-        jPanel17.add(jLabel42);
-        jLabel42.setBounds(600, 412, 112, 17);
-
-        txtA_itemDes_rt.setEditable(false);
-        jPanel17.add(txtA_itemDes_rt);
-        txtA_itemDes_rt.setBounds(266, 344, 185, 22);
-
-        txt_btQty_rt.setEditable(false);
-        jPanel17.add(txt_btQty_rt);
-        txt_btQty_rt.setBounds(742, 344, 185, 22);
-
-        txt_netUnitPrice_rt.setEditable(false);
-        jPanel17.add(txt_netUnitPrice_rt);
-        txt_netUnitPrice_rt.setBounds(742, 410, 185, 22);
-        jPanel17.add(txt_returnDes_rt);
-        txt_returnDes_rt.setBounds(266, 410, 185, 22);
-
-        jLabel43.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel43.setText("Return Type");
-        jPanel17.add(jLabel43);
-        jLabel43.setBounds(107, 487, 99, 17);
-
-        btn_calculate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_calculate.setText("Calculate Net Return Price");
-        btn_calculate.setActionCommand("<html><center>Calculate<br/>Net Return Price</center></html>");
-        btn_calculate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_calculateActionPerformed(evt);
-            }
-        });
-        jPanel17.add(btn_calculate);
-        btn_calculate.setBounds(923, 485, 221, 33);
-
-        cmbx_type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Faulty Goods", "Non-Faluty Goods" }));
-        jPanel17.add(cmbx_type);
-        cmbx_type.setBounds(266, 485, 185, 22);
-
-        btn_return.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_return.setText("Return");
-        btn_return.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_returnActionPerformed(evt);
-            }
-        });
-        jPanel17.add(btn_return);
-        btn_return.setBounds(1199, 485, 221, 33);
-
-        jLabel44.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel44.setText("Return Quantity");
-        jPanel17.add(jLabel44);
-        jLabel44.setBounds(1090, 352, 112, 17);
-        jPanel17.add(txt_returnQty_rt);
-        txt_returnQty_rt.setBounds(1235, 350, 185, 22);
-
-        jLabel49.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel49.setText("Pay Customer");
-        jPanel17.add(jLabel49);
-        jLabel49.setBounds(1090, 418, 112, 17);
-
-        txt_returnPrice_rt.setEditable(false);
-        jPanel17.add(txt_returnPrice_rt);
-        txt_returnPrice_rt.setBounds(1235, 416, 185, 22);
-
-        btn_clr_rt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_clr_rt.setText("Clear");
-        btn_clr_rt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_clr_rtActionPerformed(evt);
-            }
-        });
-        jPanel17.add(btn_clr_rt);
-        btn_clr_rt.setBounds(1451, 344, 67, 33);
-
-        jPanel7.add(jPanel17);
-        jPanel17.setBounds(50, 250, 1570, 540);
-
-        jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Invoice Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
-        jPanel18.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-
-        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel15.setText("Invoice ID");
-
-        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel18.setText("Customer ID");
-
-        txt_issuedDate_rt.setEditable(false);
-
-        txt_cusName_rt.setEditable(false);
-
-        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel21.setText("Issued Date & Time");
-
-        txt_cusID_rt.setEditable(false);
-
-        jLabel22.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel22.setText("Customer Name");
-
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setText("Search");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
-        jPanel18.setLayout(jPanel18Layout);
-        jPanel18Layout.setHorizontalGroup(
-            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel18Layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txt_cusID_rt, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_invoiceID_rt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 306, Short.MAX_VALUE)
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel22)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(95, 95, 95)
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txt_issuedDate_rt)
-                    .addComponent(txt_cusName_rt, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(113, 113, 113)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(189, 189, 189))
-        );
-        jPanel18Layout.setVerticalGroup(
-            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel18Layout.createSequentialGroup()
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel18Layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel15)
-                            .addComponent(txt_invoiceID_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_issuedDate_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel21))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel18)
-                            .addComponent(txt_cusName_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel22)
-                            .addComponent(txt_cusID_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel18Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-
-        jPanel7.add(jPanel18);
-        jPanel18.setBounds(50, 40, 1570, 190);
-
-        jTabbedPane1.addTab("Return Items", jPanel7);
-
-        jPanel8.setLayout(null);
-
-        jPanel21.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel21.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
-
-        jLabel50.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel50.setText("Starting Date");
-
-        jLabel52.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel52.setText("Ending Date");
-
-        jLabel53.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel53.setText("Search by OrderID:");
-
-        jLabel54.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel54.setText("Serach by CustomerID:");
-
-        txt_OrderID_history.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        txt_OrderID_history.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_OrderID_historyActionPerformed(evt);
-            }
-        });
-        txt_OrderID_history.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txt_OrderID_historyKeyReleased(evt);
-            }
-        });
-
-        txt_cusID_history.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        txt_cusID_history.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txt_cusID_historyKeyReleased(evt);
-            }
-        });
-
-        jButton10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton10.setText("Refresh");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
-            }
-        });
-
-        date_start.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                date_startInputMethodTextChanged(evt);
-            }
-        });
-        date_start.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                date_startPropertyChange(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
-        jPanel21.setLayout(jPanel21Layout);
-        jPanel21Layout.setHorizontalGroup(
-            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel21Layout.createSequentialGroup()
-                .addGap(112, 112, 112)
-                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel21Layout.createSequentialGroup()
-                        .addComponent(jLabel52)
-                        .addGap(72, 72, 72)
-                        .addComponent(date_end, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel21Layout.createSequentialGroup()
-                        .addComponent(jLabel50)
-                        .addGap(64, 64, 64)
-                        .addComponent(date_start, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(217, 217, 217)
-                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel21Layout.createSequentialGroup()
-                        .addComponent(jLabel54)
-                        .addGap(21, 21, 21)
-                        .addComponent(txt_cusID_history, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel21Layout.createSequentialGroup()
-                        .addComponent(jLabel53)
-                        .addGap(49, 49, 49)
-                        .addComponent(txt_OrderID_history, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 401, Short.MAX_VALUE)
-                        .addComponent(jButton10)
-                        .addGap(109, 109, 109))))
-        );
-        jPanel21Layout.setVerticalGroup(
-            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel21Layout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
-                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel50)
-                    .addGroup(jPanel21Layout.createSequentialGroup()
-                        .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel21Layout.createSequentialGroup()
-                                    .addGap(4, 4, 4)
-                                    .addComponent(jLabel53))
-                                .addGroup(jPanel21Layout.createSequentialGroup()
-                                    .addGap(1, 1, 1)
-                                    .addComponent(txt_OrderID_history, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jButton10))
-                            .addGroup(jPanel21Layout.createSequentialGroup()
-                                .addComponent(date_start, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(4, 4, 4)))
-                        .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel21Layout.createSequentialGroup()
-                                .addGap(11, 11, 11)
-                                .addComponent(txt_cusID_history, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel21Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(date_end, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel54)
-                                    .addComponent(jLabel52))))))
-                .addContainerGap())
-        );
-
-        jPanel8.add(jPanel21);
-        jPanel21.setBounds(50, 20, 1590, 100);
-
-        tbl_history.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "OrderID", "CustomerID", "Customer Name", "Placed Date", "Total Amount"
-            }
-        ));
-        tbl_history.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbl_historyMouseClicked(evt);
-            }
-        });
-        jScrollPane8.setViewportView(tbl_history);
-
-        jPanel8.add(jScrollPane8);
-        jScrollPane8.setBounds(50, 140, 1590, 590);
-
-        jTabbedPane1.addTab("Transaction History", jPanel8);
-
         jPanel23.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Schedule", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
         jLabel56.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -2832,6 +2355,420 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Deliveries", jPanel22);
 
+        jPanel6.setLayout(null);
+
+        jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Customer Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel16.setLayout(null);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setText("Customer ID");
+        jPanel16.add(jLabel1);
+        jLabel1.setBounds(60, 30, 100, 16);
+
+        jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton4.setText("Search");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel16.add(jButton4);
+        jButton4.setBounds(600, 30, 100, 40);
+
+        txt_cusID_sd.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txt_cusID_sd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_cusID_sdKeyReleased(evt);
+            }
+        });
+        jPanel16.add(txt_cusID_sd);
+        txt_cusID_sd.setBounds(240, 30, 190, 30);
+
+        jPanel6.add(jPanel16);
+        jPanel16.setBounds(20, 30, 1600, 90);
+
+        jPanel19.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Now Paying", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel19.setLayout(null);
+
+        jLabel45.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel45.setText("Payment Method");
+        jPanel19.add(jLabel45);
+        jLabel45.setBounds(80, 60, 140, 16);
+
+        jLabel46.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel46.setText("Cheque Number");
+        jPanel19.add(jLabel46);
+        jLabel46.setBounds(80, 130, 120, 16);
+
+        jLabel47.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel47.setText("Amount");
+        jPanel19.add(jLabel47);
+        jLabel47.setBounds(670, 70, 100, 16);
+        jPanel19.add(txt_chequeNo_sd);
+        txt_chequeNo_sd.setBounds(290, 120, 190, 30);
+        jPanel19.add(txt_amount_sd);
+        txt_amount_sd.setBounds(810, 60, 190, 30);
+
+        jButton8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton8.setText("Pay Debt");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        jPanel19.add(jButton8);
+        jButton8.setBounds(1350, 40, 150, 100);
+
+        cmbx_payType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Cheque" }));
+        cmbx_payType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbx_payTypeActionPerformed(evt);
+            }
+        });
+        jPanel19.add(cmbx_payType);
+        cmbx_payType.setBounds(290, 60, 190, 22);
+
+        jPanel6.add(jPanel19);
+        jPanel19.setBounds(20, 540, 1600, 190);
+
+        jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Customer's Transactions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel20.setLayout(null);
+
+        tbl_cusTransactions.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane7.setViewportView(tbl_cusTransactions);
+
+        jPanel20.add(jScrollPane7);
+        jScrollPane7.setBounds(60, 90, 1470, 210);
+
+        jLabel48.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel48.setText("Total Debts");
+        jPanel20.add(jLabel48);
+        jLabel48.setBounds(60, 340, 100, 16);
+
+        txt_totDebt.setEditable(false);
+        jPanel20.add(txt_totDebt);
+        txt_totDebt.setBounds(260, 330, 190, 30);
+
+        lbl_currentTrans.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lbl_currentTrans.setText("No customer is selected");
+        jPanel20.add(lbl_currentTrans);
+        lbl_currentTrans.setBounds(60, 40, 440, 20);
+
+        jPanel6.add(jPanel20);
+        jPanel20.setBounds(20, 150, 1600, 370);
+
+        jTabbedPane1.addTab("Settle Debts", jPanel6);
+
+        jPanel7.setLayout(null);
+
+        jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Item Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel17.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jPanel17.setLayout(null);
+
+        tbl_invoice.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbl_invoice.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_invoiceMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tbl_invoice);
+
+        jPanel17.add(jScrollPane6);
+        jScrollPane6.setBounds(40, 60, 1440, 230);
+
+        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel27.setText("Item Description");
+        jPanel17.add(jLabel27);
+        jLabel27.setBounds(107, 346, 115, 17);
+
+        jLabel40.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel40.setText("Bought Quantity");
+        jPanel17.add(jLabel40);
+        jLabel40.setBounds(600, 346, 124, 17);
+
+        jLabel41.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel41.setText("Return Description");
+        jPanel17.add(jLabel41);
+        jLabel41.setBounds(107, 410, 139, 17);
+
+        jLabel42.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel42.setText("Net Unit Price");
+        jPanel17.add(jLabel42);
+        jLabel42.setBounds(600, 412, 112, 17);
+
+        txtA_itemDes_rt.setEditable(false);
+        jPanel17.add(txtA_itemDes_rt);
+        txtA_itemDes_rt.setBounds(266, 344, 185, 22);
+
+        txt_btQty_rt.setEditable(false);
+        jPanel17.add(txt_btQty_rt);
+        txt_btQty_rt.setBounds(742, 344, 185, 22);
+
+        txt_netUnitPrice_rt.setEditable(false);
+        jPanel17.add(txt_netUnitPrice_rt);
+        txt_netUnitPrice_rt.setBounds(742, 410, 185, 22);
+        jPanel17.add(txt_returnDes_rt);
+        txt_returnDes_rt.setBounds(266, 410, 185, 22);
+
+        jLabel43.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel43.setText("Return Type");
+        jPanel17.add(jLabel43);
+        jLabel43.setBounds(107, 487, 99, 17);
+
+        btn_calculate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_calculate.setText("Calculate Net Return Price");
+        btn_calculate.setActionCommand("<html><center>Calculate<br/>Net Return Price</center></html>");
+        btn_calculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_calculateActionPerformed(evt);
+            }
+        });
+        jPanel17.add(btn_calculate);
+        btn_calculate.setBounds(923, 485, 221, 33);
+
+        cmbx_type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Faulty Goods", "Non-Faluty Goods" }));
+        jPanel17.add(cmbx_type);
+        cmbx_type.setBounds(266, 485, 185, 22);
+
+        btn_return.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_return.setText("Return");
+        btn_return.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_returnActionPerformed(evt);
+            }
+        });
+        jPanel17.add(btn_return);
+        btn_return.setBounds(1199, 485, 221, 33);
+
+        jLabel44.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel44.setText("Return Quantity");
+        jPanel17.add(jLabel44);
+        jLabel44.setBounds(1090, 352, 112, 17);
+        jPanel17.add(txt_returnQty_rt);
+        txt_returnQty_rt.setBounds(1235, 350, 185, 22);
+
+        jLabel49.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel49.setText("Pay Customer");
+        jPanel17.add(jLabel49);
+        jLabel49.setBounds(1090, 418, 112, 17);
+
+        txt_returnPrice_rt.setEditable(false);
+        jPanel17.add(txt_returnPrice_rt);
+        txt_returnPrice_rt.setBounds(1235, 416, 185, 22);
+
+        btn_clr_rt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_clr_rt.setText("Clear");
+        btn_clr_rt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_clr_rtActionPerformed(evt);
+            }
+        });
+        jPanel17.add(btn_clr_rt);
+        btn_clr_rt.setBounds(1451, 344, 67, 33);
+
+        jPanel7.add(jPanel17);
+        jPanel17.setBounds(50, 250, 1570, 540);
+
+        jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 0, 255)), "Invoice Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18), new java.awt.Color(0, 0, 255))); // NOI18N
+        jPanel18.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel15.setText("Invoice ID");
+
+        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel18.setText("Customer ID");
+
+        txt_issuedDate_rt.setEditable(false);
+
+        txt_cusName_rt.setEditable(false);
+
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel21.setText("Issued Date & Time");
+
+        txt_cusID_rt.setEditable(false);
+
+        jLabel22.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel22.setText("Customer Name");
+
+        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton5.setText("Search");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
+        jPanel18.setLayout(jPanel18Layout);
+        jPanel18Layout.setHorizontalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(60, 60, 60)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_cusID_rt, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_invoiceID_rt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 306, Short.MAX_VALUE)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel22)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(95, 95, 95)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt_issuedDate_rt)
+                    .addComponent(txt_cusName_rt, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(113, 113, 113)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(189, 189, 189))
+        );
+        jPanel18Layout.setVerticalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel18Layout.createSequentialGroup()
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel18Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(txt_invoiceID_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_issuedDate_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel21))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel18)
+                            .addComponent(txt_cusName_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel22)
+                            .addComponent(txt_cusID_rt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel18Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+
+        jPanel7.add(jPanel18);
+        jPanel18.setBounds(50, 40, 1570, 190);
+
+        jTabbedPane1.addTab("Return Items", jPanel7);
+
+        jPanel8.setLayout(null);
+
+        jPanel21.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel21.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
+
+        jLabel53.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel53.setText("Search by OrderID:");
+
+        jLabel54.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel54.setText("Serach by CustomerID:");
+
+        txt_OrderID_history.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txt_OrderID_history.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_OrderID_historyActionPerformed(evt);
+            }
+        });
+        txt_OrderID_history.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_OrderID_historyKeyReleased(evt);
+            }
+        });
+
+        txt_cusID_history.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txt_cusID_history.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_cusID_historyKeyReleased(evt);
+            }
+        });
+
+        jButton10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton10.setText("Refresh");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
+        jPanel21.setLayout(jPanel21Layout);
+        jPanel21Layout.setHorizontalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel21Layout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addComponent(jLabel53)
+                .addGap(49, 49, 49)
+                .addComponent(txt_OrderID_history, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(227, 227, 227)
+                .addComponent(jLabel54)
+                .addGap(21, 21, 21)
+                .addComponent(txt_cusID_history, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 406, Short.MAX_VALUE)
+                .addComponent(jButton10)
+                .addGap(109, 109, 109))
+        );
+        jPanel21Layout.setVerticalGroup(
+            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel21Layout.createSequentialGroup()
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton10, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txt_OrderID_history, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txt_cusID_history, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel21Layout.createSequentialGroup()
+                            .addGap(3, 3, 3)
+                            .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel53)
+                                .addComponent(jLabel54)))))
+                .addGap(49, 49, 49))
+        );
+
+        jPanel8.add(jPanel21);
+        jPanel21.setBounds(50, 20, 1590, 100);
+
+        tbl_history.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "OrderID", "CustomerID", "Customer Name", "Placed Date", "Total Amount"
+            }
+        ));
+        tbl_history.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_historyMouseClicked(evt);
+            }
+        });
+        jScrollPane8.setViewportView(tbl_history);
+
+        jPanel8.add(jScrollPane8);
+        jScrollPane8.setBounds(50, 140, 1590, 590);
+
+        jTabbedPane1.addTab("Transaction History", jPanel8);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -3085,6 +3022,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
                 
                 //increment cus loan by loanAmount and cusVists++
                 cus_update=conn.prepareStatement("UPDATE Customer SET totalOutstanding=totalOutstanding+?,noOfVisits=noOfVisits+1 where cusID=?  ");
+                if(this.loanAmount==null)
+                    this.loanAmount="0";
                 cus_update.setString(1,this.loanAmount);
                 cus_update.setString(2,this.cusID);
                 cus_update.execute();
@@ -3588,11 +3527,15 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
     private void calbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calbuttonActionPerformed
         //Calculate delivery charges
-        //        OrderDelivery orderDelivery = new OrderDelivery();
-        showCheckBoxes();
-        double price = calculateTotal(Double.parseDouble(distanceTxt.getText()));
-        totalTxt.setText(""+price);
-        totalTxt.setEditable(false);
+        if(totalTxt.getText() != null){
+            showCheckBoxes();
+            double price = calculateTotal(Double.parseDouble(distanceTxt.getText()));
+            totalTxt.setText(""+price);
+            totalTxt.setEditable(false);
+        }
+        else{
+            JOptionPane.showMessageDialog(rootPane, "Empty fields are not allowed", "Empty Fields", ERROR);
+        }
     }//GEN-LAST:event_calbuttonActionPerformed
 
     private void confirmbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmbtnActionPerformed
@@ -4090,35 +4033,21 @@ public class Order_sub extends javax.swing.JInternalFrame {
         date_end.setDate(null);
     }//GEN-LAST:event_jButton10ActionPerformed
 
-    private void date_startPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_date_startPropertyChange
-                
-        
-    }//GEN-LAST:event_date_startPropertyChange
-
-    private void date_startInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_date_startInputMethodTextChanged
-        
-    }//GEN-LAST:event_date_startInputMethodTextChanged
-
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
         clearScheDeliv();
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void confirmBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmBtnActionPerformed
+            
+        updateDrivStatus();
+        updateVehiStatus();
 
-        try {
-
-            updateDrivStatus();
-            updateVehiStatus();
-
-            int res= addScheduledDelivery();
-            if(res>0){
-                JOptionPane.showMessageDialog(this, "Insert Successful");
-            }
-            else{
-                JOptionPane.showMessageDialog(this, "Insert Unsuccessful");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+        int res= addScheduledDelivery();
+        if(res>0){
+            JOptionPane.showMessageDialog(this, "Insert Successful");
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Insert Unsuccessful");
         }
 
         loadSchduledDelivery();
@@ -4127,14 +4056,24 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_confirmBtnActionPerformed
 
     private void postpnBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postpnBtnActionPerformed
-
+        
+        Statement stm1=null;
         String did = idtxt.getText();
         try {
             String SQL1 = "INSERT INTO PostponedDelivery Values (null,'"+did+"')";
-            Statement stm1 = conn.createStatement();
+            stm1 = conn.createStatement();
             stm1.executeUpdate(SQL1);
         } catch (SQLException ex) {
             Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            if (stm1 != null){
+                try {
+                    stm1.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
         char cmp = did.charAt(0);
         if(cmp == 'O'){
@@ -4167,16 +4106,25 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_driverUpdateBtnActionPerformed
 
     private void vehiUpdateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehiUpdateBtnActionPerformed
-
+        Statement stm=null; 
         try {
             String vehiNum = allVehiCombo.getSelectedItem().toString();
             String status = avaVehiCombo.getSelectedItem().toString();
 
             String SQL="UPDATE Vehicle SET availability = '"+status+"' WHERE vehiNo = '"+vehiNum+"'";
-            Statement stm=conn.createStatement();
+            stm=conn.createStatement();
             stm.executeUpdate(SQL);
         } catch (SQLException ex) {
             Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
 
     }//GEN-LAST:event_vehiUpdateBtnActionPerformed
@@ -4186,7 +4134,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_itemTableMouseClicked
 
     private void supTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supTableMouseClicked
-
+        Statement stm=null;
+        ResultSet rs=null;
         try {
             clearItemTable();
             
@@ -4203,8 +4152,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
             String oId = supTable.getValueAt(row, 1).toString();
             
             String SQL = "SELECT ItemName FROM SupplierOrderItems WHERE OrderID = '"+oId+"' ";
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery(SQL);
+            stm = conn.createStatement();
+            rs = stm.executeQuery(SQL);
             
             while(rs.next()){
                 itemTable.setModel(DbUtils.resultSetToTableModel(rs));
@@ -4212,11 +4161,28 @@ public class Order_sub extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
         }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
 
     }//GEN-LAST:event_supTableMouseClicked
 
     private void agencyTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agencyTableMouseClicked
-
+        Statement stm=null;
+        ResultSet rs=null;
         try {
             clearItemTable();
             
@@ -4236,8 +4202,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
             addrstxt.setText(adrs);
 
             String SQL = "SELECT itemcode, description, quantity FROM sales WHERE invoiceno = '"+invoiceID+"'";
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery(SQL);
+            stm = conn.createStatement();
+            rs = stm.executeQuery(SQL);
 
             while(rs.next()){
                 itemTable.setModel(DbUtils.resultSetToTableModel(rs));
@@ -4245,10 +4211,30 @@ public class Order_sub extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
 
     }//GEN-LAST:event_agencyTableMouseClicked
 
     private void orderTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderTableMouseClicked
+        Statement stm=null;
+        ResultSet rs=null;
         try {
             clearItemTable();
             
@@ -4266,14 +4252,30 @@ public class Order_sub extends javax.swing.JInternalFrame {
             String orderId = orderTable.getValueAt(row, 1).toString();
 
             String SQL = "SELECT itemID, description, qty FROM ItemsBought WHERE orderID = '"+orderId+"'";
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery(SQL);
+            stm = conn.createStatement();
+            rs = stm.executeQuery(SQL);
 
             while(rs.next()){
                 itemTable.setModel(DbUtils.resultSetToTableModel(rs));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     }//GEN-LAST:event_orderTableMouseClicked
 
@@ -4323,19 +4325,37 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
 
     public void loadOrderDeliverTable() {
-    
+        
+        Statement stm=null;
+        ResultSet rs=null;
         validateDeliveID();
         try {
-            Statement stm=conn.createStatement();
+            stm=conn.createStatement();
             String SQL="SELECT * FROM OrderDelivery";
-            ResultSet rs=stm.executeQuery(SQL);
+            rs=stm.executeQuery(SQL);
              
             orderTable.setModel(DbUtils.resultSetToTableModel(rs));
              
         } catch (SQLException ex) {
            // Logger.getLogger(ordertempjFrame.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
-         }
+        }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }   
     
     private double calculateTotal(double dist){
@@ -4392,6 +4412,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }
     
     private int addDelivery() {
+        Statement stm=null;
+//        ResultSet rs=null;
         int res = 0;
         try {
             String did = delivIdTxt.getText();
@@ -4403,7 +4425,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
 
             String SQL="INSERT INTO OrderDelivery VALUES ('"+did+"','"+oid+"','"+addrs+"', '"+ddate+"','"+dis+"','"+road+"','"+fr+"','"+tot+"')";
-            Statement stm=conn.createStatement();
+            stm=conn.createStatement();
             res = stm.executeUpdate(SQL);
 
             this.delCharge=tot;
@@ -4412,6 +4434,16 @@ public class Order_sub extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
+        }
+        
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
         return res;
     }
@@ -4431,35 +4463,68 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }
 
     public void loadVehicles(){
-    
+        Statement stm=null;
+        ResultSet rs=null;
         try {
             String SQL = "Select vehiNo from Vehicle";
-            Statement stm = conn.createStatement();
-            ResultSet rs=stm.executeQuery(SQL);
+            stm = conn.createStatement();
+            rs=stm.executeQuery(SQL);
             while(rs.next()){
                 //add(rs.getString("id"));
                 allVehiCombo.addItem(rs.getString("vehiNo"));
             }
         } catch (SQLException ex) {
             //Logger.getLogger(OrderDeliveryInt.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex);
+            ex.printStackTrace();
+        }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     }
     
     public void loadDrivers(){
-    
+        Statement stm=null;
+        ResultSet rs=null;
         try {
             String SQL= "SELECT Name from Driver";
-            Statement stm = conn.createStatement();
-            ResultSet rs=stm.executeQuery(SQL);
+            stm = conn.createStatement();
+            rs=stm.executeQuery(SQL);
             while(rs.next()){
                 allDriverCombo.addItem(rs.getString("Name"));
             }
         } catch (SQLException ex) {
             //Logger.getLogger(OrderDeliveryInt.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex);
+            ex.printStackTrace();
         }
-    
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
     
     public String getMap(String destination){
@@ -4533,15 +4598,32 @@ public class Order_sub extends javax.swing.JInternalFrame {
         DateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
         Date sysDate = new Date();
         String date = dateformat.format(sysDate);
-    
+        Statement stm=null;
+        ResultSet rs=null;
         try {
-            Statement stm=conn.createStatement();
+            stm=conn.createStatement();
             String SQL="SELECT * FROM OrderDelivery WHERE delivDate = '"+date+"'";
-            ResultSet rs=stm.executeQuery(SQL);
+            rs=stm.executeQuery(SQL);
             
             orderTable.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException ex) {
             Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     
     }
@@ -4551,37 +4633,38 @@ public class Order_sub extends javax.swing.JInternalFrame {
         DateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
         Date sysDate = new Date();
         String date = dateformat.format(sysDate);
-    
+        Statement stm=null;
+        ResultSet rs=null;
         try {
-            Statement stm=conn.createStatement();
+            stm=conn.createStatement();
             String SQL="SELECT * FROM SupplierDelivery WHERE DelivDate = '"+date+"'";
-            ResultSet rs=stm.executeQuery(SQL);
+            rs=stm.executeQuery(SQL);
             
             supTable.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException ex) {
             Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
     
     private void validateOrderDeliveID(){
-    
-//        try {
-//            Statement s = conn.createStatement();
-//            ResultSet rs = s.executeQuery("SELECT MAX(orderDelivId) AS itemid FROM OrderDelivery");
-//            String itemid;
-//            while(rs.next()){
-//                itemid=rs.getString("itemid");
-//                String ino[]=itemid.split("OD");
-//                int no=Integer.parseInt(ino[1]);
-//                no=no+1;
-//                delivIdTxt.setText("OD"+no);
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        public void validateOrderDeliveID(){
-//      
+  
         PreparedStatement pst =null;
         ResultSet rs=null;
         ArrayList<String> list = new ArrayList<String>();
@@ -4625,13 +4708,14 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }
     
     public void loadAvailableDrivers(){
-    
+        Statement stm=null;
+        ResultSet rs=null;
         try {
             //String date = delivDate.getDateFormatString();
             
             String SQL= "SELECT Name FROM Driver WHERE availability = 'Available'";
-            Statement stm = conn.createStatement();
-            ResultSet rs=stm.executeQuery(SQL);
+            stm = conn.createStatement();
+            rs=stm.executeQuery(SQL);
             while(rs.next()){
                 driverCombo.addItem(rs.getString("Name"));
             }
@@ -4639,23 +4723,57 @@ public class Order_sub extends javax.swing.JInternalFrame {
             //Logger.getLogger(OrderDeliveryInt.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex);
         }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     
     }
     
     public void loadAvailableVehicles(){
-    
+        
+        Statement stm=null;
+        ResultSet rs=null;
         try {
             //String date = delivDate.getDateFormatString();
             
             String SQL= "SELECT vehiNo FROM Vehicle WHERE availability = 'Available'";
-            Statement stm = conn.createStatement();
-            ResultSet rs=stm.executeQuery(SQL);
+            stm = conn.createStatement();
+            rs=stm.executeQuery(SQL);
             while(rs.next()){
                 vehiCombo.addItem(rs.getString("vehiNo"));
             }
         } catch (SQLException ex) {
             //Logger.getLogger(OrderDeliveryInt.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex);
+            ex.printStackTrace();
+        }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     
     }
@@ -4684,15 +4802,33 @@ public class Order_sub extends javax.swing.JInternalFrame {
     }
 
     public void loadSchduledDelivery(){
-    
+        Statement stm=null;
+        ResultSet rs=null;
         try {
-            Statement stm=conn.createStatement();
+            stm=conn.createStatement();
             String SQL="SELECT * FROM ScheduledDelivery";
-            ResultSet rs=stm.executeQuery(SQL);
+            rs=stm.executeQuery(SQL);
             
             delivTable.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException ex) {
             Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     
     }
@@ -4705,60 +4841,119 @@ public class Order_sub extends javax.swing.JInternalFrame {
         driverCombo.setSelectedItem("");
     }
     
-    private int addScheduledDelivery() throws SQLException{
-    
-        String did = delivIdtxt.getText();
-        String type = typeCombo.getSelectedItem().toString();
-        String tid = idtxt.getText();
-        String vehi = vehiCombo.getSelectedItem().toString();
-        String drvr = driverCombo.getSelectedItem().toString();
-        String adrs = addrstxt.getText();
-        
-        DateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
-        Date sysDate = new Date();
-        String date = dateformat.format(sysDate);
-                
-        String SQL = "INSERT INTO ScheduledDelivery VALUES ('"+did+"','"+type+"', '"+tid+"', '"+vehi+"', '"+drvr+"', '"+date+"', '"+adrs+"')";
-        Statement stm = conn.createStatement();
-        int res = stm.executeUpdate(SQL);        
-        
+    private int addScheduledDelivery(){
+        Statement stm=null;
+        int res = 0;
+        try {
+            String did = delivIdtxt.getText();
+            String type = typeCombo.getSelectedItem().toString();
+            String tid = idtxt.getText();
+            String vehi = vehiCombo.getSelectedItem().toString();
+            String drvr = driverCombo.getSelectedItem().toString();
+            String adrs = addrstxt.getText();
+            
+            DateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
+            Date sysDate = new Date();
+            String date = dateformat.format(sysDate);
+            
+            String SQL = "INSERT INTO ScheduledDelivery VALUES ('"+did+"','"+type+"', '"+tid+"', '"+vehi+"', '"+drvr+"', '"+date+"', '"+adrs+"')";
+            stm = conn.createStatement();
+            res = stm.executeUpdate(SQL);
+            
+            return res;
+        } catch (SQLException ex) {
+            Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
         return res;
-    
     }
     
-    private void updateVehiStatus() throws SQLException{
-    
-        String vNo = vehiCombo.getSelectedItem().toString();
-        
-        String SQL = "UPDATE Vehicle SET availability = 'Unavailable' WHERE vehiNo = '"+vNo+"'";
-        Statement stm = conn.createStatement();
-        stm.executeUpdate(SQL);
-        
-    }
-    
-    private void updateDrivStatus() throws SQLException{
-    
-        String dname = driverCombo.getSelectedItem().toString();
-        
-        String SQL = "UPDATE Driver SET availability = 'Unavailable' WHERE Name = '"+dname+"'";
-        Statement stm = conn.createStatement();
-        stm.executeUpdate(SQL);
-        
-    }
-    
-    private String getStoreAddress(String inID) throws SQLException{
-        String ad = "";
-        
-//        String SQL = "SELECT address FROM store WHERE id = (SELECT s.id FROM store s, invoiceSummary i WHERE i.storeid = s.id)";
-        String SQL = "SELECT address FROM store WHERE id = (SELECT id FROM invoiceSummary WHERE invoiceno = '"+inID+"')";
-        Statement stm = conn.createStatement();
-        ResultSet rs = stm.executeQuery(SQL);
-           
-        while(rs.next()){
-            //itemTable.setModel(DbUtils.resultSetToTableModel(rs));
-            ad = rs.getString("address");
+    private void updateVehiStatus(){
+        Statement stm=null;
+        try {
+            String vNo = vehiCombo.getSelectedItem().toString();
+            
+            String SQL = "UPDATE Vehicle SET availability = 'Unavailable' WHERE vehiNo = '"+vNo+"'";
+            stm = conn.createStatement();
+            stm.executeUpdate(SQL);
+        } catch (SQLException ex) {
+            Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+    
+    private void updateDrivStatus(){
+        Statement stm=null;
+        try {
+            String dname = driverCombo.getSelectedItem().toString();
+            
+            String SQL = "UPDATE Driver SET availability = 'Unavailable' WHERE Name = '"+dname+"'";
+            stm = conn.createStatement();
+            stm.executeUpdate(SQL);
+        } catch (SQLException ex) {
+            Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+    
+    private String getStoreAddress(String inID){
+        String ad = "";
+        Statement stm=null;
+        ResultSet rs=null;
+        try {            
+            String SQL = "SELECT address FROM store WHERE id = (SELECT id FROM invoiceSummary WHERE invoiceno = '"+inID+"')";
+            stm = conn.createStatement();
+            rs = stm.executeQuery(SQL);
+            
+            while(rs.next()){
+                ad = rs.getString("address");
+            }
+            
+//            return ad;
+        } catch (SQLException ex) {
+            Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
         return ad;
     }
     
@@ -4767,53 +4962,73 @@ public class Order_sub extends javax.swing.JInternalFrame {
         DateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
         Date sysDate = new Date();
         String date = dateformat.format(sysDate);
-    
+        Statement stm=null;
+        ResultSet rs=null;
         try {
-            Statement stm=conn.createStatement();
+            stm=conn.createStatement();
             String SQL="SELECT * FROM agencyDelivery WHERE date = '"+date+"'";
-            ResultSet rs=stm.executeQuery(SQL);
+            rs=stm.executeQuery(SQL);
             
             agencyTable.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException ex) {
             Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
-    }
-    
-    private String getLastOrderID() throws SQLException{
-        String oid = null;
-        String did = txt_delID.getText();
-        String SQL = "SELECT orderID FROM \"Order\" WHERE delID = '"+did+"'";
-        Statement stm = conn.createStatement();
-        ResultSet rs = stm.executeQuery(SQL);
-        
-        while(rs.next()){
-            System.out.println("getLastOrderID eke oid"+oid);
-            oid = rs.getString("delID");
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
-        
-        return oid;
+    
     }
+    
+//    private String getLastOrderID() throws SQLException{
+//        String oid = null;
+//        String did = txt_delID.getText();
+//        String SQL = "SELECT orderID FROM \"Order\" WHERE delID = '"+did+"'";
+//        Statement stm = conn.createStatement();
+//        ResultSet rs = stm.executeQuery(SQL);
+//        
+//        while(rs.next()){
+//            System.out.println("getLastOrderID eke oid"+oid);
+//            oid = rs.getString("delID");
+//        }
+//        
+//        return oid;
+//    }
 
 
 
     private void updateODelivTable(String OrderID){
     
         String did = txt_delID.getText();
-//        System.out.println("updateODelivTable eke did"+did);
-//        String oid = getLastOrderID();
-////        String oid = "";
-//        System.out.println("updateODelivTable eke oid"+oid);
-        
         String SQL = "UPDATE OrderDelivery SET orderId = '"+OrderID+"' WHERE orderDelivId = '"+did+"'";
-        
+        Statement stm=null;
         try{
-            Statement stm = conn.createStatement();
+            stm = conn.createStatement();
             stm.executeUpdate(SQL);
         }catch(Exception e){
             e.printStackTrace();
         }
-
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Order_sub.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     
     }
     
@@ -4852,8 +5067,6 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> cmbx_type;
     private javax.swing.JButton confirmBtn;
     private javax.swing.JButton confirmbtn;
-    private com.toedter.calendar.JDateChooser date_end;
-    private com.toedter.calendar.JDateChooser date_start;
     private com.toedter.calendar.JDateChooser delivDate;
     private javax.swing.JTextField delivIdTxt;
     private javax.swing.JTextField delivIdtxt;
@@ -4916,9 +5129,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
-    private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
@@ -4961,7 +5172,6 @@ public class Order_sub extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
