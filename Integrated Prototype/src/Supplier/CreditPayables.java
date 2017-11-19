@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +34,7 @@ public class CreditPayables extends javax.swing.JInternalFrame {
     PreparedStatement pst5 = null;
     PreparedStatement pst6 = null;
     PreparedStatement pst7 = null;
+    PreparedStatement pst8 = null;
     ResultSet rs1 = null;
     ResultSet rs2 = null;
     ResultSet rs3 = null;
@@ -47,6 +50,34 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         LoadingCustomizedOrder_CreditPayables();
         LoadingSupplierOrder_CreditPayables();
     }
+     public String getNumDate(java.util.Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        try{
+            String numberDate = sdf.format(date);
+            return numberDate;
+        }catch(Exception e){
+            return "E";
+        }
+        
+        
+        
+    }
+    
+    public java.util.Date getStringDate(String date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date longDate =null;
+        try {
+            longDate = (Date) (sdf.parse(date));
+            //System.out.println(sdf.format(jDateChooser1.getDate()) );        // TODO add your handling code here:
+        } catch (ParseException ex) {
+            //Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println();
+        }
+        
+        return  longDate;
+
+    }
     
     public void LoadingCustomizedOrder_CreditPayables(){
         try {
@@ -57,43 +88,6 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             
             jTable1.setModel(DbUtils.resultSetToTableModel(rs1));
             
-            //int OID,SID;
-            //String P_Status = null;
-            //String CID = null;
-            //double total = 0;
-            //double remain = 0;
-            
-            /*while(rs1.next()){
-                int OID = Integer.parseInt(rs1.getString(1));
-                String CID = rs1.getString(2);
-                int SID = Integer.parseInt(rs1.getString(3));
-                String P_Status = rs1.getString(5);
-                double total = rs1.getDouble(8);
-                //remain = total;
-                
-                //System.out.println(OID+" "+CID+" "+SID+" "+P_Status+" "+total);
-                
-                if(P_Status.equals("Completed")){
-                    
-                    System.out.println(OID+" "+CID+" "+SID+" "+P_Status+" "+total);
-                    
-                //String ss = "INSERT INTO CustomizedOrders_CreditDetails (OrderID,CustomerID,SupplierID,TotalCreditAmount,RemainingCreditAmount) VALUES ('"+OID+"','"+CID+"','"+SID+"','"+total+"','"+remain+"')";
-                String ss = "INSERT INTO CustomizedOrders_CreditDetails (OrderID,CustomerID,SupplierID,TotalCreditAmount) VALUES ('"+OID+"','"+CID+"','"+SID+"','"+total+"')";
-//                pst2 = conn1.prepareStatement(ss);
-//                pst2.execute();
-                    Statement stm1 = conn1.createStatement();
-                    stm1.execute(ss);
-                }
-            }
-            
-            String s2 = "SELECT * FROM CustomizedOrders_CreditDetails";
-            //pst3 = conn1.prepareStatement(s2);
-            //rs2 = pst3.executeQuery();
-            
-            Statement stm2 = conn1.createStatement();
-            rs2 = stm2.executeQuery(s2);
-            
-            jTable1.setModel(DbUtils.resultSetToTableModel(rs2));*/
             
         } catch (SQLException ex) {
             Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,7 +107,7 @@ public class CreditPayables extends javax.swing.JInternalFrame {
     public void LoadingSupplierOrder_CreditPayables(){
         try {
             
-            String s = "SELECT OrderID,SupplierID,TotalAmount FROM SupplierOrder WHERE PaymentStatus='Not Completed'";
+            String s = "SELECT OrderID,SupplierID,TotalAmount,TotalPaidAmount FROM SupplierOrder WHERE PaymentStatus='Not Completed'";
             Statement stm3 = conn1.createStatement();
             rs2 = stm3.executeQuery(s);
             
@@ -166,7 +160,7 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         try {
             String id = txt_LabelOID.getText();
             
-            String s = "SELECT OrderID,InstallmentNo, PayingAmount,PaymentDate,PaymentType FROM CustomizedOrders_CreditDetails WHERE OrderID='"+id+"'";
+            String s = "SELECT InstallmentNo, PayingAmount,PaymentDate,PaymentType FROM CustomizedOrders_CreditDetails WHERE OrderID='"+id+"'";
             Statement stm3 = conn1.createStatement();
             rs2 = stm3.executeQuery(s);
             
@@ -181,12 +175,13 @@ public class CreditPayables extends javax.swing.JInternalFrame {
     
     public void LoadingSupplierOrder_Installments(){
         try {
+            String id = LabelOID.getText();
             
-            String s = "SELECT OrderID,InstallmentNo, PayingAmount,PaymentDate,PaymentType FROM SuplierOrders_CreditDetails";
+            String s = "SELECT InstallmentNo, PayingAmount,PaymentDate,PaymentType FROM SuplierOrders_CreditDetails WHERE OrderID='"+id+"'";
             Statement stm3 = conn1.createStatement();
             rs2 = stm3.executeQuery(s);
             
-            //jTable4.setModel(DbUtils.resultSetToTableModel(rs2));
+            jTable4.setModel(DbUtils.resultSetToTableModel(rs2));
             
             
         } catch (SQLException ex) {
@@ -228,7 +223,6 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         jButton5 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
-        jButton6 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -244,7 +238,6 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
         LabelOID = new javax.swing.JLabel();
@@ -383,6 +376,8 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         PaymentType.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         PaymentType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cheque", "Cash" }));
 
+        PaymentDate.setDateFormatString("dd-MM-yyyy");
+
         jButton5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton5.setText("Add Payment");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -403,9 +398,6 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             }
         ));
         jScrollPane3.setViewportView(jTable3);
-
-        jButton6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton6.setText("Update Payment");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -433,14 +425,14 @@ public class CreditPayables extends javax.swing.JInternalFrame {
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel9)
-                                            .addComponent(jLabel10)
-                                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(33, 33, 33)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(PaymentDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(PaymentType, 0, 161, Short.MAX_VALUE))
-                                            .addComponent(jButton6))))
+                                            .addComponent(jLabel10))
+                                        .addGap(99, 99, 99)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(PaymentDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(PaymentType, 0, 161, Short.MAX_VALUE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(105, 105, 105)
+                                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jScrollPane3))))
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -461,7 +453,9 @@ public class CreditPayables extends javax.swing.JInternalFrame {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -485,12 +479,9 @@ public class CreditPayables extends javax.swing.JInternalFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
                             .addComponent(PaymentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton5)
-                            .addComponent(jButton6))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton5)
+                        .addGap(29, 29, 29))))
         );
 
         jTabbedPane4.addTab("Customized Order Details", jPanel1);
@@ -606,12 +597,7 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(jButton7);
-        jButton7.setBounds(10, 770, 160, 31);
-
-        jButton8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton8.setText("Update Payment");
-        jPanel2.add(jButton8);
-        jButton8.setBounds(190, 770, 170, 31);
+        jButton7.setBounds(110, 770, 160, 31);
 
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -624,6 +610,11 @@ public class CreditPayables extends javax.swing.JInternalFrame {
                 "Installment No", "Paying Amount", "Payment Type", "Payment Date"
             }
         ));
+        jTable4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable4MouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(jTable4);
 
         jPanel2.add(jScrollPane4);
@@ -645,6 +636,8 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         PaymentType1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cheque", "Cash" }));
         jPanel2.add(PaymentType1);
         PaymentType1.setBounds(200, 640, 160, 30);
+
+        PaymentDate1.setDateFormatString("dd-MM-yyyy");
         jPanel2.add(PaymentDate1);
         PaymentDate1.setBounds(200, 710, 160, 22);
 
@@ -797,12 +790,7 @@ public class CreditPayables extends javax.swing.JInternalFrame {
                 }
             
             LoadingCustomizedOrder_Installments();
-            
-            //txt_LabelOID.setText("");
-            //PaymentType.setText("");
-            //PaymentDate.setText("");
-            //PayingAmount.setText("");
-            
+           
         } catch (SQLException ex) {
             Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -820,7 +808,8 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             String instNo = InstallmentNo.getText();
             Double PayAmount = Double.parseDouble(PayingAmount.getText());
             Date pDate = PaymentDate.getDate();
-            String payDate = DateFormat.getDateInstance().format(pDate);
+            
+            String payDate = getNumDate(pDate);
             String pType = PaymentType.getSelectedItem().toString();
             Double TotalCredit = Double.parseDouble(jTable1.getValueAt(row,3).toString());
             Double PreTotalPaid = Double.parseDouble(jTable1.getValueAt(row,4).toString());
@@ -835,8 +824,6 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             pst7 = conn1.prepareStatement(ss2);
             pst7.execute();
             
-            //System.out.println("Inserted!");
-            
             LoadingCustomizedOrder_Installments();
             
             JOptionPane.showMessageDialog(null,"Payment successfully added!","Added", JOptionPane.INFORMATION_MESSAGE);
@@ -847,13 +834,25 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             LoadingCustomizedOrder_CreditPayables();
             
             
-            if(TotalPaid==TotalCredit){
-                //String com = "Completed";
-                String ss4 = "UPDATE CustomizedOrders SET PaymentStatus = 'Completed' WHERE OderID='"+oid+"'";
+            if(Double.compare(TotalCredit,TotalPaid)==0){
+                
+                String ss4 = "UPDATE CustomizedOrders SET PaymentStatus = \"Completed\" WHERE OrderID ='"+oid+"'";
                 pst7 = conn1.prepareStatement(ss4);
                 pst7.execute();
+                
+                String ss5 = "UPDATE CustomizedOrders SET EndDate = '"+payDate+"' WHERE OrderID ='"+oid+"'";
+                pst7 = conn1.prepareStatement(ss5);
+                pst7.execute();
+                System.out.println("near supplier update query" + payDate);
+                
                 LoadingCustomizedOrder_CreditPayables();
             }
+            
+            txt_LabelOID.setText("");
+            InstallmentNo.setText("");
+            PayingAmount.setText("");
+            PaymentType.setSelectedItem("");
+            PaymentDate.setDate(null);
            
         } catch (SQLException ex) {
             Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
@@ -873,14 +872,11 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         int row=jTable2.getSelectedRow();
             
         String oid=jTable2.getValueAt(row,0).toString();
-        //System.out.print(oid);
         LabelOID.setText(oid);
         
                 
         
         try {
-            
-            //String ss1 = "SELECT OrderID, PaymentAmount, PaymentType, PaymentDate, InstallmentNo FROM CustomizedOrders_CreditDetails WHERE OrderID=oid";
             String ss1 = "SELECT * FROM SuplierOrders_CreditDetails WHERE OrderID='"+oid+"'";
             pst3 = conn1.prepareStatement(ss1);
             rs3 = pst3.executeQuery();
@@ -902,10 +898,6 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             
             LoadingSupplierOrder_Installments();
             
-            //txt_LabelOID.setText("");
-            //PaymentType.setText("");
-            //PaymentDate.setText("");
-            //PayingAmount.setText("");
             
         } catch (SQLException ex) {
             Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
@@ -913,7 +905,6 @@ public class CreditPayables extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTable2MouseClicked
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
         
         int row=jTable2.getSelectedRow();
             
@@ -921,11 +912,12 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             String instNo1 = InstallmentNo1.getText();
             Double PayAmount1 = Double.parseDouble(PayingAmount1.getText());
             Date pDate1 = PaymentDate1.getDate();
-            String payDate1 = DateFormat.getDateInstance().format(pDate1);
+            String payDate1 = getNumDate(pDate1);
             String pType1 = PaymentType1.getSelectedItem().toString();
             Double TotalCredit1 = Double.parseDouble(jTable2.getValueAt(row,2).toString());
             Double PreTotalPaid1 = Double.parseDouble(jTable2.getValueAt(row,3).toString());
             Double TotalPaid1 = PayAmount1 + PreTotalPaid1;
+            
             
         if(oid1.equals("") || instNo1.equals("") || PayAmount1==0 || payDate1.equals("") || pType1.equals("")){
             JOptionPane.showMessageDialog(null,"All the text fields should be filled!","Error!", JOptionPane.INFORMATION_MESSAGE);
@@ -936,30 +928,44 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             pst7 = conn1.prepareStatement(ss2);
             pst7.execute();
             
-            //System.out.println("Inserted!");
-            
             LoadingSupplierOrder_Installments();
+            
             
             JOptionPane.showMessageDialog(null,"Payment successfully added!","Added", JOptionPane.INFORMATION_MESSAGE);
             
-            String ss3 = "UPDATE SupplierOrders SET TotalPaidAmount = '"+TotalPaid1+"' WHERE OrderID='"+oid1+"'";
+            String ss3 = "UPDATE SupplierOrder SET TotalPaidAmount = '"+TotalPaid1+"' WHERE OrderID='"+oid1+"'";
             pst7 = conn1.prepareStatement(ss3);
             pst7.execute();
             LoadingSupplierOrder_CreditPayables();
             
             
-            if(TotalCredit1.equals(TotalPaid1)){
-                String com = "Completed";
-                String ss4 = "UPDATE SupplierOrders SET PaymentStatus = '"+com+"' WHERE OderID='"+oid1+"'";
+            if(Double.compare(TotalCredit1,TotalPaid1)==0){
+            
+                String ss4 = "UPDATE SupplierOrder SET PaymentStatus = \"Completed\" WHERE OrderID='"+oid1+"'";
                 pst7 = conn1.prepareStatement(ss4);
                 pst7.execute();
-                LoadingCustomizedOrder_CreditPayables();
+                
+                String ss5 = "UPDATE SupplierOrder SET EndDate = '"+payDate1+"'  WHERE OrderID='"+oid1+"'";
+                pst8 = conn1.prepareStatement(ss5);
+                pst8.execute();
+                
+                LoadingSupplierOrder_CreditPayables();
             }
+            
+            LabelOID.setText("");
+            InstallmentNo1.setText("");
+            PayingAmount1.setText("");
+            PaymentType1.setSelectedItem("");
+            PaymentDate1.setDate(null);
            
         } catch (SQLException ex) {
             Logger.getLogger(CreditPayables.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null,"Error in adding the payment!","Error!", JOptionPane.INFORMATION_MESSAGE);
-        }finally{
+        }
+            catch(Exception e){
+                System.out.println(e);
+            }
+            finally{
                 try {
                     pst7.close();
                 } catch (SQLException ex) {
@@ -968,6 +974,26 @@ public class CreditPayables extends javax.swing.JInternalFrame {
          }
         }
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jTable4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable4MouseClicked
+        int row=jTable4.getSelectedRow();
+            
+            String oid1 = LabelOID.getText();
+            String instNo1 = InstallmentNo1.getText();
+            Double PayAmount1 = Double.parseDouble(PayingAmount1.getText());
+            Date pDate1 = PaymentDate1.getDate();
+            String payDate1 = DateFormat.getDateInstance().format(pDate1);
+            String pType1 = PaymentType1.getSelectedItem().toString();
+            //Double TotalCredit1 = Double.parseDouble(jTable2.getValueAt(row,2).toString());
+            //Double PreTotalPaid1 = Double.parseDouble(jTable2.getValueAt(row,3).toString());
+            //Double TotalPaid1 = PayAmount1 + PreTotalPaid1;
+            
+            LabelOID.setText(oid1);
+            InstallmentNo1.setText(instNo1);
+            PayingAmount1.setText(Double.toString(PayAmount1));
+            PaymentDate1.setDate(pDate1);
+            PaymentType1.setSelectedItem(pType1);
+    }//GEN-LAST:event_jTable4MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -985,9 +1011,7 @@ public class CreditPayables extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
