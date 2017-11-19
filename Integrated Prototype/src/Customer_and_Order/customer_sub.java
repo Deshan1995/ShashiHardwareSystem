@@ -46,7 +46,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
         rdBtn_ID.setSelected(true);
         
         btn_assignNewCus.setVisible(false);
-        btn_assignLastCus.setVisible(false);
+        //btn_assignLastCus.setVisible(false);
         btn_backToOrder1.setVisible(false);
         btn_backToOrder2.setVisible(false);
         
@@ -58,6 +58,8 @@ public class customer_sub extends javax.swing.JInternalFrame {
         
         loadCustomerTable1();
         loadCustomerTable2();
+        
+        
     }
     
     public void finalize() throws SQLException {
@@ -240,7 +242,6 @@ public class customer_sub extends javax.swing.JInternalFrame {
         txt_numOfVisits = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         btn_backToOrder1 = new javax.swing.JButton();
-        btn_assignLastCus = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
@@ -421,15 +422,6 @@ public class customer_sub extends javax.swing.JInternalFrame {
             }
         });
 
-        btn_assignLastCus.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_assignLastCus.setForeground(new java.awt.Color(255, 102, 102));
-        btn_assignLastCus.setText("Assign Lastly Added Customer");
-        btn_assignLastCus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_assignLastCusActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -438,8 +430,6 @@ public class customer_sub extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_assignLastCus)
-                        .addGap(71, 71, 71)
                         .addComponent(btn_backToOrder1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addGap(39, 39, 39)
@@ -452,9 +442,7 @@ public class customer_sub extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_backToOrder1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_assignLastCus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btn_backToOrder1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -990,17 +978,15 @@ public class customer_sub extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btn_backToOrder2ActionPerformed
 
     private void btn_assignNewCusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_assignNewCusActionPerformed
-        Order.assignCustomer(txt_cusID2.getText());
+        Order.assignCustomer(txt_cusID2.getText(),txt_cusName2.getText());
+        Order.callOrderFormAgain();
+        //customer_sub.enableAndDoClickAssignCus();
         
     }//GEN-LAST:event_btn_assignNewCusActionPerformed
 
     private void btn_backToOrder1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backToOrder1ActionPerformed
         Order.callOrderFormAgain();
     }//GEN-LAST:event_btn_backToOrder1ActionPerformed
-
-    private void btn_assignLastCusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_assignLastCusActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_assignLastCusActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         
@@ -1080,7 +1066,6 @@ public class customer_sub extends javax.swing.JInternalFrame {
     } 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Register;
-    javax.swing.JButton btn_assignLastCus;
     javax.swing.JButton btn_assignNewCus;
     javax.swing.JButton btn_backToOrder1;
     javax.swing.JButton btn_backToOrder2;
