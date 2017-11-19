@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Asset;
+package itp;
 
 /**
  *
@@ -67,6 +67,28 @@ PreparedStatement ps = null;
                txt_cost.setText("");
                txt_Rate.setText("");
                txt_life.setText("");
+               ((JTextField)revalueDate.getDateEditor().getUiComponent()).setText("");
+    }
+     
+    public void delete(){
+               String sql = "delete from Depreciation where Asset_Id=?";
+            try{
+                ps=conn.prepareStatement(sql);
+                ps.setString(1,txt_asset_id.getText());
+                ps.execute();
+
+           }catch(Exception e){
+               JOptionPane.showMessageDialog(null,e);
+           }
+        
+            finally{
+            try{
+                ps.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -95,8 +117,7 @@ PreparedStatement ps = null;
         btn_revalue_search = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txt_description = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        lbl_date1 = new javax.swing.JLabel();
+        btn_Clr = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -109,10 +130,12 @@ PreparedStatement ps = null;
         txt_accumulated_depre = new javax.swing.JTextField();
         btn_revaluation = new javax.swing.JButton();
         btn_search = new javax.swing.JButton();
+        btn_clr = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
 
         revaluation.setLocation(new java.awt.Point(365, 0));
+        revaluation.setPreferredSize(new java.awt.Dimension(500, 750));
         revaluation.setSize(new java.awt.Dimension(1000, 725));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -120,6 +143,11 @@ PreparedStatement ps = null;
 
         txt_net_book_value.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_net_book_value.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        txt_net_book_value.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_net_book_valueKeyTyped(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Revaluation Details", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 22), new java.awt.Color(0, 0, 102))); // NOI18N
 
@@ -131,9 +159,19 @@ PreparedStatement ps = null;
 
         txt_life.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_life.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        txt_life.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_lifeKeyTyped(evt);
+            }
+        });
 
         txt_cost.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_cost.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        txt_cost.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_costKeyTyped(evt);
+            }
+        });
 
         btn_change.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btn_change.setText("Change");
@@ -148,6 +186,11 @@ PreparedStatement ps = null;
 
         txt_Rate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_Rate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        txt_Rate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_RateKeyTyped(evt);
+            }
+        });
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel13.setText("Revaluation Date");
@@ -161,15 +204,15 @@ PreparedStatement ps = null;
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(89, 89, 89)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txt_life, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                            .addComponent(txt_cost, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                            .addComponent(txt_Rate, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(txt_life)
+                            .addComponent(txt_cost)
+                            .addComponent(txt_Rate)
                             .addComponent(revalueDate, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(178, 178, 178)
@@ -224,11 +267,13 @@ PreparedStatement ps = null;
         txt_description.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_description.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel12.setText("Date :");
-
-        lbl_date1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lbl_date1.setText("Date");
+        btn_Clr.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_Clr.setText("Clear");
+        btn_Clr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ClrActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout revaluationLayout = new javax.swing.GroupLayout(revaluation.getContentPane());
         revaluation.getContentPane().setLayout(revaluationLayout);
@@ -237,61 +282,57 @@ PreparedStatement ps = null;
             .addGroup(revaluationLayout.createSequentialGroup()
                 .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(revaluationLayout.createSequentialGroup()
-                        .addGap(402, 402, 402)
-                        .addComponent(btn_revalue_search))
+                        .addGap(340, 340, 340)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(txt_asset_id, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(revaluationLayout.createSequentialGroup()
+                        .addGap(340, 340, 340)
+                        .addComponent(jLabel3)
+                        .addGap(25, 25, 25)
+                        .addComponent(txt_description, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(revaluationLayout.createSequentialGroup()
+                        .addGap(340, 340, 340)
+                        .addComponent(jLabel6)
+                        .addGap(37, 37, 37)
+                        .addComponent(txt_net_book_value, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(revaluationLayout.createSequentialGroup()
+                        .addGap(380, 380, 380)
+                        .addComponent(btn_revalue_search)
+                        .addGap(60, 60, 60)
+                        .addComponent(btn_Clr, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(revaluationLayout.createSequentialGroup()
                         .addGap(245, 245, 245)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(revaluationLayout.createSequentialGroup()
-                        .addGap(290, 290, 290)
-                        .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(revaluationLayout.createSequentialGroup()
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txt_asset_id, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(revaluationLayout.createSequentialGroup()
-                                .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, revaluationLayout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addGap(37, 37, 37))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, revaluationLayout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(25, 25, 25)))
-                                .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txt_description, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txt_net_book_value, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(283, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, revaluationLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel12)
-                .addGap(26, 26, 26)
-                .addComponent(lbl_date1)
-                .addGap(72, 72, 72))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         revaluationLayout.setVerticalGroup(
             revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(revaluationLayout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(revaluationLayout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(txt_asset_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(19, 19, 19)
-                .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(lbl_date1))
-                .addGap(75, 75, 75)
-                .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_asset_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(revaluationLayout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel3))
                     .addComponent(txt_description, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
+                .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(revaluationLayout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel6))
                     .addComponent(txt_net_book_value, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addComponent(btn_revalue_search, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(305, Short.MAX_VALUE))
+                .addGap(34, 34, 34)
+                .addGroup(revaluationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_revalue_search, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_Clr, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(62, 62, 62)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         setPreferredSize(new java.awt.Dimension(1000, 705));
@@ -317,6 +358,11 @@ PreparedStatement ps = null;
 
         txt_netBookValue.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_netBookValue.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        txt_netBookValue.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_netBookValueKeyTyped(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setText("Accumulated Depreciation");
@@ -387,6 +433,14 @@ PreparedStatement ps = null;
             }
         });
 
+        btn_clr.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_clr.setText("Clear");
+        btn_clr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_clrActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -397,10 +451,12 @@ PreparedStatement ps = null;
                         .addGap(258, 258, 258)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(283, 283, 283)
+                        .addGap(274, 274, 274)
                         .addComponent(btn_search, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(106, 106, 106)
-                        .addComponent(btn_revaluation, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(38, 38, 38)
+                        .addComponent(btn_revaluation, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(btn_clr, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(255, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -411,8 +467,9 @@ PreparedStatement ps = null;
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_search, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_revaluation, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(189, Short.MAX_VALUE))
+                    .addComponent(btn_revaluation, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_clr, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(155, Short.MAX_VALUE))
         );
 
         jPanel4.setBackground(new java.awt.Color(153, 153, 153));
@@ -478,12 +535,22 @@ PreparedStatement ps = null;
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,e);
         }
+        
+        finally{
+            try{
+                ps.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
     }//GEN-LAST:event_btn_searchActionPerformed
 
     private void txt_accumulated_depreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_accumulated_depreMouseClicked
          try{
        
-            String sql="Select Depreciable_Value,Purchased_Date from Depreciation where Asset_Id Like '%"+txt_assetId.getText()+"%' AND Asset_Description Like '%"+txt_Description.getText()+"%'";
+            String sql="Select d.Depreciable_Value,a.Purchased_Date from Asset a,Depreciation d where a.Asset_Id Like '%"+txt_assetId.getText()+"%' AND a.Asset_Description Like '%"+txt_Description.getText()+"%' AND a.Asset_Id=d.Asset_Id";
        
             ps=conn.prepareStatement(sql);
             
@@ -509,12 +576,22 @@ PreparedStatement ps = null;
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,e);
         }
+         
+         finally{
+            try{
+                ps.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
     }//GEN-LAST:event_txt_accumulated_depreMouseClicked
 
     private void btn_revalue_searchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_revalue_searchActionPerformed
         try{
        
-       String sql="Select Asset_Id,Asset_Description,Net_Book_Value from Depreciation where Asset_Id Like '%"+txt_asset_id.getText()+"%' AND Asset_Description Like '%"+txt_description.getText()+"%'";
+       String sql="Select a.Asset_Id,a.Asset_Description,d.Net_Book_Value from Asset a,Depreciation d where a.Asset_Id Like '%"+txt_asset_id.getText()+"%' AND a.Asset_Description Like '%"+txt_description.getText()+"%' AND a.Asset_Id=d.Asset_Id";
        
             ps=conn.prepareStatement(sql);
             
@@ -525,12 +602,35 @@ PreparedStatement ps = null;
             txt_net_book_value.setText(rs.getString("Net_Book_Value"));
   
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null,e);
+            JOptionPane.showMessageDialog(null,"Asset should be existing depreciated asset");
+        }
+        
+        finally{
+            try{
+                ps.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
         }
     }//GEN-LAST:event_btn_revalue_searchActionPerformed
 
     private void btn_changeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_changeActionPerformed
-       try{
+       
+    if(txt_asset_id.getText().isEmpty()){
+        JOptionPane.showMessageDialog(null,"Enter the Asset Id that is to be revalued");
+    }
+    else if(((JTextField)revalueDate.getDateEditor().getUiComponent()).getText().isEmpty())
+    {
+        JOptionPane.showConfirmDialog(rootPane, "Enter the date", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    else if(txt_cost.getText().isEmpty())
+    {
+        JOptionPane.showConfirmDialog(rootPane, "Enter the value of the asset", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    else{
+        try{
           
             String val1 = txt_cost.getText();
             String val2 = txt_Rate.getText();
@@ -543,24 +643,96 @@ PreparedStatement ps = null;
             ps.setString(1,txt_asset_id.getText());
             ps.execute();
             JOptionPane.showMessageDialog(null,"Updated");
-            
+          
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,e);
         }
-          
-          clear();
+        
+        finally{
+            try{
+                ps.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
+        delete();
+        clear();
+    }
     }//GEN-LAST:event_btn_changeActionPerformed
+
+    private void btn_clrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clrActionPerformed
+        
+                txt_assetId.setText("");
+                txt_Description.setText("");
+                txt_netBookValue.setText("");
+                txt_accumulated_depre.setText("");
+               
+    }//GEN-LAST:event_btn_clrActionPerformed
+
+    private void btn_ClrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ClrActionPerformed
+                txt_asset_id.setText("");
+                txt_description.setText("");
+                txt_net_book_value.setText("");
+    }//GEN-LAST:event_btn_ClrActionPerformed
+
+    private void txt_netBookValueKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_netBookValueKeyTyped
+        char c=evt.getKeyChar();
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Only numbers are allowed");
+        }
+    }//GEN-LAST:event_txt_netBookValueKeyTyped
+
+    private void txt_net_book_valueKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_net_book_valueKeyTyped
+       char c=evt.getKeyChar();
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Only numbers are allowed");
+        }
+    }//GEN-LAST:event_txt_net_book_valueKeyTyped
+
+    private void txt_costKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_costKeyTyped
+        char c=evt.getKeyChar();
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Only numbers are allowed");
+        }
+    }//GEN-LAST:event_txt_costKeyTyped
+
+    private void txt_RateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_RateKeyTyped
+        char c=evt.getKeyChar();
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Only numbers are allowed");
+        }
+    }//GEN-LAST:event_txt_RateKeyTyped
+
+    private void txt_lifeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_lifeKeyTyped
+        char c=evt.getKeyChar();
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Only numbers are allowed");
+        }
+    }//GEN-LAST:event_txt_lifeKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_Clr;
     private javax.swing.JButton btn_change;
+    private javax.swing.JButton btn_clr;
     private javax.swing.JButton btn_revaluation;
     private javax.swing.JButton btn_revalue_search;
     private javax.swing.JButton btn_search;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -574,7 +746,6 @@ PreparedStatement ps = null;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JLabel lbl_date1;
     private javax.swing.JDialog revaluation;
     private com.toedter.calendar.JDateChooser revalueDate;
     private javax.swing.JTextField txt_Description;
