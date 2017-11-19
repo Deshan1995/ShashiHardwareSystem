@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Asset;
+package itp;
 
 
 
@@ -11,11 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
+//import java.sql.SQLException;
+import org.sqlite.SQLiteException;
 /**
  *
  * @author User
@@ -25,6 +28,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
     Connection conn = null;
     ResultSet rs = null;
     PreparedStatement ps = null;
+    PreparedStatement ps1 = null;
     Statement s = null;
     String temp1;
     String val = null;
@@ -33,6 +37,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
     String depre_method = null;
     double cost=0,rate=0,annual_depre=0;
     String depreDate = null,depreId=null;
+    String temp = null;
     /**
      * Creates new form Depreciation
      */
@@ -43,7 +48,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
         calendar();
         auto();
         Notification();
-        depreciation();
+       //depreciation();
     }
     public void tableUpdate(){
            
@@ -110,6 +115,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
                 txt_netBookValue.setText("");
                 ((JTextField)purchase_date.getDateEditor().getUiComponent()).setText("");
                 
+                txt_depreId.setEditable(true);
                 txt_assetId.setEditable(true);
                 cmb_category.setEnabled(true);
                 txt_Description.setEditable(true);
@@ -132,12 +138,14 @@ public class Depreciation extends javax.swing.JInternalFrame {
     public void calendar()
     { 
         Calendar cal=new GregorianCalendar();
-        //year= cal.get(Calendar.YEAR);
-        month=cal.get(Calendar.MONTH)+1;
-        //day=cal.get(Calendar.DAY_OF_MONTH);
+//        year= cal.get(Calendar.YEAR);
+//        month=cal.get(Calendar.MONTH)+1;
+//        day=cal.get(Calendar.DAY_OF_MONTH);
        // lbl_date.setText(year+"/"+month+"/"+day);
-       year=2021;
-       day=7;
+       year=2017;
+    month=9;
+       day=2; 
+    
     }
     
     public void showtime(){
@@ -208,60 +216,80 @@ public class Depreciation extends javax.swing.JInternalFrame {
             catch (Exception e) {
             System.out.println(e);
         }
+        
+        finally{
+            try{
+                s.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
     }
     
     public void depreciation(){
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            SimpleDateFormat df = new SimpleDateFormat("MM");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat df = new SimpleDateFormat("MM");
 
             java.util.Date d1 = null;
             int diff = 0;
 
 	try{
 	    String sql="Select a.Asset_Id,a.Purchased_Date,a.Purchased_Cost,a.Depreciation_Rate,d.Annual_Depreciation,d.Depreciation_Method from Asset a, Depreciation d where a.Asset_Id=d.Asset_Id ";
-            
                     
-            ps=conn.prepareStatement(sql);
-           
+            ps=conn.prepareStatement(sql); 
             rs=ps.executeQuery();
-               
-
+            
 		while(rs.next()){
-
+ 
 		id = rs.getString("Asset_Id");  
                 date = rs.getString("Purchased_Date");
 		cost = Double.parseDouble(rs.getString("Purchased_Cost"));
 		rate = Double.parseDouble(rs.getString("Depreciation_Rate"));
-		annual_depre = Double.parseDouble(rs.getString("Annual_Depreciation"));
+                
+                temp = rs.getString("Annual_Depreciation");
+                if(!temp.isEmpty()){
+                    annual_depre = Double.parseDouble(rs.getString("Annual_Depreciation"));
+                }
+                
 		depre_method = rs.getString("Depreciation_Method");
-
+ 
 		d1 = format.parse(date);
                 String month1 = df.format(d1);
                 diff = month - Integer.parseInt(month1);
-                        
+                         
                        
 		if(depre_method.equals("Straight Line")){ 
-		
-                    val = Double.toString(cost-((annual_depre/12.0)*diff));
+		 
+                    val = Double.toString(cost-((annual_depre/12)*diff));
                                  
                 }
 		else if(depre_method.equals("Declining Balance")){
-                		
+                 		
                     val= Double.toString(cost-(((cost*rate)/100.0)*diff));
 		}
 
 	 	String sql1 = "Update Depreciation set Net_Book_Value='"+val+"' where Asset_Id='"+id+"'";
            
             	ps=conn.prepareStatement(sql1);
-                      
-            	ps.execute();
                        
+            	ps.execute();
+                        
                 }
 	}catch(Exception e){
             JOptionPane.showMessageDialog(null,e);
         }
-
-    
+  
+        finally{
+            try{
+                ps.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
 }
     
     public void Notification(){
@@ -276,9 +304,9 @@ public class Depreciation extends javax.swing.JInternalFrame {
 	try{
 	    String sql="Select Depre_Id,depre_date from Depreciation ";
             
-            ps=conn.prepareStatement(sql);
+            ps1=conn.prepareStatement(sql);
             
-            rs=ps.executeQuery();
+            rs=ps1.executeQuery();
                
 
 		while(rs.next()){
@@ -304,16 +332,33 @@ public class Depreciation extends javax.swing.JInternalFrame {
             
             
             
-                            }catch(Exception e){
-                                JOptionPane.showMessageDialog(null,e);
+                            }catch(Exception e1){
+                 
+                                if(e1.toString().contains("java.sql.SQLException: column Depre_Id is not unique") ){                   
+                                    System.out.println(e1);
+                                }else{
+                                    //System.out.println(e1);
+                                    JOptionPane.showMessageDialog(null,e1);
+                                            
+                                }                
                             }
+                            
                     } 
                     
 	}}catch(Exception e){
             JOptionPane.showMessageDialog(null,e);
         }
 
-    
+        finally{
+            try{
+                ps.close();
+                ps1.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
 }
     
     public void Update_Depredate(){
@@ -360,17 +405,68 @@ public class Depreciation extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null,e);
         }
         finally{
-                try{
+            try{
                 ps.close();
                 rs.close();
-                }
-                catch(Exception e)
-                {
-                    
-                }
             }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
+        
     }
  
+    int no,no1;
+    public void auto1(){
+    
+        ArrayList<String> list = new ArrayList<String>();
+        try {
+            String a = txt_depreId.getText();
+            String ino[]=a.split("D");
+            no1=Integer.parseInt(ino[1]);
+            
+            String sql = "SELECT Depre_Id as depreid FROM Depreciation";
+            
+            ps=conn.prepareStatement(sql);
+            
+            rs = ps.executeQuery();
+            while(rs.next())
+            {
+                list.add(rs.getString("depreid"));
+            }
+    
+            for(int i=0;i<=list.size()-1;i++){
+	              
+                String b = list.get(i);
+                String ino1[]=b.split("D");
+            
+                no=Integer.parseInt(ino1[1]);
+
+		if(no1+1<=no){
+
+                    int j=no1+(i-1);
+                    String id="D"+j;
+                  
+                    String sql1="Update Depreciation set Depre_Id='"+id+"' where Depre_Id='"+b+"'";
+                    ps=conn.prepareStatement(sql1);
+                    ps.execute();
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+        finally{
+            try{
+                ps.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
+    
+     }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -408,7 +504,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         txt_cost = new javax.swing.JTextField();
-        cmb_category = new javax.swing.JComboBox<String>();
+        cmb_category = new javax.swing.JComboBox<>();
         txt_assetId = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
@@ -418,12 +514,13 @@ public class Depreciation extends javax.swing.JInternalFrame {
         txt_Description = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txt_depreId = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
         btn_clear = new javax.swing.JButton();
         btn_search_depre = new javax.swing.JButton();
         btn_refresh = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+
+        Asset.setSize(new java.awt.Dimension(850, 300));
 
         asset.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -505,8 +602,14 @@ public class Depreciation extends javax.swing.JInternalFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Depreciation", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 22), new java.awt.Color(0, 0, 102))); // NOI18N
 
+        txt_life.setEditable(false);
         txt_life.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_life.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        txt_life.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_lifeKeyTyped(evt);
+            }
+        });
 
         txt_depreExpence.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_depreExpence.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
@@ -531,8 +634,14 @@ public class Depreciation extends javax.swing.JInternalFrame {
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel19.setText("Depreciable Value");
 
+        txt_Rate.setEditable(false);
         txt_Rate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_Rate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        txt_Rate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_RateKeyTyped(evt);
+            }
+        });
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setText("Depreciation Rate");
@@ -572,6 +681,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
         jLabel1.setText("Purchased Date");
 
         purchase_date.setDateFormatString("yyyy-MM-dd");
+        purchase_date.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -583,27 +693,27 @@ public class Depreciation extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txt_netBookValue, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txt_netBookValue, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                        .addComponent(txt_depreExpence, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txt_depreExpence, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txt_depreValue, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txt_depreValue, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txt_life, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txt_life, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txt_Rate, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txt_Rate, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cmb_depreMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cmb_depreMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -645,7 +755,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
         );
 
         btn_search.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_search.setText("Search an asset");
+        btn_search.setText("Search asset");
         btn_search.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_searchActionPerformed(evt);
@@ -681,6 +791,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel15.setText("Asset Id");
 
+        txt_cost.setEditable(false);
         txt_cost.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_cost.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         txt_cost.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -690,7 +801,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
         });
 
         cmb_category.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        cmb_category.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Computer ", "Furniture", "Machinary", "Property", "Vehicle" }));
+        cmb_category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Computer ", "Furniture", "Machinary", "Vehicle" }));
         cmb_category.setBorder(null);
 
         txt_assetId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -734,8 +845,6 @@ public class Depreciation extends javax.swing.JInternalFrame {
         txt_depreId.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txt_depreId.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        jTextField1.setText("jTextField1");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -768,10 +877,6 @@ public class Depreciation extends javax.swing.JInternalFrame {
                             .addComponent(txt_assetId, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                             .addComponent(txt_depreId))))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -800,8 +905,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txt_salvageValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28))
         );
 
         btn_clear.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -813,7 +917,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
         });
 
         btn_search_depre.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_search_depre.setText("Search a depreciation");
+        btn_search_depre.setText("Search depreciation");
         btn_search_depre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_search_depreActionPerformed(evt);
@@ -842,8 +946,8 @@ public class Depreciation extends javax.swing.JInternalFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btn_search, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(3, 3, 3)
+                                .addComponent(btn_search, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_search_depre)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_refresh)))
@@ -858,7 +962,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
                         .addComponent(btn_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(95, 95, 95)
                         .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -953,7 +1057,6 @@ public class Depreciation extends javax.swing.JInternalFrame {
         finally{
             try{
                 ps.close();
-                rs.close();
             }
             catch(Exception e){
                 JOptionPane.showMessageDialog(null,e);
@@ -992,7 +1095,6 @@ public class Depreciation extends javax.swing.JInternalFrame {
         finally{
             try{
                 ps.close();
-                rs.close();
             }
             catch(Exception e){
                 JOptionPane.showMessageDialog(null,e);
@@ -1021,13 +1123,12 @@ public class Depreciation extends javax.swing.JInternalFrame {
             finally{
             try{
                 ps.close();
-                rs.close();
             }
             catch(Exception e){
                 JOptionPane.showMessageDialog(null,e);
             }
         }
-            
+            auto1();
             tableUpdate();
             clear();
         }
@@ -1155,7 +1256,7 @@ public class Depreciation extends javax.swing.JInternalFrame {
                     
                 Double num1 = Double.parseDouble(txt_cost.getText());
                 Double num2 = Double.parseDouble(txt_depreExpence.getText());
-                String val = Double.toString(num1-(num2*diff));
+                String val = Double.toString(num1-((num2/12)*diff));
                
                 txt_netBookValue.setText(val);
             }
@@ -1292,6 +1393,24 @@ public class Depreciation extends javax.swing.JInternalFrame {
         txt_life.setEditable(false);
     }//GEN-LAST:event_DepreciationKeyPressed
 
+    private void txt_RateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_RateKeyTyped
+        char c=evt.getKeyChar();
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Only numbers are allowed");
+        }
+    }//GEN-LAST:event_txt_RateKeyTyped
+
+    private void txt_lifeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_lifeKeyTyped
+        char c=evt.getKeyChar();
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Only numbers are allowed");
+        }
+    }//GEN-LAST:event_txt_lifeKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog Asset;
@@ -1326,7 +1445,6 @@ public class Depreciation extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private com.toedter.calendar.JDateChooser purchase_date;
     private javax.swing.JTextField txt_Description;
     private javax.swing.JTextField txt_Rate;

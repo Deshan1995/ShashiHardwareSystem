@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Asset;
+package itp;
 
 /**
  *
@@ -17,7 +17,7 @@ public class javaconnect {
     public static Connection ConnecrDb(){
         try{
             Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:hardwaredb.sqlite");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\HOME\\Documents\\NetBeansProjects\\ITP\\Hardwaredb.sqlite");
            // JOptionPane.showMessageDialog(null,"Connection Established");
             return conn;
         }
