@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package itp;
+package Asset;
 
 /**
  *
  * @author User
  */
+import DBconnection.DBconnect;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,7 +27,7 @@ PreparedStatement ps = null;
      */
     public AccumulatedDepreciation() {
         initComponents();
-        conn=javaconnect.ConnecrDb();
+        conn=DBconnect.connectDb();
         calendar();
         showtime();
     }

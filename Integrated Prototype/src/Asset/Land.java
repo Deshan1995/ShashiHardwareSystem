@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package itp;
+package Asset;
 
 /**
  *
  * @author S V
  */
 
+import DBconnection.DBconnect;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
@@ -31,7 +32,7 @@ Statement s = null;
      */
     public Land() {
         initComponents();
-        conn=javaconnect.ConnecrDb();
+        conn=DBconnect.connectDb();
         tableUpdate();
         tableUpdate1();
         calendar();
