@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Asset;
+//package Asset;
 
 /**
  *
@@ -284,15 +284,15 @@ public void pay(){
         jLabel11 = new javax.swing.JLabel();
         txt_assetId = new javax.swing.JTextField();
         cmb_category = new javax.swing.JComboBox();
-        purchase_date = new com.toedter.calendar.JDateChooser();
         jLabel2 = new javax.swing.JLabel();
         txt_Description = new javax.swing.JTextField();
+        purchase_date = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         Asset = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         btn_view = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
-        cmb_pay = new javax.swing.JComboBox<>();
+        cmb_pay = new javax.swing.JComboBox<String>();
         btn_update = new javax.swing.JButton();
         btn_delete = new javax.swing.JButton();
         btn_insert = new javax.swing.JButton();
@@ -304,11 +304,9 @@ public void pay(){
         txt_Rate = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txt_life = new javax.swing.JTextField();
+        btn_demo = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-
-        payment.setLocation(new java.awt.Point(365, 0));
-        payment.setSize(new java.awt.Dimension(1000, 500));
 
         pay.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -433,8 +431,6 @@ public void pay(){
             }
         });
 
-        purchase_date.setDateFormatString("yyyy-MM-dd");
-
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("Asset Description");
 
@@ -469,9 +465,9 @@ public void pay(){
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txt_cost, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(purchase_date, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txt_cost, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                                    .addComponent(purchase_date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -495,9 +491,9 @@ public void pay(){
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_Description, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(purchase_date, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(purchase_date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -544,7 +540,7 @@ public void pay(){
         jLabel13.setText("Payment Type");
 
         cmb_pay.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        cmb_pay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Select>", "Cash", "Cheque", "Loan" }));
+        cmb_pay.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "<Select>", "Cash", "Cheque", "Loan" }));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -680,6 +676,14 @@ public void pay(){
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
+        btn_demo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_demo.setText("Demo");
+        btn_demo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_demoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -701,14 +705,16 @@ public void pay(){
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(159, 159, 159)
+                        .addGap(115, 115, 115)
                         .addComponent(btn_search, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(89, 89, 89)
-                        .addComponent(btn_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(34, 34, 34)
+                        .addComponent(btn_refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(btn_demo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(85, 85, 85)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(36, 36, 36)
+                .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -724,13 +730,14 @@ public void pay(){
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btn_search)
-                            .addComponent(btn_refresh)))
+                            .addComponent(btn_refresh)
+                            .addComponent(btn_demo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1072,11 +1079,23 @@ public void pay(){
         }
     }//GEN-LAST:event_btn_paySearchActionPerformed
 
+    private void btn_demoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_demoActionPerformed
+       
+        
+                cmb_category.setSelectedIndex(1);
+                txt_Description.setText("printer");
+                txt_cost.setText("12000");
+                txt_Rate.setText("8");
+                txt_life.setText("5");
+                ((JTextField)purchase_date.getDateEditor().getUiComponent()).setText("2017-11-09");
+    }//GEN-LAST:event_btn_demoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Asset;
     private javax.swing.JButton btn_clear;
     private javax.swing.JButton btn_delete;
+    private javax.swing.JButton btn_demo;
     private javax.swing.JButton btn_insert;
     private javax.swing.JButton btn_paySearch;
     private javax.swing.JButton btn_refresh;
