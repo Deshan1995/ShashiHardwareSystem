@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Date;
+import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -22,14 +24,17 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
     PreparedStatement pst = null;
     ResultSet rs = null;
     Statement s = null;
+    Date ds;
     
     /**
      * Creates new form ProcessPayment
      */
     public ProcessPayment() {
         initComponents();
-        LBLcash.setVisible(false);
-        LBLcheque.setVisible(false);
+                
+        ds = new Date();
+        
+        JDCdate.setDate(ds);
         
         conn = DBconnect.connectDb();
         generateID();
@@ -38,28 +43,48 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         //load Table
         
         tableLoad();
+        tableLoad1();
     }
 
-    public void tableLoad()
+    public void clear(){
+    
+            TXTstoreid.setText("");
+            TXTstorename.setText("");
+            TXTpaymentid.setText("");
+            TXTcreditamount.setText("");
+            TXTcashpayment.setText("");
+            TXTcashpaidamount.setText("");
+            TXTcashbalance.setText("");
+            JDCdate.setDate(ds);
+            
+            
+            generateID();
+    
+    }
+    
+    
+    
+    public void tableLoad1()
     {
     
         try{
         
-            String sql = "SELECT paymentid, storeid, amount, paidamount, balance, date FROM agencyPayments";
+            String sql = "SELECT Cheque_No,Account_No,Date,Bank_Name,Amount,Status FROM Cheque WHERE Cheque_FROM = 'Agency'";
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
          
-            cashpaymenttable.setModel(DbUtils.resultSetToTableModel(rs));
+            chequepaymenttable.setModel(DbUtils.resultSetToTableModel(rs));
             
-                        
+            
         }
+        
         
         
         
         
         catch(Exception e){
         
-            System.out.println(e);
+            e.printStackTrace();
         
         }
             
@@ -83,12 +108,58 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         
     }
     
+    public void tableLoad()
+    {
+    
+        try{
+        
+            String sql = "SELECT a.paymentid, s.name, a.amount, a.date FROM agencyPayments a, store s WHERE a.storeid = s.id";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+         
+            cashpaymenttable.setModel(DbUtils.resultSetToTableModel(rs));
+            
+            
+        }
+        
+        
+        
+        
+        
+        catch(Exception e){
+        
+            e.printStackTrace();
+        
+        }
+            
+        finally{
+        
+            try{
+            
+                pst.close();
+                rs.close();
+                
+            
+            }
+            
+            catch(Exception e){
+        
+                System.out.println(e);
+        
+        }
+        
+        }
+        
+    }
+    
+    
+    
     public void generateID(){
         
         
         try{
             s = conn.createStatement();
-            rs = s.executeQuery("SELECT MAX(invoiceno) AS lastitem FROM invoiceSummary");
+            rs = s.executeQuery("SELECT MAX(paymentid) AS lastitem FROM agencyPayments");
            
             String paymentid;
             
@@ -98,7 +169,7 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
                 String pid[] = paymentid.split("PID");
                 int no=Integer.parseInt(pid[1]);
                 no = no + 1;
-                TXTcashpayid.setText("PID"+no);
+                TXTpaymentid.setText("PID"+no);
                 
             }
         }
@@ -113,6 +184,7 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         
             try{
             
+                s.close();
                 rs.close();
                 
             
@@ -129,7 +201,56 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
        
     }
         
+public void updateCreditBalance(){
     
+   try{
+//       String sql = "SELECT creditAmount from store";
+//       pst=conn.prepareStatement(sql);
+//      
+//       rs = pst.executeQuery();
+//       
+//       String creditbal = rs.getString("creditAmount");
+       
+       double cAmount = Double.parseDouble(TXTcreditamount.getText());
+       
+       double cPay = Double.parseDouble(TXTcashpayment.getText());
+       
+       String stid = TXTstoreid.getText();
+       
+       cAmount=cAmount-cPay;
+       
+       String credAmount = Double.toString(cAmount);
+       
+       TXTcreditamount.setText(credAmount);
+       
+       String sql = "Update store set creditAmount='"+ credAmount +"' Where id='"+ stid +"' ";
+       pst=conn.prepareStatement(sql);
+       pst.execute();
+       
+   }   
+   catch(Exception e){
+       System.out.println(e);
+   }
+   
+    finally{
+        
+            try{
+            
+                pst.close();
+                                
+            
+            }
+            
+            catch(Exception e){
+        
+                System.out.println(e);
+        
+        }
+        
+        }
+   
+   
+}   
     
     
     
@@ -157,16 +278,8 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel67 = new javax.swing.JLabel();
-        TXTcashpayid = new javax.swing.JTextField();
-        jLabel68 = new javax.swing.JLabel();
-        TXTcashstorename = new javax.swing.JTextField();
-        jLabel69 = new javax.swing.JLabel();
-        TXTcashstoreid = new javax.swing.JTextField();
         jLabel70 = new javax.swing.JLabel();
         TXTcashpayment = new javax.swing.JTextField();
-        jLabel71 = new javax.swing.JLabel();
-        TXTcashcreditamount = new javax.swing.JTextField();
         jLabel73 = new javax.swing.JLabel();
         TXTcashpaidamount = new javax.swing.JTextField();
         TXTcashbalance = new javax.swing.JTextField();
@@ -174,11 +287,6 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         cashpaymenttable = new javax.swing.JTable();
         BTNcashaddpayment = new javax.swing.JButton();
-        BTNcashremovepayment = new javax.swing.JButton();
-        JDCcashdate = new com.toedter.calendar.JDateChooser();
-        jLabel72 = new javax.swing.JLabel();
-        LBLcash = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -189,25 +297,24 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         TXTchequebranchno = new javax.swing.JTextField();
         jLabel77 = new javax.swing.JLabel();
         jLabel78 = new javax.swing.JLabel();
-        accountno = new javax.swing.JTextField();
+        TXTaccountno = new javax.swing.JTextField();
         jLabel79 = new javax.swing.JLabel();
         TXTchequebankname = new javax.swing.JTextField();
-        TXTchequepaymentid = new javax.swing.JTextField();
-        jLabel80 = new javax.swing.JLabel();
-        jLabel81 = new javax.swing.JLabel();
-        TXTchequecreditamount = new javax.swing.JTextField();
-        TXTchequestorename = new javax.swing.JTextField();
-        jLabel82 = new javax.swing.JLabel();
-        TXTchequestoreid = new javax.swing.JTextField();
-        JDCchequedate = new com.toedter.calendar.JDateChooser();
-        jLabel83 = new javax.swing.JLabel();
-        jLabel84 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         chequepaymenttable = new javax.swing.JTable();
         BTNchequeaddpayment = new javax.swing.JButton();
-        BTNchequechequereturned = new javax.swing.JButton();
-        LBLcheque = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
+        jLabel67 = new javax.swing.JLabel();
+        TXTchequepayment = new javax.swing.JTextField();
+        TXTstorename = new javax.swing.JTextField();
+        jLabel82 = new javax.swing.JLabel();
+        TXTstoreid = new javax.swing.JTextField();
+        JDCdate = new com.toedter.calendar.JDateChooser();
+        jLabel83 = new javax.swing.JLabel();
+        jLabel84 = new javax.swing.JLabel();
+        TXTpaymentid = new javax.swing.JTextField();
+        jLabel80 = new javax.swing.JLabel();
+        jLabel81 = new javax.swing.JLabel();
+        TXTcreditamount = new javax.swing.JTextField();
 
         jPanel6.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -236,39 +343,12 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1570, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel2)
         );
-
-        jLabel67.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel67.setText("Payment ID    :");
-
-        TXTcashpayid.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTcashpayidActionPerformed(evt);
-            }
-        });
-
-        jLabel68.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel68.setText("Store Name    :");
-
-        TXTcashstorename.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTcashstorenameActionPerformed(evt);
-            }
-        });
-
-        jLabel69.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel69.setText("Store ID    :");
-
-        TXTcashstoreid.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTcashstoreidActionPerformed(evt);
-            }
-        });
 
         jLabel70.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel70.setText("Payment         :");
@@ -278,16 +358,9 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
                 TXTcashpaymentActionPerformed(evt);
             }
         });
-
-        jLabel71.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel71.setText("Current Credit Amount    :");
-
-        TXTcashcreditamount.setEditable(false);
-        TXTcashcreditamount.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        TXTcashcreditamount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        TXTcashcreditamount.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTcashcreditamountActionPerformed(evt);
+        TXTcashpayment.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTcashpaymentKeyTyped(evt);
             }
         });
 
@@ -297,6 +370,11 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         TXTcashpaidamount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TXTcashpaidamountActionPerformed(evt);
+            }
+        });
+        TXTcashpaidamount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTcashpaidamountKeyTyped(evt);
             }
         });
 
@@ -323,16 +401,11 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(cashpaymenttable);
 
         BTNcashaddpayment.setText("Add Payment");
-
-        BTNcashremovepayment.setText("Remove Payment");
-
-        jLabel72.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel72.setText("Date           :");
-
-        LBLcash.setText("Cash");
-
-        jSeparator1.setBackground(new java.awt.Color(153, 153, 153));
-        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
+        BTNcashaddpayment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTNcashaddpaymentActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -340,90 +413,35 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel67, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(TXTcashpayid))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel68, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(TXTcashstorename, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(36, 36, 36)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel69, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel72, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(JDCcashdate, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TXTcashstoreid, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(116, 116, 116)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(TXTcashcreditamount, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(113, 113, 113)
-                                        .addComponent(LBLcash, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel71, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(TXTcashpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(TXTcashpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel73, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(TXTcashpaidamount, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel74, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(TXTcashbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(BTNcashaddpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(29, 29, 29)
-                                        .addComponent(BTNcashremovepayment, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(51, 51, 51)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1004, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jSeparator1))
-                .addContainerGap())
+                                .addComponent(jLabel73, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(TXTcashpaidamount, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel74, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(TXTcashbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(51, 51, 51))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(BTNcashaddpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(146, 146, 146)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1004, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(TXTcashpayid)
-                            .addComponent(jLabel71, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel72, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addComponent(jLabel67, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(JDCcashdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(TXTcashstorename)
-                                    .addComponent(jLabel69, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TXTcashstoreid))
-                                .addComponent(jLabel68, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(TXTcashcreditamount, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(LBLcash, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(31, 31, 31)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(33, 33, 33)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -437,12 +455,10 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(TXTcashbalance)
                             .addComponent(jLabel74, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(76, 76, 76)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(BTNcashaddpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(BTNcashremovepayment, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(88, 88, 88)
+                        .addComponent(BTNcashaddpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 174, Short.MAX_VALUE))
+                .addGap(0, 224, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Cash Payments", jPanel1);
@@ -472,6 +488,11 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
                 TXTchequechequenoActionPerformed(evt);
             }
         });
+        TXTchequechequeno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTchequechequenoKeyTyped(evt);
+            }
+        });
 
         jLabel75.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel75.setText("Bank No                :");
@@ -481,10 +502,20 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
                 TXTchequebanknoActionPerformed(evt);
             }
         });
+        TXTchequebankno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTchequebanknoKeyTyped(evt);
+            }
+        });
 
         TXTchequebranchno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TXTchequebranchnoActionPerformed(evt);
+            }
+        });
+        TXTchequebranchno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTchequebranchnoKeyTyped(evt);
             }
         });
 
@@ -494,9 +525,14 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         jLabel78.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel78.setText("Account No           :");
 
-        accountno.addActionListener(new java.awt.event.ActionListener() {
+        TXTaccountno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                accountnoActionPerformed(evt);
+                TXTaccountnoActionPerformed(evt);
+            }
+        });
+        TXTaccountno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTaccountnoKeyTyped(evt);
             }
         });
 
@@ -508,48 +544,11 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
                 TXTchequebanknameActionPerformed(evt);
             }
         });
-
-        TXTchequepaymentid.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTchequepaymentidActionPerformed(evt);
+        TXTchequebankname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTchequebanknameKeyTyped(evt);
             }
         });
-
-        jLabel80.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel80.setText("Current Credit Amount    :");
-
-        jLabel81.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel81.setText("Store Name         :");
-
-        TXTchequecreditamount.setEditable(false);
-        TXTchequecreditamount.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        TXTchequecreditamount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        TXTchequecreditamount.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTchequecreditamountActionPerformed(evt);
-            }
-        });
-
-        TXTchequestorename.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTchequestorenameActionPerformed(evt);
-            }
-        });
-
-        jLabel82.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel82.setText("Store ID     :");
-
-        TXTchequestoreid.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTchequestoreidActionPerformed(evt);
-            }
-        });
-
-        jLabel83.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel83.setText("Date            :");
-
-        jLabel84.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel84.setText("Payment ID         :");
 
         chequepaymenttable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -571,12 +570,19 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
             }
         });
 
-        BTNchequechequereturned.setText("Cheque Returned");
+        jLabel67.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel67.setText("Payment                :");
 
-        LBLcheque.setText("Cheque");
-
-        jSeparator2.setBackground(new java.awt.Color(153, 153, 153));
-        jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
+        TXTchequepayment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TXTchequepaymentActionPerformed(evt);
+            }
+        });
+        TXTchequepayment.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTchequepaymentKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -584,113 +590,59 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel84, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(TXTchequepaymentid))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel81, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(TXTchequestorename, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(36, 36, 36)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel83, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel82, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(571, 571, 571))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(197, 197, 197)
+                        .addComponent(BTNchequeaddpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(223, 223, 223))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabel78, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(58, 58, 58)
+                                    .addComponent(TXTaccountno, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabel77, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(58, 58, 58)
+                                    .addComponent(TXTchequebranchno, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel78, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(58, 58, 58)
-                                        .addComponent(accountno, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel77, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(58, 58, 58)
-                                        .addComponent(TXTchequebranchno, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel66, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(58, 58, 58)
-                                        .addComponent(TXTchequechequeno, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addComponent(jLabel75, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(58, 58, 58))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                                .addComponent(jLabel79, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(71, 71, 71)))
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(TXTchequebankno)
-                                            .addComponent(TXTchequebankname, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(BTNchequeaddpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29)
-                                .addComponent(BTNchequechequereturned, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(32, 32, 32)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(JDCchequedate, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TXTchequestoreid, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(116, 116, 116)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(TXTchequecreditamount, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel80, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(155, 155, 155)
-                                        .addComponent(LBLcheque, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1004, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jSeparator2)
-                .addContainerGap())
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabel66, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(58, 58, 58)
+                                    .addComponent(TXTchequechequeno, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                            .addComponent(jLabel75, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(58, 58, 58))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                            .addComponent(jLabel79, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(71, 71, 71)))
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(TXTchequebankno)
+                                        .addComponent(TXTchequebankname, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel67, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(58, 58, 58)
+                                .addComponent(TXTchequepayment, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(33, 33, 33)))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1004, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(TXTchequepaymentid)
-                                        .addComponent(jLabel83))
-                                    .addComponent(jLabel84, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(TXTchequestorename)
-                                        .addComponent(jLabel82, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel81, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel80, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(JDCchequedate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(TXTchequestoreid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TXTchequecreditamount, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(LBLcheque, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(TXTchequepayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel67))
+                        .addGap(78, 78, 78)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(TXTchequechequeno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel66))
@@ -708,16 +660,62 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
                             .addComponent(jLabel77))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(accountno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TXTaccountno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel78))
-                        .addGap(59, 59, 59)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(BTNchequeaddpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(BTNchequechequereturned, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 167, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BTNchequeaddpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(178, 178, 178))
         );
 
         jTabbedPane1.addTab("Cheque Payments", jPanel2);
+
+        TXTstorename.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TXTstorenameActionPerformed(evt);
+            }
+        });
+
+        jLabel82.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel82.setText("Store ID               :");
+
+        TXTstoreid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TXTstoreidActionPerformed(evt);
+            }
+        });
+        TXTstoreid.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTstoreidKeyTyped(evt);
+            }
+        });
+
+        jLabel83.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel83.setText("Date                     :");
+
+        jLabel84.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel84.setText("Payment ID         :");
+
+        TXTpaymentid.setEditable(false);
+        TXTpaymentid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TXTpaymentidActionPerformed(evt);
+            }
+        });
+
+        jLabel80.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel80.setText("Current Credit Amount    :");
+
+        jLabel81.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel81.setText("Store Name         :");
+
+        TXTcreditamount.setEditable(false);
+        TXTcreditamount.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        TXTcreditamount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        TXTcreditamount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TXTcreditamountActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -725,11 +723,60 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jTabbedPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel84, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addComponent(jLabel82, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(TXTpaymentid, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                    .addComponent(TXTstoreid))
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel81, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TXTstorename, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel83, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(JDCdate, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(89, 89, 89)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TXTcreditamount, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel80, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(TXTpaymentid)
+                                    .addComponent(jLabel83))
+                                .addComponent(jLabel84, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(JDCdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel81, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(TXTstorename, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(TXTstoreid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jLabel82, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel80, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(TXTcreditamount, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane1))
         );
@@ -741,28 +788,42 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_TXTchequechequenoActionPerformed
 
-    private void TXTcashpayidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTcashpayidActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TXTcashpayidActionPerformed
-
-    private void TXTcashstorenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTcashstorenameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TXTcashstorenameActionPerformed
-
-    private void TXTcashstoreidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTcashstoreidActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TXTcashstoreidActionPerformed
-
     private void TXTcashpaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTcashpaymentActionPerformed
-        // TODO add your handling code here:
+        TXTcashpaidamount.requestFocus();
     }//GEN-LAST:event_TXTcashpaymentActionPerformed
 
-    private void TXTcashcreditamountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTcashcreditamountActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TXTcashcreditamountActionPerformed
-
     private void TXTcashpaidamountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTcashpaidamountActionPerformed
-        // TODO add your handling code here:
+        
+//        String storename = TXTstoreName.getText();
+//        String storeid = TXTstoreID.getText();
+//        String paymentmethod = CMBpaymentMethod.getSelectedItem().toString();
+        double amountpaid = Double.parseDouble(TXTcashpaidamount.getText());
+        double payment = Double.parseDouble(TXTcashpayment.getText());
+        double balance = 0;
+        double creditbalance = Double.parseDouble(TXTcreditamount.getText());
+        double temp;
+        
+        
+        
+            if(amountpaid > payment){
+            
+                balance = amountpaid - payment;
+                
+                
+                             
+            }
+            
+            else {
+            
+                balance = 0;
+                
+            }
+            
+            TXTcashbalance.setText(Double.toString(balance));
+            TXTcreditamount.setText(Double.toString(creditbalance));
+            
+            
+
     }//GEN-LAST:event_TXTcashpaidamountActionPerformed
 
     private void TXTcashbalanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTcashbalanceActionPerformed
@@ -777,60 +838,415 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_TXTchequebranchnoActionPerformed
 
-    private void accountnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountnoActionPerformed
+    private void TXTaccountnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTaccountnoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_accountnoActionPerformed
+    }//GEN-LAST:event_TXTaccountnoActionPerformed
 
     private void TXTchequebanknameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTchequebanknameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TXTchequebanknameActionPerformed
 
-    private void TXTchequepaymentidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTchequepaymentidActionPerformed
+    private void TXTpaymentidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTpaymentidActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TXTchequepaymentidActionPerformed
+    }//GEN-LAST:event_TXTpaymentidActionPerformed
 
-    private void TXTchequecreditamountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTchequecreditamountActionPerformed
+    private void TXTcreditamountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTcreditamountActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TXTchequecreditamountActionPerformed
+    }//GEN-LAST:event_TXTcreditamountActionPerformed
 
-    private void TXTchequestorenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTchequestorenameActionPerformed
+    private void TXTstorenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTstorenameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TXTchequestorenameActionPerformed
+    }//GEN-LAST:event_TXTstorenameActionPerformed
 
-    private void TXTchequestoreidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTchequestoreidActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TXTchequestoreidActionPerformed
+    private void TXTstoreidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTstoreidActionPerformed
+        
+        
+        
+        
+        String stid = TXTstoreid.getText();
+        
+        String sql = "SELECT name, creditAmount FROM store WHERE id = '"+ stid +"' ";
+         
+        try {
+        
+            
+        pst=conn.prepareStatement(sql);
+        rs = pst.executeQuery();
+        
+        if(rs.next()) { 
+            
+            String name = rs.getString("name");
+            TXTstorename.setText(name);
+            String credAmount = rs.getString("creditAmount");
+            TXTcreditamount.setText(credAmount);
+            
+            
+        }
+        
+        } catch (Exception e ) {
+            
+            System.out.println(e);
+
+        }
+        
+        finally{
+        
+            try{
+            
+                pst.close();
+                rs.close();
+                        
+            }
+            
+            catch(Exception e){
+        
+                System.out.println(e);
+        
+        }
+        
+        
+        
+        
+        
+        
+        
+        }
+        
+        
+        
+        
+    }//GEN-LAST:event_TXTstoreidActionPerformed
 
     private void BTNchequeaddpaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNchequeaddpaymentActionPerformed
-        // TODO add your handling code here:
+        if(TXTchequechequeno.getText().equals("") || TXTchequebranchno.getText().equals("") || TXTchequebankno.getText().equals("") || TXTchequebankname.getText().equals("") || TXTaccountno.getText().equals("")) 
+        {
+
+            JOptionPane.showMessageDialog(null,"All fields are required to be filled");
+
+        }
+       
+        
+            
+        else{
+        
+            String paymentid = TXTpaymentid.getText();
+            String stid = TXTstoreid.getText();
+            String chequno = TXTchequechequeno.getText();
+            String bankno = TXTchequebankno.getText();
+            String bankname = TXTchequebankname.getText();
+            String branchno = TXTchequebranchno.getText();
+            String accountno = TXTaccountno.getText();
+            Date date = JDCdate.getDate();
+            String amount = TXTchequepayment.getText();
+            String status = "Pending";
+            String chequefrom = "Agency";
+            String chequeto = "N/A";
+        
+        
+        String q = "INSERT INTO Cheque (Cheque_No,Bank_No,Branch_No,Account_No,Bank_Name,Amount,Date,Cheque_From,Cheque_To,Status) values('"+ chequno +"' , '"+ bankno +"' , '"+ branchno +"' , '"+ accountno +"' , '"+ bankname +"' , '"+ amount +"' , '"+ date +"' , '"+ chequefrom +"' , '"+ chequeto +"' , '"+ status +"')";
+
+         try
+        {
+            
+                pst = conn.prepareStatement(q);
+                pst.execute();
+                
+                //load Table
+                tableLoad();
+                
+                
+                
+                
+               
+
+       
+                double cAmount = Double.parseDouble(TXTcreditamount.getText());
+       
+                double cPay = Double.parseDouble(TXTchequepayment.getText());
+       
+                
+       
+                cAmount=cAmount-cPay;
+       
+                String credAmount = Double.toString(cAmount);
+       
+                TXTcreditamount.setText(credAmount);
+       
+                String sql = "Update store set creditAmount='"+ credAmount +"' Where id='"+ stid +"' ";
+                pst=conn.prepareStatement(sql);
+                pst.execute();
+                
+                
+                
+                
+                
+                
+                clear();
+       
+   }
+                  
+                
+                
+                
+                
+                
+                
+                
+                
+        
+
+        catch(Exception e)
+        {
+
+            e.printStackTrace();
+
+        }
+         
+         finally{
+        
+            try{
+            
+                pst.close();
+                
+            
+            }
+            
+            catch(Exception e){
+        
+                e.printStackTrace();
+        
+        }
+        
+        }
+                    
+        } 
     }//GEN-LAST:event_BTNchequeaddpaymentActionPerformed
+
+    private void BTNcashaddpaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNcashaddpaymentActionPerformed
+        if(TXTpaymentid.getText().equals("") || TXTstoreid.getText().equals("") || TXTcashpayment.getText().equals("") || TXTcashpaidamount.getText().equals("") || TXTcashbalance.getText().equals("")) 
+        {
+
+            JOptionPane.showMessageDialog(null,"All fields are required to be filled");
+
+        }
+       
+        
+            
+        else{
+        
+            String paymentid = TXTpaymentid.getText();
+            String stid = TXTstoreid.getText();
+            String payment = TXTcashpayment.getText();
+            String paidamount = TXTcashpaidamount.getText();
+            String balance = TXTcashbalance.getText();
+            Date date = JDCdate.getDate();
+        
+        
+            
+        
+        
+        String q = "INSERT INTO agencyPayments (paymentid,storeid,amount,paidamount,balance,date) values('"+ paymentid +"' , '"+ stid +"' , '"+ payment +"' , '"+ paidamount +"' , '"+ balance +"' , '"+ date +"')";
+
+         try
+        {
+            
+                pst = conn.prepareStatement(q);
+                pst.execute();
+                
+                //load Table
+                tableLoad();
+                
+                
+                updateCreditBalance();
+                
+                clear();
+                
+                
+        }
+
+        catch(Exception e)
+        {
+
+            e.printStackTrace();
+
+        }
+         
+         finally{
+        
+            try{
+            
+                pst.close();
+                
+            
+            }
+            
+            catch(Exception e){
+        
+                e.printStackTrace();
+        
+        }
+        
+        }
+                    
+        } 
+                                          
+
+   
+            
+        
+    }//GEN-LAST:event_BTNcashaddpaymentActionPerformed
+
+    private void TXTchequepaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTchequepaymentActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TXTchequepaymentActionPerformed
+
+    private void TXTstoreidKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTstoreidKeyTyped
+        
+        
+        char c=evt.getKeyChar();
+
+        if(Character.isDigit(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Letters");
+        }
+        
+        
+    }//GEN-LAST:event_TXTstoreidKeyTyped
+
+    private void TXTcashpaymentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTcashpaymentKeyTyped
+        char c=evt.getKeyChar();
+
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Digits");
+        }
+    }//GEN-LAST:event_TXTcashpaymentKeyTyped
+
+    private void TXTcashpaidamountKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTcashpaidamountKeyTyped
+char c=evt.getKeyChar();
+
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Digits");
+        }
+    }//GEN-LAST:event_TXTcashpaidamountKeyTyped
+
+    private void TXTchequepaymentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTchequepaymentKeyTyped
+char c=evt.getKeyChar();
+
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Digits");
+        }    }//GEN-LAST:event_TXTchequepaymentKeyTyped
+
+    private void TXTchequechequenoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTchequechequenoKeyTyped
+        char c=evt.getKeyChar();
+
+        String check = TXTchequechequeno.getText()+c;
+
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Numbers");
+        }
+        
+        else if(check.length() > 6){
+        
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Only 6 numbers are allowed");
+        
+        }
+    }//GEN-LAST:event_TXTchequechequenoKeyTyped
+
+    private void TXTchequebanknoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTchequebanknoKeyTyped
+        char c=evt.getKeyChar();
+
+        String check = TXTchequebankno.getText()+c;
+
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Numbers");
+        }
+        
+        else if(check.length() > 4){
+        
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Only 4 numbers are allowed");
+        
+        }
+    }//GEN-LAST:event_TXTchequebanknoKeyTyped
+
+    private void TXTchequebranchnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTchequebranchnoKeyTyped
+       char c=evt.getKeyChar();
+
+        String check = TXTchequebranchno.getText()+c;
+
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Numbers");
+        }
+        
+        else if(check.length() > 3){
+        
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Only 3 numbers are allowed");
+        
+        }
+    }//GEN-LAST:event_TXTchequebranchnoKeyTyped
+
+    private void TXTaccountnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTaccountnoKeyTyped
+        char c=evt.getKeyChar();
+
+        String check = TXTaccountno.getText()+c;
+
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Numbers");
+        }
+        
+        else if(check.length() > 10){
+        
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Only 10 numbers are allowed");
+        
+        }
+    }//GEN-LAST:event_TXTaccountnoKeyTyped
+
+    private void TXTchequebanknameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTchequebanknameKeyTyped
+        char c=evt.getKeyChar();
+
+        if(Character.isDigit(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Letters");
+        }
+    }//GEN-LAST:event_TXTchequebanknameKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTNcashaddpayment;
-    private javax.swing.JButton BTNcashremovepayment;
     private javax.swing.JButton BTNchequeaddpayment;
-    private javax.swing.JButton BTNchequechequereturned;
-    private com.toedter.calendar.JDateChooser JDCcashdate;
-    private com.toedter.calendar.JDateChooser JDCchequedate;
-    private javax.swing.JLabel LBLcash;
-    private javax.swing.JLabel LBLcheque;
+    private com.toedter.calendar.JDateChooser JDCdate;
+    private javax.swing.JTextField TXTaccountno;
     private javax.swing.JTextField TXTcashbalance;
-    private javax.swing.JTextField TXTcashcreditamount;
     private javax.swing.JTextField TXTcashpaidamount;
-    private javax.swing.JTextField TXTcashpayid;
     private javax.swing.JTextField TXTcashpayment;
-    private javax.swing.JTextField TXTcashstoreid;
-    private javax.swing.JTextField TXTcashstorename;
     private javax.swing.JTextField TXTchequebankname;
     private javax.swing.JTextField TXTchequebankno;
     private javax.swing.JTextField TXTchequebranchno;
     private javax.swing.JTextField TXTchequechequeno;
-    private javax.swing.JTextField TXTchequecreditamount;
-    private javax.swing.JTextField TXTchequepaymentid;
-    private javax.swing.JTextField TXTchequestoreid;
-    private javax.swing.JTextField TXTchequestorename;
-    private javax.swing.JTextField accountno;
+    private javax.swing.JTextField TXTchequepayment;
+    private javax.swing.JTextField TXTcreditamount;
+    private javax.swing.JTextField TXTpaymentid;
+    private javax.swing.JTextField TXTstoreid;
+    private javax.swing.JTextField TXTstorename;
     private javax.swing.JTable cashpaymenttable;
     private javax.swing.JTable chequepaymenttable;
     private javax.swing.JLabel jLabel2;
@@ -838,11 +1254,7 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel67;
-    private javax.swing.JLabel jLabel68;
-    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel70;
-    private javax.swing.JLabel jLabel71;
-    private javax.swing.JLabel jLabel72;
     private javax.swing.JLabel jLabel73;
     private javax.swing.JLabel jLabel74;
     private javax.swing.JLabel jLabel75;
@@ -861,8 +1273,6 @@ public class ProcessPayment extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }
