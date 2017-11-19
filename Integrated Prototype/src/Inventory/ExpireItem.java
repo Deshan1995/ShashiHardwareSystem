@@ -13,6 +13,7 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import javax.swing.*;
 //import DBClass.conect;
+import DBconnection.DBconnect;
 import javax.swing.table.TableModel;
 import java.text.DateFormat;
 import javax.swing.table.DefaultTableModel;
@@ -40,8 +41,11 @@ public class ExpireItem extends javax.swing.JInternalFrame {
     
     public ExpireItem() {
         initComponents();
-        conn = conect.ConnectDb();;
+        conn = DBconnect.connectDb();
         tableload();
+        tableload1();
+        enable();
+       
     }
 
     public void tableload()
@@ -70,12 +74,41 @@ public class ExpireItem extends javax.swing.JInternalFrame {
         }
        
     }
+    
+    public void tableload1()
+    {
+        String expire1 = "select * from  Expired_Item";
+        try{
+        pst = conn.prepareStatement(expire1);
+        rs = pst.executeQuery();
+        
+        TableExpire.setModel(DbUtils.resultSetToTableModel(rs));
+        }
+        catch(Exception e)
+         {
+                
+         }
+        finally
+        {
+            try{
+            pst.close();
+            rs.close();
+            }
+            catch(Exception e){
+            
+            }
+                  
+        }
+       
+    }
+    
     public void tableloadA()
     {
         String dd=((JTextField)FromExpire.getDateEditor().getUiComponent()).getText();
         String dd1=((JTextField)ToExpire.getDateEditor().getUiComponent()).getText();
+        //String DDD=()
         
-        String sql = "select * from Nearto_Be_Expired where Date BETWEEN '"+dd+"' AND '"+dd1+"'";
+        String sql = "select * from Nearto_Be_Expired where ExpireDate BETWEEN '"+dd+"' AND '"+dd1+"' ";
         try{
         pst = conn.prepareStatement(sql);
         rs = pst.executeQuery();
@@ -98,8 +131,32 @@ public class ExpireItem extends javax.swing.JInternalFrame {
             }
        
     }
+       public void clearExpireItem()
+       {
+       ESItemID.setText("");
+       ESItemName.setText("");
+       }
+       public void clearExpireBrand()
+       {
+       ESBrandID.setText("");
+       ESBrandName.setText("");
+       }
+       public void clearExpireSupplier()
+       {
+       ESSupplierID.setText("");
+       ESSupplierName.setText("");
+       }
        
-    
+       public void enable()
+       {
+       ESItemID.setEditable(true);
+       ESItemName.setEditable(true);
+       ESBrandID.setEditable(true);
+       ESBrandName.setEditable(true);
+       ESSupplierID.setEditable(true);
+       ESSupplierName.setEditable(true);
+       }
+       
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -120,23 +177,21 @@ public class ExpireItem extends javax.swing.JInternalFrame {
         ExpireSearch = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        jTextField11 = new javax.swing.JTextField();
-        jTextField12 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
+        ESSupplierName = new javax.swing.JTextField();
+        ESBrandName = new javax.swing.JTextField();
+        ESItemName = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
+        ESSupplierID = new javax.swing.JTextField();
+        ESBrandID = new javax.swing.JTextField();
+        ESItemID = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        ERefesh = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TableExpire = new javax.swing.JTable();
 
         jLabel14.setText("From                :");
 
@@ -145,6 +200,11 @@ public class ExpireItem extends javax.swing.JInternalFrame {
         jLabel15.setText("To                   :");
 
         ToExpire.setDateFormatString("yyyy-MM-dd");
+        ToExpire.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ToExpireKeyReleased(evt);
+            }
+        });
 
         NearExpire.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -170,61 +230,72 @@ public class ExpireItem extends javax.swing.JInternalFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(53, 53, 53)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1176, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(FromExpire, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(77, 77, 77)
+                        .addComponent(FromExpire, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(ToExpire, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(162, 162, 162)
-                        .addComponent(ExpireSearch)))
-                .addContainerGap(421, Short.MAX_VALUE))
+                        .addGap(32, 32, 32)
+                        .addComponent(ExpireSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(1125, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(46, 46, 46)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(FromExpire, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(FromExpire, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(ToExpire, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ExpireSearch))))
-                .addGap(134, 134, 134)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ToExpire, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ExpireSearch))
+                .addGap(166, 166, 166)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(340, Short.MAX_VALUE))
+                .addContainerGap(268, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Near to be expiring", jPanel2);
 
-        jTextField11.addActionListener(new java.awt.event.ActionListener() {
+        ESSupplierName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField11ActionPerformed(evt);
+                ESSupplierNameActionPerformed(evt);
+            }
+        });
+        ESSupplierName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ESSupplierNameKeyReleased(evt);
             }
         });
 
-        jTextField12.addActionListener(new java.awt.event.ActionListener() {
+        ESBrandName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField12ActionPerformed(evt);
+                ESBrandNameActionPerformed(evt);
+            }
+        });
+        ESBrandName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ESBrandNameKeyReleased(evt);
             }
         });
 
-        jTextField10.addActionListener(new java.awt.event.ActionListener() {
+        ESItemName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField10ActionPerformed(evt);
+                ESItemNameActionPerformed(evt);
+            }
+        });
+        ESItemName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ESItemNameKeyReleased(evt);
             }
         });
 
@@ -234,21 +305,36 @@ public class ExpireItem extends javax.swing.JInternalFrame {
 
         jLabel12.setText("Supplier name");
 
-        jTextField9.addActionListener(new java.awt.event.ActionListener() {
+        ESSupplierID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField9ActionPerformed(evt);
+                ESSupplierIDActionPerformed(evt);
+            }
+        });
+        ESSupplierID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ESSupplierIDKeyReleased(evt);
             }
         });
 
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+        ESBrandID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+                ESBrandIDActionPerformed(evt);
+            }
+        });
+        ESBrandID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ESBrandIDKeyReleased(evt);
             }
         });
 
-        jTextField8.addActionListener(new java.awt.event.ActionListener() {
+        ESItemID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField8ActionPerformed(evt);
+                ESItemIDActionPerformed(evt);
+            }
+        });
+        ESItemID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ESItemIDKeyReleased(evt);
             }
         });
 
@@ -258,24 +344,10 @@ public class ExpireItem extends javax.swing.JInternalFrame {
 
         jLabel9.setText("Supplier ID");
 
-        jButton2.setText("Search");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        ERefesh.setText("Refesh");
+        ERefesh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Search");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jButton4.setText("Search");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                ERefeshActionPerformed(evt);
             }
         });
 
@@ -289,35 +361,32 @@ public class ExpireItem extends javax.swing.JInternalFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(ESItemID, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(ESSupplierID, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(ESBrandID, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(43, 43, 43)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(ESItemName, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(ESBrandName, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(42, 42, 42)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2)
-                    .addComponent(jButton4))
-                .addContainerGap(71, Short.MAX_VALUE))
+                        .addComponent(ESSupplierName, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(ERefesh)))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -326,27 +395,25 @@ public class ExpireItem extends javax.swing.JInternalFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(ESItemID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ESItemName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ESBrandID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(ESBrandName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ESSupplierID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
+                    .addComponent(ESSupplierName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ERefesh))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TableExpire.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -357,21 +424,17 @@ public class ExpireItem extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(TableExpire);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1609, Short.MAX_VALUE)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1158, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(407, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -389,56 +452,46 @@ public class ExpireItem extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1614, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(0, 24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 13, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1013, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1013, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 17, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void ESItemIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ESItemIDActionPerformed
+    ESBrandID.setVisible(false);
+     ESBrandName.disable();
+     ESSupplierID.disable();
+     ESSupplierName.disable();        
+    }//GEN-LAST:event_ESItemIDActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void ESBrandIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ESBrandIDActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_ESBrandIDActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void ESSupplierIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ESSupplierIDActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_ESSupplierIDActionPerformed
 
-    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
+    private void ESItemNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ESItemNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField8ActionPerformed
+    }//GEN-LAST:event_ESItemNameActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void ESBrandNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ESBrandNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_ESBrandNameActionPerformed
 
-    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
+    private void ESSupplierNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ESSupplierNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField9ActionPerformed
-
-    private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField10ActionPerformed
-
-    private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField12ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField12ActionPerformed
-
-    private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField11ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField11ActionPerformed
+    }//GEN-LAST:event_ESSupplierNameActionPerformed
 
     private void ExpireSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExpireSearchActionPerformed
         //    public void tableload()
@@ -460,7 +513,7 @@ public class ExpireItem extends javax.swing.JInternalFrame {
             if(diff<0){
 
                 JOptionPane.showMessageDialog(null,"End date Should be Upcomming Date");
-                FromExpire.setDate(null);
+                //FromExpire.setDate(null);
                 ToExpire.setDate(null);
             }
             else{
@@ -474,14 +527,229 @@ public class ExpireItem extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_ExpireSearchActionPerformed
 
+    private void ESItemIDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ESItemIDKeyReleased
+ try{
+             clearExpireBrand();
+             clearExpireSupplier();
+             
+       
+       
+       ESBrandID.setEditable(false);
+       ESBrandName.setEditable(false);
+       ESSupplierID.setEditable(false);
+       ESSupplierName.setEditable(false);
+     
+       
+       String sql="Select * from Expired_Item where ItemId Like '%"+ESItemID.getText()+"%'";
+       
+            pst=conn.prepareStatement(sql);
+          
+            rs=pst.executeQuery();
+            TableExpire.setModel(DbUtils.resultSetToTableModel(rs));
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+        finally{
+            try{
+                pst.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }        
+    }//GEN-LAST:event_ESItemIDKeyReleased
+
+    private void ToExpireKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ToExpireKeyReleased
+      
+    }//GEN-LAST:event_ToExpireKeyReleased
+
+    private void ERefeshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ERefeshActionPerformed
+      enable();
+      tableload1();
+      clearExpireItem();
+      clearExpireBrand();
+      clearExpireSupplier();
+      
+    }//GEN-LAST:event_ERefeshActionPerformed
+
+    private void ESItemNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ESItemNameKeyReleased
+         try{
+            
+             clearExpireBrand();
+             clearExpireSupplier();
+             
+       ESBrandID.setEditable(false);
+       ESBrandName.setEditable(false);
+       ESSupplierID.setEditable(false);
+       ESSupplierName.setEditable(false);
+       
+       String sql="Select * from Expired_Item where ItemName Like '%"+ESItemName.getText()+"%'";
+       
+            pst=conn.prepareStatement(sql);
+          
+            rs=pst.executeQuery();
+            TableExpire.setModel(DbUtils.resultSetToTableModel(rs));
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+        finally{
+            try{
+                pst.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
+    }//GEN-LAST:event_ESItemNameKeyReleased
+
+    private void ESBrandIDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ESBrandIDKeyReleased
+        try{
+             clearExpireItem();
+             clearExpireSupplier();
+             
+       ESItemID.setEditable(false);
+       ESItemName.setEditable(false);
+       ESSupplierID.setEditable(false);
+       ESSupplierName.setEditable(false);
+       
+       String sql="Select * from Expired_Item where BrandId Like '%"+ESBrandID.getText()+"%'";
+       
+            pst=conn.prepareStatement(sql);
+          
+            rs=pst.executeQuery();
+            TableExpire.setModel(DbUtils.resultSetToTableModel(rs));
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+        finally{
+            try{
+                pst.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
+    }//GEN-LAST:event_ESBrandIDKeyReleased
+
+    private void ESBrandNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ESBrandNameKeyReleased
+         try{
+             clearExpireItem();
+             clearExpireSupplier();
+             
+       ESItemID.setEditable(false);
+       ESItemName.setEditable(false);
+       ESSupplierID.setEditable(false);
+       ESSupplierName.setEditable(false);
+       
+       String sql="Select * from Expired_Item where BrandName Like '%"+ESBrandName.getText()+"%'";
+       
+            pst=conn.prepareStatement(sql);
+          
+            rs=pst.executeQuery();
+            TableExpire.setModel(DbUtils.resultSetToTableModel(rs));
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+        finally{
+            try{
+                pst.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
+    }//GEN-LAST:event_ESBrandNameKeyReleased
+
+    private void ESSupplierIDKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ESSupplierIDKeyReleased
+        try{
+            
+             clearExpireItem();
+             clearExpireBrand();
+             
+       ESItemID.setEditable(false);
+       ESItemName.setEditable(false);
+       ESBrandID.setEditable(false);
+       ESBrandName.setEditable(false);
+       
+       String sql="Select * from Expired_Item where SupplierID Like '%"+ESSupplierID.getText()+"%'";
+       
+            pst=conn.prepareStatement(sql);
+          
+            rs=pst.executeQuery();
+            TableExpire.setModel(DbUtils.resultSetToTableModel(rs));
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+        finally{
+            try{
+                pst.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
+    }//GEN-LAST:event_ESSupplierIDKeyReleased
+
+    private void ESSupplierNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ESSupplierNameKeyReleased
+        try{
+               clearExpireItem();
+             clearExpireBrand();
+             
+       ESItemID.setEditable(false);
+       ESItemName.setEditable(false);
+       ESBrandID.setEditable(false);
+       ESBrandName.setEditable(false);
+            
+       String sql="Select * from Expired_Item where SupplierName Like '%"+ESSupplierName.getText()+"%'";
+       
+            pst=conn.prepareStatement(sql);
+          
+            rs=pst.executeQuery();
+            TableExpire.setModel(DbUtils.resultSetToTableModel(rs));
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+        finally{
+            try{
+                pst.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
+    }//GEN-LAST:event_ESSupplierNameKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ERefesh;
+    private javax.swing.JTextField ESBrandID;
+    private javax.swing.JTextField ESBrandName;
+    private javax.swing.JTextField ESItemID;
+    private javax.swing.JTextField ESItemName;
+    private javax.swing.JTextField ESSupplierID;
+    private javax.swing.JTextField ESSupplierName;
     private javax.swing.JButton ExpireSearch;
     private com.toedter.calendar.JDateChooser FromExpire;
     private javax.swing.JTable NearExpire;
+    private javax.swing.JTable TableExpire;
     private com.toedter.calendar.JDateChooser ToExpire;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -496,12 +764,5 @@ public class ExpireItem extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 }
