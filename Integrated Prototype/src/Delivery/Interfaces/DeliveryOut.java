@@ -1,11 +1,13 @@
 package Delivery.Interfaces;
 
-import Delivery.Model.DBConnection;
+//import Delivery.Model.DBConnection;
+import DBconnection.DBconnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -40,12 +42,18 @@ public class DeliveryOut extends javax.swing.JInternalFrame {
     
     public DeliveryOut() {
         initComponents();
-        conn = DBConnection.connect();
+        conn = DBconnect.connectDb();
+        
+        Date dd = new Date();
+        
+        scheduleDate.setSelectableDateRange(dd, null);
+        
         loadOrderDeliverTable();
-        loadDrivers();
-        loadVehicles();
+        loadPostponedTable();
         
         deliIdTxt.setEditable(false);
+        
+        
         
     }
 
@@ -60,6 +68,15 @@ public class DeliveryOut extends javax.swing.JInternalFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel10 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        reschedule_panel = new javax.swing.JPanel();
+        jLabel66 = new javax.swing.JLabel();
+        scheduleDate = new com.toedter.calendar.JDateChooser();
+        jLabel3 = new javax.swing.JLabel();
+        reschlBtn = new javax.swing.JButton();
+        deliIdTxt = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         orderDelivTable = new javax.swing.JTable();
         jPanel11 = new javax.swing.JPanel();
@@ -72,20 +89,87 @@ public class DeliveryOut extends javax.swing.JInternalFrame {
         dateRadioBtn = new javax.swing.JRadioButton();
         addrsRadioBtn = new javax.swing.JRadioButton();
         searchTxt = new javax.swing.JTextField();
-        reschedule_panel = new javax.swing.JPanel();
-        jLabel66 = new javax.swing.JLabel();
-        driverCombo = new javax.swing.JComboBox();
-        scheduleDate = new com.toedter.calendar.JDateChooser();
-        jLabel68 = new javax.swing.JLabel();
-        vehiCombo = new javax.swing.JComboBox();
-        jLabel70 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        reschlBtn = new javax.swing.JButton();
-        deliIdTxt = new javax.swing.JTextField();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        clearBtn = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        reschedTable = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        postponedTable = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel2.setBackground(new java.awt.Color(153, 153, 153));
+
+        jLabel4.setBackground(new java.awt.Color(153, 153, 153));
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("   Reschedule Deliveries");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel4)
+                .addGap(0, 1153, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        reschedule_panel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Reschedule", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 22))); // NOI18N
+
+        jLabel66.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel66.setText("Date");
+
+        scheduleDate.setDateFormatString("dd-MM-yyyy");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setText("Delivery ID");
+
+        reschlBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        reschlBtn.setText("Reschedule");
+        reschlBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reschlBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout reschedule_panelLayout = new javax.swing.GroupLayout(reschedule_panel);
+        reschedule_panel.setLayout(reschedule_panelLayout);
+        reschedule_panelLayout.setHorizontalGroup(
+            reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(reschedule_panelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel66))
+                .addGap(31, 31, 31)
+                .addGroup(reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(scheduleDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(deliIdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(51, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, reschedule_panelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(reschlBtn)
+                .addGap(20, 20, 20))
+        );
+        reschedule_panelLayout.setVerticalGroup(
+            reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, reschedule_panelLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(deliIdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel66)
+                    .addGroup(reschedule_panelLayout.createSequentialGroup()
+                        .addComponent(scheduleDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(51, 51, 51)
+                        .addComponent(reschlBtn)))
+                .addContainerGap())
+        );
 
         orderDelivTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -123,6 +207,8 @@ public class DeliveryOut extends javax.swing.JInternalFrame {
                 vehiRadioBtnActionPerformed(evt);
             }
         });
+
+        jDateChooser3.setDateFormatString("dd-MM-yyyy");
 
         buttonGroup1.add(driverRadioBtn);
         driverRadioBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -163,179 +249,162 @@ public class DeliveryOut extends javax.swing.JInternalFrame {
             }
         });
 
+        clearBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        clearBtn.setText("Clear");
+        clearBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel11Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGap(53, 53, 53)
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addrsRadioBtn)
-                    .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(driverRadioBtn))
-                .addGap(24, 24, 24)
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dateRadioBtn)
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jDateChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(vehiRadioBtn))
-                .addContainerGap(75, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(searchBtn)
-                .addGap(42, 42, 42))
+                .addContainerGap()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel11Layout.createSequentialGroup()
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addrsRadioBtn)
+                            .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(driverRadioBtn))
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(dateRadioBtn)
+                                    .addComponent(vehiRadioBtn)))
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(jDateChooser3, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)))
+                        .addGap(65, 65, 65))
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(searchBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(clearBtn)
+                        .addGap(40, 40, 40))))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(driverRadioBtn)
-                    .addComponent(vehiRadioBtn))
-                .addGap(18, 18, 18)
+                .addContainerGap(17, Short.MAX_VALUE)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addrsRadioBtn)
-                    .addComponent(dateRadioBtn))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jDateChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addComponent(searchBtn)
-                .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(80, 80, 80)
+                        .addComponent(jLabel2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(driverRadioBtn)
+                            .addComponent(vehiRadioBtn))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addrsRadioBtn)
+                            .addComponent(dateRadioBtn))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDateChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(clearBtn)
+                    .addComponent(searchBtn))
+                .addGap(13, 13, 13))
         );
 
-        reschedule_panel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Reschedule", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 22))); // NOI18N
-
-        jLabel66.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel66.setText("Date");
-
-        driverCombo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-
-        scheduleDate.setDateFormatString("dd-MM-yyyy");
-
-        jLabel68.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel68.setText("Driver");
-
-        vehiCombo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-
-        jLabel70.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel70.setText("Vehicle");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel3.setText("Delivery ID");
-
-        reschlBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        reschlBtn.setText("Reschedule");
-        reschlBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reschlBtnActionPerformed(evt);
+        reschedTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        reschedTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reschedTableMouseClicked(evt);
             }
         });
+        jScrollPane2.setViewportView(reschedTable);
 
-        javax.swing.GroupLayout reschedule_panelLayout = new javax.swing.GroupLayout(reschedule_panel);
-        reschedule_panel.setLayout(reschedule_panelLayout);
-        reschedule_panelLayout.setHorizontalGroup(
-            reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(reschedule_panelLayout.createSequentialGroup()
+        postponedTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        postponedTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                postponedTableMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(postponedTable);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel68)
-                    .addGroup(reschedule_panelLayout.createSequentialGroup()
-                        .addGroup(reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel66)
-                            .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(76, 76, 76)
-                        .addGroup(reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(driverCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(vehiCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(scheduleDate, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
-                            .addComponent(deliIdTxt))))
-                .addContainerGap(152, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, reschedule_panelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(reschlBtn)
-                .addGap(33, 33, 33))
-        );
-        reschedule_panelLayout.setVerticalGroup(
-            reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, reschedule_panelLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(deliIdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel68)
-                    .addComponent(driverCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel70)
-                    .addComponent(vehiCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(reschedule_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel66)
-                    .addComponent(scheduleDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
-                .addComponent(reschlBtn)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(reschedule_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
-
-        jPanel2.setBackground(new java.awt.Color(153, 153, 153));
-
-        jLabel4.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("   Delivery Out");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel4)
-                .addGap(0, 961, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(reschedule_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
-                        .addComponent(reschedule_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(104, 104, 104))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(reschedule_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(49, 49, 49)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(158, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -356,77 +425,6 @@ public class DeliveryOut extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void vehiRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehiRadioBtnActionPerformed
-        // TODO add your handling code here:
-        searchTxt.setText(null);
-    }//GEN-LAST:event_vehiRadioBtnActionPerformed
-
-    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
-        try {
-            // TODO add your handling code here:
-            String SQL = null;
-            if(driverRadioBtn.isSelected()){
-                SQL = "SELECT * FROM OrderDelivery WHERE driverId like '%"+searchTxt.getText()+"'";
-            }
-            else if(vehiRadioBtn.isSelected()){
-                SQL = "SELECT * FROM OrderDelivery WHERE vehiNo like '%"+searchTxt.getText()+"'";
-            }
-            else if(dateRadioBtn.isSelected()){
-                SQL = "SELECT * FROM OrderDetail WHERE delivDate like '%"+jDateChooser3.getDate().toString()+"'";
-            }
-            else if(addrsRadioBtn.isSelected()){
-                SQL = "SELECT * FROM OrderDelivery WHERE address like '%"+searchTxt.getText()+"'";
-            }
-            Statement stm = conn.createStatement();
-            ResultSet rs=stm.executeQuery(SQL);
-            orderDelivTable.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (SQLException ex) {
-            Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_searchBtnActionPerformed
-
-    private void orderDelivTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderDelivTableMouseClicked
-        // TODO add your handling code here:
-        int row = orderDelivTable.getSelectedRow();
-        DefaultTableModel model = (DefaultTableModel)orderDelivTable.getModel();
-        
-        String vehicle = orderDelivTable.getValueAt(row, 4).toString();
-        String did = orderDelivTable.getValueAt(row, 0).toString();
-        //Object date = orderDelivTable.getValueAt(row, 3);
-        String driv = orderDelivTable.getValueAt(row, 5).toString();
-        
-        vehiCombo.setSelectedItem(vehicle);
-        ((JTextField)scheduleDate.getDateEditor().getUiComponent()).setText(model.getValueAt(row,3).toString());
-        driverCombo.setSelectedItem(driv);
-        deliIdTxt.setText(did);
-        
-    }//GEN-LAST:event_orderDelivTableMouseClicked
-
-    private void reschlBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reschlBtnActionPerformed
-        try {
-            // TODO add your handling code here:
-            String did = deliIdTxt.getText();
-            String vehicle = vehiCombo.getSelectedItem().toString();
-            String driver = driverCombo.getSelectedItem().toString();
-//            String date = scheduleDate.getDate().toString();
-            String date =((JTextField)scheduleDate.getDateEditor().getUiComponent()).getText();
-            
-            String SQL = "UPDATE OrderDelivery SET delivDate ='"+date+"', vehiNo ='"+vehicle+"', driverId ='"+driver+"' WHERE delivId = '"+did+"'";
-            Statement stm = conn.createStatement();
-            int res = stm.executeUpdate(SQL);
-            
-            if (res > 0){
-                JOptionPane.showMessageDialog(this, "Delivery Updated");
-            }
-            else{
-                JOptionPane.showMessageDialog(this, "Update unsuccessful", "Error Message", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        loadOrderDeliverTable();
-    }//GEN-LAST:event_reschlBtnActionPerformed
-
     private void searchTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtKeyTyped
         // TODO add your handling code here:
         char c=evt.getKeyChar();
@@ -438,11 +436,6 @@ public class DeliveryOut extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_searchTxtKeyTyped
 
-    private void driverRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_driverRadioBtnActionPerformed
-        // TODO add your handling code here:
-        searchTxt.setText(null);
-    }//GEN-LAST:event_driverRadioBtnActionPerformed
-
     private void addrsRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addrsRadioBtnActionPerformed
         // TODO add your handling code here:
         searchTxt.setText(null);
@@ -453,67 +446,223 @@ public class DeliveryOut extends javax.swing.JInternalFrame {
         searchTxt.setText(null);
     }//GEN-LAST:event_dateRadioBtnActionPerformed
 
+    private void driverRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_driverRadioBtnActionPerformed
+        // TODO add your handling code here:
+        searchTxt.setText(null);
+    }//GEN-LAST:event_driverRadioBtnActionPerformed
+
+    private void vehiRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehiRadioBtnActionPerformed
+        // TODO add your handling code here:
+        searchTxt.setText(null);
+    }//GEN-LAST:event_vehiRadioBtnActionPerformed
+
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
+        Statement stm=null;
+        ResultSet rs=null;
+        try {
+            // TODO add your handling code here:
+            String SQL = null;
+            if(driverRadioBtn.isSelected()){
+                SQL = "SELECT * FROM ScheduledDelivery WHERE driver like '%"+searchTxt.getText()+"'";
+            }
+            else if(vehiRadioBtn.isSelected()){
+                SQL = "SELECT * FROM ScheduledDelivery WHERE vehicle like '%"+searchTxt.getText()+"'";
+            }
+            else if(dateRadioBtn.isSelected()){
+                SQL = "SELECT * FROM ScheduledDelivery WHERE date like '%"+jDateChooser3.getDate().toString()+"'";
+                searchTxt.setEditable(false);
+            }
+            else if(addrsRadioBtn.isSelected()){
+                SQL = "SELECT * FROM ScheduledDelivery WHERE address like '%"+searchTxt.getText()+"'";
+            }
+            stm = conn.createStatement();
+            rs=stm.executeQuery(SQL);
+            orderDelivTable.setModel(DbUtils.resultSetToTableModel(rs));
+        } catch (SQLException ex) {
+            Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_searchBtnActionPerformed
+
+    private void orderDelivTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderDelivTableMouseClicked
+        
+        int row = orderDelivTable.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel)orderDelivTable.getModel();
+        String did = orderDelivTable.getValueAt(row, 0).toString();
+        
+        ((JTextField)scheduleDate.getDateEditor().getUiComponent()).setText(model.getValueAt(row,5).toString());
+
+        deliIdTxt.setText(did);
+
+    }//GEN-LAST:event_orderDelivTableMouseClicked
+
+    private void reschlBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reschlBtnActionPerformed
+        if(deliIdTxt.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Delivery not selected", "Empty field",JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            try {
+                String did = deliIdTxt.getText();
+                updateTables(did);
+
+            } catch (SQLException ex) {
+                Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            loadOrderDeliverTable();
+        }
+    }//GEN-LAST:event_reschlBtnActionPerformed
+
+    private void reschedTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reschedTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reschedTableMouseClicked
+
+    private void postponedTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_postponedTableMouseClicked
+        int row = postponedTable.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel)postponedTable.getModel();
+
+        String id = postponedTable.getValueAt(row, 0).toString();
+        
+        try {
+            setTables(id);
+        } catch (SQLException ex) {
+            Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_postponedTableMouseClicked
+
+    private void clearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
+        // clear search bar
+        searchTxt.setText(null);
+    }//GEN-LAST:event_clearBtnActionPerformed
+
     public void loadOrderDeliverTable() {
+        
+        Statement stm=null;
+        ResultSet rs=null;
+
         try {
             //Load existing order delivery table
             
-            Statement stm=conn.createStatement();
-            String SQL="SELECT * FROM OrderDelivery";
-            ResultSet rs=stm.executeQuery(SQL);
+            stm=conn.createStatement();
+            String SQL="SELECT * FROM ScheduledDelivery";
+            rs=stm.executeQuery(SQL);
              
             orderDelivTable.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException ex) {
             Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
         }
+        finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
-    public void loadVehicles(){
-    
+    public void loadPostponedTable(){
+        Statement stm=null;
+        ResultSet rs=null;
         try {
-            String SQL = "Select vehiNo from Vehicle";
-            Statement stm = conn.createStatement();
-            ResultSet rs=stm.executeQuery(SQL);
-            while(rs.next()){
-                //add(rs.getString("id"));
-                vehiCombo.addItem(rs.getString("vehiNo"));
-            }
+            stm=conn.createStatement();
+            String SQL="SELECT ID FROM PostponedDelivery";
+            rs=stm.executeQuery(SQL);
+            
+            postponedTable.setModel(DbUtils.resultSetToTableModel(rs));
         } catch (SQLException ex) {
-            //Logger.getLogger(OrderDeliveryInt.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+finally{
+            if (stm != null){
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    
     }
     
-    public void loadDrivers(){
-    
-        try {
-            String SQL= "SELECT Name from Driver";
-            Statement stm = conn.createStatement();
-            ResultSet rs=stm.executeQuery(SQL);
-            while(rs.next()){
-                driverCombo.addItem(rs.getString("Name"));
-            }
-        } catch (SQLException ex) {
-            //Logger.getLogger(OrderDeliveryInt.class.getName()).log(Level.SEVERE, null, ex);
+    private void updateTables(String id) throws SQLException{
+        String SQL = null;
+        char cmp = id.charAt(0);
+        String date =((JTextField)scheduleDate.getDateEditor().getUiComponent()).getText();
+        if(cmp == 'O'){
+            SQL = "UPDATE OrderDelivery set delivDate = '"+date+"'";
         }
+        else if(cmp== 'S'){
+            SQL = "UPDATE SupplierDelivery set DelivDate = '"+date+"'";
+        }
+        else if(cmp == 'A'){
+            SQL = "UPDATE agencyDelivery set date = '"+date+"'";
+        }
+        
+        Statement stm = conn.createStatement();
+        stm.executeUpdate(SQL);
+    }
+    
+    private void setTables(String id) throws SQLException{
+    
+        String SQL = null;
+        char cmp = id.charAt(0);
+        if(cmp == 'O'){
+            SQL = "SELECT * FROM OrderDelivery WHERE orderDelivId = '"+id+"'";
+        }
+        else if(cmp== 'S'){
+            SQL = "SELECT * FROM SupplierDelivery WHERE supDelivId = '"+id+"'";
+        }
+        else if(cmp == 'A'){
+            SQL = "SELECT * FROM agencyDelivery WHERE agencyDelivID = '"+id+"'";
+        }
+        
+        Statement stm = conn.createStatement();
+        ResultSet rs=stm.executeQuery(SQL);
+            
+        reschedTable.setModel(DbUtils.resultSetToTableModel(rs));
     
     }
     
-//    private void validateSearchText(){
-//        
-//        String check = searchTxt.getText();
-//        if(vehiRadioBtn.isSelected()){
-//            String VALIDATOR = "^[a-zA-Z0-9]*$";//Java regEx
-//            Pattern VALIDATE =Pattern.compile(VALIDATOR, Pattern.CASE_INSENSITIVE);      
-//            Matcher  matcherVehicle = VALIDATE .matcher(check);
-//        }
-//        
-//    }
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton addrsRadioBtn;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton clearBtn;
     private javax.swing.JRadioButton dateRadioBtn;
     private javax.swing.JTextField deliIdTxt;
-    private javax.swing.JComboBox driverCombo;
     private javax.swing.JRadioButton driverRadioBtn;
     private com.toedter.calendar.JDateChooser jDateChooser3;
     private javax.swing.JLabel jLabel1;
@@ -521,19 +670,21 @@ public class DeliveryOut extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel66;
-    private javax.swing.JLabel jLabel68;
-    private javax.swing.JLabel jLabel70;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable orderDelivTable;
+    private javax.swing.JTable postponedTable;
+    private javax.swing.JTable reschedTable;
     private javax.swing.JPanel reschedule_panel;
     private javax.swing.JButton reschlBtn;
     private com.toedter.calendar.JDateChooser scheduleDate;
     private javax.swing.JButton searchBtn;
     private javax.swing.JTextField searchTxt;
-    private javax.swing.JComboBox vehiCombo;
     private javax.swing.JRadioButton vehiRadioBtn;
     // End of variables declaration//GEN-END:variables
 }

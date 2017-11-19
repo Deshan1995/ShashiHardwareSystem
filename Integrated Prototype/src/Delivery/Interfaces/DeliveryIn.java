@@ -5,7 +5,8 @@
  */
 package Delivery.Interfaces;
 
-import Delivery.Model.DBConnection;
+//import Delivery.Model.DBConnection;
+import DBconnection.DBconnect;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -45,17 +46,18 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
      */
     public DeliveryIn() {
         initComponents();
-        conn = DBConnection.connect();
+        conn = DBconnect.connectDb();
         loadSupplierTable();
         loadSupplierDeliveryTable();
-        loadDrivers();
-        loadVehicles();
+
         validateDeliveID();
         
         jTextArea1.setVisible(false);
         
         addrTxt.setEditable(false);
         distntTxt.setEditable(false);
+        delivIdTxt.setEditable(false);
+        supOrIdTxt.setEditable(false);
     }
 
     /**
@@ -68,7 +70,6 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jTextArea1 = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -86,20 +87,14 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
         supplierTable = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         supDelivTbl = new javax.swing.JTable();
+        jTextArea1 = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        vehiCombo = new javax.swing.JComboBox();
-        driverCombo = new javax.swing.JComboBox();
         addBtn = new javax.swing.JButton();
         editBtn = new javax.swing.JButton();
         deleBtn = new javax.swing.JButton();
         newBtn = new javax.swing.JButton();
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -233,24 +228,15 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(supDelivTbl);
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Schedule", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 22))); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("Date");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel6.setText("Vehicle");
-
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel7.setText("Driver");
-
         jDateChooser1.setDateFormatString("dd-MM-yyyy");
-
-        vehiCombo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                vehiComboActionPerformed(evt);
-            }
-        });
 
         addBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         addBtn.setText("Add");
@@ -291,22 +277,16 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(95, 95, 95)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel5)
-                        .addComponent(jLabel6)
-                        .addComponent(jLabel7))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(addBtn)
-                        .addGap(7, 7, 7)))
+                        .addComponent(jLabel5)
+                        .addGap(9, 9, 9))
+                    .addComponent(addBtn))
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(87, 87, 87)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(driverCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(vehiCombo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(94, 94, 94)
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
+                        .addGap(11, 11, 11)
                         .addComponent(editBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(deleBtn)
@@ -321,15 +301,7 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel5)
                     .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(vehiCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(driverCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
                     .addComponent(editBtn)
@@ -355,9 +327,9 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jTextArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(518, 518, 518)
+                    .addComponent(jTextArea1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(518, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -374,9 +346,9 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
                 .addContainerGap(174, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGap(325, 325, 325)
                     .addComponent(jTextArea1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addContainerGap(325, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -422,65 +394,77 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_addrTxtActionPerformed
 
-    private void vehiComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehiComboActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_vehiComboActionPerformed
-
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        try {
-            int res= addDelivery();
-            if(res>0){
-                JOptionPane.showMessageDialog(this, "Added Success");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DeliveryIn.class.getName()).log(Level.SEVERE, null, ex);
+        if((supOrIdTxt.getText().equals(""))||(distntTxt.getText().equals(""))){
+            JOptionPane.showMessageDialog(null, "Select a tuple", "Empty Fields", JOptionPane.ERROR_MESSAGE);
         }
-        loadSupplierDeliveryTable();
-        clear();
+        else{
+            try {
+                int res= addDelivery();
+                if(res>0){
+                    JOptionPane.showMessageDialog(this, "Added Success");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(DeliveryIn.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            loadSupplierDeliveryTable();
+            clear();
+        }
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         // TODO add your handling code here:
-        int value = JOptionPane.showConfirmDialog(null, "Do you want to save changes?");
-        
-        if(value == 0){
-            try {
-                //
-                String did = delivIdTxt.getText();
-                String oid = supOrIdTxt.getText();
-                double cost = Double.parseDouble(costTxt.getText());
-                String ddate = (((JTextField)jDateChooser1.getDateEditor().getUiComponent()).getText());
-                String vehi = vehiCombo.getSelectedItem().toString();
-                String driver = driverCombo.getSelectedItem().toString();
-                
-                String SQL = "Update SupplierDelivery SET DelivDate ='"+ddate+"',VehiNo ='"+vehi+"',Driver ='"+driver+"' WHERE DelivId = '"+did+"'";
-                Statement stm= conn.createStatement();
-                stm.executeUpdate(SQL);
-            } catch (SQLException ex) {
-                Logger.getLogger(DeliveryIn.class.getName()).log(Level.SEVERE, null, ex);
+        if(delivIdTxt.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Select a tuple", "Empty Fields", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            int value = JOptionPane.showConfirmDialog(null, "Do you want to save changes?");
+
+            if(value == 0){
+                try {
+                    //
+                    String did = delivIdTxt.getText();
+                    String oid = supOrIdTxt.getText();
+                    double cost = Double.parseDouble(costTxt.getText());
+                    String ddate = (((JTextField)jDateChooser1.getDateEditor().getUiComponent()).getText());
+
+                    String SQL = "Update SupplierDelivery SET DelivDate ='"+ddate+"' WHERE supDelivId = '"+did+"'";
+                    Statement stm= conn.createStatement();
+                    stm.executeUpdate(SQL);
+                } catch (SQLException ex) {
+                    Logger.getLogger(DeliveryIn.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                loadSupplierDeliveryTable();
             }
         }
     }//GEN-LAST:event_editBtnActionPerformed
 
     private void deleBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleBtnActionPerformed
-        // TODO add your handling code here:
-        int value = JOptionPane.showConfirmDialog(null, "Do you want to delete this entry?");
-        
-        if(value == 0){
-        
-            try {
-                String did= delivIdTxt.getText();
-                String oid = supOrIdTxt.getText();
-                
-                String SQL = "DELETE FROM SupplierDelivery where DelivId = '"+did+"' AND SupOrderId = '"+oid+"'";
-                Statement stm= conn.createStatement();
-                stm.executeUpdate(SQL);
-            } catch (SQLException ex) {
-                Logger.getLogger(Vehicle.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        // Delete a scheduled delivery
+        if(delivIdTxt.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Select a tuple", "Empty Fields", JOptionPane.ERROR_MESSAGE);
         }
-        loadSupplierDeliveryTable();  
-        clear();
+        else{
+            
+            int value = JOptionPane.showConfirmDialog(null, "Do you want to delete this entry?");
+
+            if(value == 0){
+
+                try {
+                    String did= delivIdTxt.getText();
+                    String oid = supOrIdTxt.getText();
+
+                    String SQL = "DELETE FROM SupplierDelivery where supDelivId = '"+did+"' AND SupOrderId = '"+oid+"'";
+                    Statement stm= conn.createStatement();
+                    stm.executeUpdate(SQL);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Vehicle.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            loadSupplierDeliveryTable();  
+            clear();
+        }
     }//GEN-LAST:event_deleBtnActionPerformed
 
     private void newBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newBtnActionPerformed
@@ -495,16 +479,14 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
                 
         String did = supDelivTbl.getValueAt(row, 0).toString();
         String sid = supDelivTbl.getValueAt(row, 1).toString();
-        String cost = supDelivTbl.getValueAt(row, 2).toString();        
-        String vehi = supDelivTbl.getValueAt(row, 4).toString();
-        String driver = supDelivTbl.getValueAt(row, 5).toString();
+        String cost = supDelivTbl.getValueAt(row, 2).toString();
+        String adrs = supDelivTbl.getValueAt(row, 4).toString();
         
         delivIdTxt.setText(did);
         supOrIdTxt.setText(sid);
         costTxt.setText(cost);
         ((JTextField)jDateChooser1.getDateEditor().getUiComponent()).setText(model.getValueAt(row,3).toString());
-        vehiCombo.setSelectedItem(vehi);
-        driverCombo.setSelectedItem(driver);
+        addrTxt.setText(adrs);
         
     }//GEN-LAST:event_supDelivTblMouseClicked
 
@@ -586,10 +568,11 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
         String oid = supOrIdTxt.getText();
         double cost = Double.parseDouble(costTxt.getText());
         String ddate = (((JTextField)jDateChooser1.getDateEditor().getUiComponent()).getText());
-        String vehi = vehiCombo.getSelectedItem().toString();
-        String driver = driverCombo.getSelectedItem().toString();
+        String adrs = addrTxt.getText();
+        //String vehi = vehiCombo.getSelectedItem().toString();
+        //String driver = driverCombo.getSelectedItem().toString();
         
-        String SQL="INSERT INTO SupplierDelivery VALUES ('"+did+"','"+oid+"','"+cost+"', '"+ddate+"','"+vehi+"','"+driver+"')";
+        String SQL="INSERT INTO SupplierDelivery VALUES ('"+did+"','"+oid+"','"+cost+"', '"+ddate+"','"+adrs+"')";
         Statement stm=conn.createStatement(); 
         int res = stm.executeUpdate(SQL);
         
@@ -613,55 +596,21 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
     
     private void clear(){
     
-        //delivIdTxt.setText(null);
         distntTxt.setText(null);
         supOrIdTxt.setText(null);
         addrTxt.setText(null);
         costTxt.setText(null);
         ((JTextField)jDateChooser1.getDateEditor().getUiComponent()).setText(null);
-        vehiCombo.setSelectedItem(null);
-        driverCombo.setSelectedItem(null);
-    
+        validateDeliveID();
     }
-    
-    public void loadVehicles(){
-    
-        try {
-            String SQL = "Select vehiNo from Vehicle";
-            Statement stm = conn.createStatement();
-            ResultSet rs=stm.executeQuery(SQL);
-            while(rs.next()){
-                //add(rs.getString("id"));
-                vehiCombo.addItem(rs.getString("vehiNo"));
-            }
-        } catch (SQLException ex) {
-            //Logger.getLogger(OrderDeliveryInt.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex);
-        }
-    }
-    
-    public void loadDrivers(){
-    
-        try {
-            String SQL= "SELECT Name from Driver";
-            Statement stm = conn.createStatement();
-            ResultSet rs=stm.executeQuery(SQL);
-            while(rs.next()){
-                driverCombo.addItem(rs.getString("Name"));
-            }
-        } catch (SQLException ex) {
-            //Logger.getLogger(OrderDeliveryInt.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex);
-        }
-    
-    }
+
     
     private void validateDeliveID(){
     
 
     ArrayList<String> list = new ArrayList<String>();
         try {
-            String sql = "SELECT DelivID as delID FROM SupplierDelivery";
+            String sql = "SELECT supDelivID as delID FROM SupplierDelivery";
             Statement stm= conn.createStatement();
             
             ResultSet rs = stm.executeQuery(sql);
@@ -692,7 +641,6 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
     private javax.swing.JButton deleBtn;
     private javax.swing.JTextField delivIdTxt;
     private javax.swing.JTextField distntTxt;
-    private javax.swing.JComboBox driverCombo;
     private javax.swing.JButton editBtn;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
@@ -700,8 +648,6 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -715,6 +661,5 @@ public class DeliveryIn extends javax.swing.JInternalFrame {
     private javax.swing.JTable supDelivTbl;
     private javax.swing.JTextField supOrIdTxt;
     private javax.swing.JTable supplierTable;
-    private javax.swing.JComboBox vehiCombo;
     // End of variables declaration//GEN-END:variables
 }

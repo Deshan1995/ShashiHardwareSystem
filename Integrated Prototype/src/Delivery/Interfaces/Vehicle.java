@@ -1,6 +1,7 @@
 package Delivery.Interfaces;
 
-import Delivery.Model.DBConnection;
+//import Delivery.Model.DBConnection;
+import DBconnection.DBconnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,7 +47,7 @@ public class Vehicle extends javax.swing.JInternalFrame {
      */
     public Vehicle() {
         initComponents();
-        conn = DBConnection.connect();
+        conn = DBconnect.connectDb();
         loadvehicleTable();
     }
     
@@ -72,6 +73,9 @@ public class Vehicle extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         veninum = new javax.swing.JTextField();
         typetxt = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        costTxt = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -140,6 +144,23 @@ public class Vehicle extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setText("Cost for Agencies");
+
+        costTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                costTxtKeyTyped(evt);
+            }
+        });
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton1.setText("Demo");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -148,38 +169,51 @@ public class Vehicle extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(133, 133, 133)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(veninum)
-                            .addComponent(typetxt, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(127, 127, 127)
                         .addComponent(addBtn)
                         .addGap(34, 34, 34)
                         .addComponent(editBtn)
                         .addGap(32, 32, 32)
-                        .addComponent(deleteBtn)))
-                .addContainerGap())
+                        .addComponent(deleteBtn)
+                        .addGap(27, 27, 27)
+                        .addComponent(jButton1))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(84, 84, 84)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(veninum)
+                            .addComponent(typetxt, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                            .addComponent(costTxt))))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(veninum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(typetxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(57, 57, 57)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addBtn)
-                    .addComponent(editBtn)
-                    .addComponent(deleteBtn))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(veninum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(typetxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(costTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(addBtn)
+                            .addComponent(editBtn)
+                            .addComponent(deleteBtn)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
                 .addContainerGap())
         );
 
@@ -209,10 +243,13 @@ public class Vehicle extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1034, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1034, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -220,8 +257,8 @@ public class Vehicle extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
         );
@@ -239,7 +276,7 @@ public class Vehicle extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 235, Short.MAX_VALUE))
+                .addGap(0, 251, Short.MAX_VALUE))
         );
 
         pack();
@@ -250,23 +287,42 @@ public class Vehicle extends javax.swing.JInternalFrame {
         
         String vehicleNo = veninum.getText();
         String type = typetxt.getText();
-        int cost = 0;
-        
-        try {
-
-            String query = "INSERT INTO Vehicle values( '" + vehicleNo + "', '" + type + "') ";
-            pst = conn.prepareStatement(query);
-            pst.execute();
-
-            JOptionPane.showMessageDialog(rootPane, "Sucessfully Inserted", "Login", JOptionPane.INFORMATION_MESSAGE);
-              
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, e);
+        double cost = Double.parseDouble(costTxt.getText());
+        if((veninum.getText().equals(""))||(type.equals(""))||(costTxt.getText().equals(""))){
+            JOptionPane.showMessageDialog(null, "No empty fields allowed", "Empty field",JOptionPane.ERROR_MESSAGE);
         }
-        
-        loadvehicleTable();  
-        clear();
-        
+        else{
+            try {
+
+                String query = "INSERT INTO Vehicle values( '" + vehicleNo + "', '" + type + "', 'Available', '"+cost+"') ";
+                pst = conn.prepareStatement(query);
+                pst.execute();
+
+                JOptionPane.showMessageDialog(rootPane, "Sucessfully Inserted", "Login", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane, e);
+            }
+
+            finally{
+                if (pst != null){
+                    try {
+                        pst.close();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                if (rs != null){
+                    try {
+                        rs.close();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+            loadvehicleTable();  
+            clear();
+        }
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void vehicleTblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_vehicleTblMouseClicked
@@ -275,67 +331,95 @@ public class Vehicle extends javax.swing.JInternalFrame {
         
         String num = vehicleTbl.getValueAt(row, 0).toString();
         String type = vehicleTbl.getValueAt(row, 1).toString();
+        String cost = vehicleTbl.getValueAt(row, 3).toString();
         
         veninum.setText(num);
         typetxt.setText(type);
+        costTxt.setText(cost);
     }//GEN-LAST:event_vehicleTblMouseClicked
 
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
-        // TODO add your handling code here:
-        int value = JOptionPane.showConfirmDialog(null, "Do you want to save changes?");
+        // edit details
+        if(veninum.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Vehicle not selected", "Empty field",JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+                        
+            int value = JOptionPane.showConfirmDialog(null, "Do you want to save changes?");
+            Statement stm = null;
         
-        if(value == 0){
-        
-            try {
-                String num= veninum.getText();
-                String type = typetxt.getText();
-                
-                String SQL = "Update Vehicle set vehiType ='"+type+"' where vehiNo = '"+num+"'";
-                Statement stm= conn.createStatement();
-                stm.executeUpdate(SQL);
-            } catch (SQLException ex) {
-                Logger.getLogger(Vehicle.class.getName()).log(Level.SEVERE, null, ex);
+            if(value == 0){
+
+                try {
+                    String num= veninum.getText();
+                    String type = typetxt.getText();
+                    double cost = Double.parseDouble(costTxt.getText());
+
+                    String SQL = "Update Vehicle set vehiType ='"+type+"', agencyCost ='"+cost+"' where vehiNo = '"+num+"'";
+                    stm= conn.createStatement();
+                    stm.executeUpdate(SQL);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Vehicle.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                finally{
+                    if (stm != null){
+                        try {
+                            stm.close();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+
             }
         
+            loadvehicleTable();  
+            clear();
         }
-        loadvehicleTable();  
-        clear();
     }//GEN-LAST:event_editBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        // TODO add your handling code here:
-        int value = JOptionPane.showConfirmDialog(null, "Do you want to delete this entry?");
-        
-        if(value == 0){
-        
-            try {
-                String num= veninum.getText();
-                String type = typetxt.getText();
-                
-                String SQL = "DELETE FROM Vehicle where vehiNo = '"+num+"'";
-                Statement stm= conn.createStatement();
-                stm.executeUpdate(SQL);
-            } catch (SQLException ex) {
-                Logger.getLogger(Vehicle.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        // Delete button
+        if(veninum.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Vehicle not selected", "Empty field",JOptionPane.ERROR_MESSAGE);
         }
-        loadvehicleTable();  
-        clear();
+        else{
+        int value = JOptionPane.showConfirmDialog(null, "Do you want to delete this entry?");
+            Statement stm = null;
+            if(value == 0){
+
+                try {
+                    String num= veninum.getText();
+                    String type = typetxt.getText();
+
+                    String SQL = "DELETE FROM Vehicle where vehiNo = '"+num+"'";
+                    stm= conn.createStatement();
+                    stm.executeUpdate(SQL);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Vehicle.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                finally{
+                    if (stm != null){
+                        try {
+                            stm.close();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+            loadvehicleTable();  
+            clear();
+        }
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void veninumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_veninumKeyTyped
         // TODO add your handling code here:
-//        char c=evt.getKeyChar();
-//
-//        if((!Character.isLetter(c))&&(!Character.isDigit(c)))
-//        {
-//            evt.consume();
-//            JOptionPane.showMessageDialog(null,"Invalid Input");
-//        }
+       
     }//GEN-LAST:event_veninumKeyTyped
 
     private void typetxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_typetxtKeyTyped
-        // TODO add your handling code here:
+        // Do not allow numeric values
         char c=evt.getKeyChar();
 
         if(!Character.isLetter(c))
@@ -346,35 +430,76 @@ public class Vehicle extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_typetxtKeyTyped
 
     private void veninumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_veninumActionPerformed
-        // TODO add your handling code here:
+        // only allow valid vehicle numbers
         validateVehicleNo();
     }//GEN-LAST:event_veninumActionPerformed
+
+    private void costTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_costTxtKeyTyped
+        // Do not allow characters
+        char c=evt.getKeyChar();
+
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Invalid Input");
+        }
+    }//GEN-LAST:event_costTxtKeyTyped
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+        String vehicleNo = "AE7588";
+        String type = "Lorry";
+        double cost = 8000;
+        
+        try {
+
+            String query = "INSERT INTO Vehicle values( '" + vehicleNo + "', '" + type + "', 'Available', '"+cost+"') ";
+            pst = conn.prepareStatement(query);
+            pst.execute();
+
+            JOptionPane.showMessageDialog(rootPane, "Sucessfully Inserted", "Login", JOptionPane.INFORMATION_MESSAGE);
+              
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, e);
+        }
+        
+        finally{
+            if (pst != null){
+                try {
+                    pst.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DeliveryOut.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        loadvehicleTable();  
+        clear();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public void clear(){
     
         veninum.setText(null);
         typetxt.setText(null);
+        costTxt.setText(null);
     
     }
     
     private void validateVehicleNo(){
     
         String num = veninum.getText();
-//        int len = num.length();
-//        char[] arr = new char[10];
-//        num.getChars(0, len-4, arr, 0);
         char [] arr = num.toCharArray();      
         int len = arr.length;
         for (int i =0; i <len; i++) {
             char temp = arr[i];
             boolean a;
-//            if(!Character.isDigit(temp)){
-//                JOptionPane.showMessageDialog(null,"Invalid Vehicle Number");
-//            }
-//            if(i<2){
-//                a = Character.isDigit(temp);
-//                
-//            }
             a = Character.isDigit(temp);
             if((i<2)&&(a==true)){
                 JOptionPane.showMessageDialog(null,"Invalid Vehicle Number");
@@ -388,10 +513,13 @@ public class Vehicle extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
+    private javax.swing.JTextField costTxt;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JButton editBtn;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

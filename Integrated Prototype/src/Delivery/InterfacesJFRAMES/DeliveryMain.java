@@ -1,9 +1,10 @@
 package Delivery.InterfacesJFRAMES;
 
+import DBconnection.DBconnect;
 import Delivery.Interfaces.DeliveryIn;
 import Delivery.Interfaces.DeliveryOut;
 import Delivery.Interfaces.Vehicle;
-import Delivery.Model.DBConnection;
+//import Delivery.Model.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +34,7 @@ public class DeliveryMain extends javax.swing.JFrame {
     public DeliveryMain() {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
-        conn = DBConnection.connect();
+        conn = DBconnect.connectDb();
     }
 
     /**
@@ -59,7 +60,7 @@ public class DeliveryMain extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Delivery", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 14))); // NOI18N
 
         delivOutBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        delivOutBtn.setText("Delivery Out");
+        delivOutBtn.setText("Reschedule");
         delivOutBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 delivOutBtnActionPerformed(evt);
