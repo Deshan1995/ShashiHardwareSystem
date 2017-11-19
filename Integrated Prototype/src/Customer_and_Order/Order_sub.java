@@ -36,6 +36,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -3050,6 +3058,16 @@ public class Order_sub extends javax.swing.JInternalFrame {
                 cus_update.setString(2,this.cusID);
                 cus_update.execute();
             }
+            
+             String report = ".\\Invoice.jrxml";
+                        JasperDesign jd = JRXmlLoader.load(report);
+                        String sql1 = "SELECT itemNo, itemID,description,qty,unitPrice,unitDiscount,netItemPrice from ItemsBought where orderID='" + orderID+ "'";
+                        JRDesignQuery n = new JRDesignQuery();
+                        n.setText(sql1);
+                        jd.setQuery(n);
+                        JasperReport jr = JasperCompileManager.compileReport(jd);
+                        JasperPrint jp = JasperFillManager.fillReport(jr, null, conn);
+                        JasperViewer.viewReport(jp, false);
 
             
         }catch(Exception e){
@@ -3527,14 +3545,15 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
     private void calbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calbuttonActionPerformed
         //Calculate delivery charges
-        if(totalTxt.getText() != null){
+        if(totalTxt.getText().equals("")){
+            JOptionPane.showMessageDialog(rootPane, "Empty fields are not allowed", "Empty Fields", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            
             showCheckBoxes();
             double price = calculateTotal(Double.parseDouble(distanceTxt.getText()));
             totalTxt.setText(""+price);
             totalTxt.setEditable(false);
-        }
-        else{
-            JOptionPane.showMessageDialog(rootPane, "Empty fields are not allowed", "Empty Fields", ERROR);
         }
     }//GEN-LAST:event_calbuttonActionPerformed
 
