@@ -885,6 +885,15 @@ public class pettycash extends javax.swing.JInternalFrame {
       {
       
       }
+        finally{
+            try{
+                pst.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
          } 
         
         
@@ -939,6 +948,7 @@ public class pettycash extends javax.swing.JInternalFrame {
       {
       
       }
+        
           }
         
     }//GEN-LAST:event_searchActionPerformed

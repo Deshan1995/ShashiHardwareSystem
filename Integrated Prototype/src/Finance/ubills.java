@@ -983,6 +983,15 @@ public class ubills extends javax.swing.JInternalFrame {
       {
       JOptionPane.showMessageDialog(null, e);
       }
+        finally{
+            try{
+                pst.close();
+                rs.close();
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,e);
+            }
+        }
          } 
     }//GEN-LAST:event_total1ActionPerformed
 
