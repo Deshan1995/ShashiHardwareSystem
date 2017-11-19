@@ -4029,8 +4029,7 @@ public class Order_sub extends javax.swing.JInternalFrame {
         txt_OrderID_history.setText("");
         txt_cusID_history.setText("");
         loadHistoryTable();
-        date_start.setDate(null);
-        date_end.setDate(null);
+        
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
