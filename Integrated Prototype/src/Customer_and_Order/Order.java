@@ -19,8 +19,8 @@ public class Order extends javax.swing.JFrame {
     
   //  Connection db;
     
-    public static Order_sub x = null;
-    public static customer_sub y =null;
+    private static Order_sub x = null;
+    private static customer_sub y =null;
     
     public Order() {
         initComponents();
@@ -51,7 +51,7 @@ public class Order extends javax.swing.JFrame {
         
     }
     
-    public static void callAddCusForm(){
+    public static void callCusAddCusForm(){
         
         x.setVisible(false);
         
@@ -60,7 +60,7 @@ public class Order extends javax.swing.JFrame {
         
        
         y.btn_assignNewCus.setVisible(true);
-        y.btn_assignLastCus.setVisible(true);
+        //y.btn_assignLastCus.setVisible(true);
         y.btn_backToOrder1.setVisible(true);
         y.btn_backToOrder2.setVisible(true);
         
@@ -71,7 +71,7 @@ public class Order extends javax.swing.JFrame {
         }
         
     }
-    public static void callAddCusSearchForm(){
+    public static void callCusSearchForm(){
         
               
         
@@ -82,7 +82,7 @@ public class Order extends javax.swing.JFrame {
         
         
         y.btn_assignNewCus.setVisible(true);
-        y.btn_assignLastCus.setVisible(true);
+        
         y.btn_backToOrder1.setVisible(true);
         y.btn_backToOrder2.setVisible(true);
         
@@ -106,8 +106,11 @@ public class Order extends javax.swing.JFrame {
         jDesktopPane1.add(x).setVisible(true);
     }
     
-    static void assignCustomer(String text) {
-        x.txt_cusID.setText(text);
+    static void assignCustomer(String id,String name) {
+        x.txt_cusID.setText(id);
+        x.btn_assignCus.setEnabled(true);
+        //x.btn_assignCus.doClick();
+        x.txt_cusName.setText(name);
         x.btn_assignCus.doClick();
     }
     
