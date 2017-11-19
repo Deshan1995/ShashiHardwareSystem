@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 import DBconnection.DBconnect;
+import java.util.Date;
 
 /**
  *
@@ -25,6 +26,10 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
     
     Connection conn = null;
     PreparedStatement pst = null;
+    PreparedStatement pst1 = null;
+    PreparedStatement pst2 = null;
+    PreparedStatement pst3 = null;
+    PreparedStatement pst4 = null;
     ResultSet rs = null;
     Statement s = null;
         
@@ -34,8 +39,12 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         
         
         initComponents();
+//        
+        Date ds = new Date();
         
+        JDCdate.setDate(ds);
         
+        generateID();
         
         LBLpolineno.setVisible(false);
                
@@ -71,9 +80,9 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             //Clear whole invoice
         
         clearItem();
-        CMBpaymentMethod.setSelectedIndex(0);
-        TXTPaymentAmount.setText("");
-        TXTcreditbalance.setText("");
+//        CMBpaymentMethod.setSelectedIndex(0);
+//        TXTPaymentAmount.setText("");
+//        TXTcreditbalance.setText("");
         TXTstoreID.setText("");
         TXTinvoiceNo.setText("");
         TXTphone.setText("");
@@ -86,7 +95,60 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         generateID();
      }
      
-     
+     public void updateCreditBalance(){
+     String invoice = TXTinvoiceNo.getText();
+       String stid = TXTstoreID.getText();
+   try{
+       String sql = "SELECT creditAmount from store Where id= '"+ stid +"'";
+      pst=conn.prepareStatement(sql);
+      
+       rs = pst.executeQuery();
+//       
+        String creditbal = rs.getString("creditAmount");
+        
+        LBLcreditBal.setText(creditbal);
+       
+       double cAmount = Double.parseDouble(LBLcreditBal.getText());
+       
+       double total = Double.parseDouble(TXTtotal.getText());
+       
+      
+       
+       cAmount=cAmount+total;
+       
+       String credAmount = Double.toString(cAmount);
+       
+     //  TXTcreditbalance.setText(credAmount);
+       
+       String sql1 = "Update store set creditAmount='"+ credAmount +"' Where id='"+ stid +"'"
+               + " ";
+       pst1=conn.prepareStatement(sql1);
+       pst1.execute();
+       
+   }   
+   catch(Exception e){
+       System.out.println(e);
+   }
+   
+    finally{
+        
+            try{
+            
+                pst1.close();
+                                
+            
+            }
+            
+            catch(Exception e){
+        
+                System.out.println(e);
+        
+        }
+        
+        }
+   
+   
+}   
     
     
      
@@ -108,7 +170,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         }
         
         catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         
         finally{
@@ -122,7 +184,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             
             catch(Exception e){
             
-                System.out.println(e);
+                e.printStackTrace();
             
             }
         
@@ -152,12 +214,12 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             
             double currentDiscountAmount = (amount * rate/100.0)*quantity;
                         
-            TXTdiscount.setText(Double.toString(previousDiscountAmount + currentDiscountAmount));
+            //TXTdiscount.setText(Double.toString(previousDiscountAmount + currentDiscountAmount));
            
         }
         
         catch (Exception e) {
-            System.out.println("kk");
+            System.out.println(e);
         }
         
         finally{
@@ -171,7 +233,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             
             catch(Exception e){
             
-                System.out.println("ll");
+                System.out.println(e);
             
             }
         
@@ -199,7 +261,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         
         catch(Exception e){
         
-            System.out.println(e);
+            e.printStackTrace();
         
         }
             
@@ -215,8 +277,8 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             
             catch(Exception e){
         
-                System.out.println(e);
-        
+                e.printStackTrace();
+                        
         }
         
         }
@@ -264,14 +326,15 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         catch (Exception e) {
             
             System.out.println(e);
+                    
         
         }
         
         finally{
         
             try{
-            
-                rs.close();
+                s.close();
+//                rs.close();
                 
             
             }
@@ -279,7 +342,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             catch(Exception e){
         
                 System.out.println(e);
-        
+                
         }
         
         }
@@ -343,16 +406,6 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         TXTtotal = new javax.swing.JTextField();
         BTNsaveNew = new javax.swing.JButton();
         BTNclear = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel24 = new javax.swing.JLabel();
-        CMBpaymentMethod = new javax.swing.JComboBox();
-        jLabel25 = new javax.swing.JLabel();
-        TXTPaymentAmount = new javax.swing.JTextField();
-        jLabel27 = new javax.swing.JLabel();
-        TXTcreditbalance = new javax.swing.JTextField();
-        BTNpayment = new javax.swing.JButton();
-        jLabel30 = new javax.swing.JLabel();
-        TXTbalance = new javax.swing.JTextField();
         TXTstoreID = new javax.swing.JTextField();
         jLabel28 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -360,6 +413,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         TXTstoreName = new javax.swing.JTextField();
         LBLpolineno = new javax.swing.JLabel();
         JDCdate = new com.toedter.calendar.JDateChooser();
+        LBLcreditBal = new javax.swing.JLabel();
 
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -517,7 +571,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -534,21 +588,24 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                         .addComponent(BTNdelete, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
                             .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(TXTdescription, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-                                    .addComponent(TXTitemCode)
-                                    .addComponent(TXTquantity)))
+                                .addComponent(TXTitemCode, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addComponent(TXTitemdiscount)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(TXTitemdiscount))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(TXTquantity))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(TXTdescription, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -557,11 +614,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
                     .addComponent(TXTitemCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel18)
-                    .addComponent(TXTquantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
                     .addComponent(TXTdescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -571,18 +624,22 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                     .addComponent(TXTpriceEach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel18)
+                    .addComponent(TXTquantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
                     .addComponent(TXTitemdiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel26)
                     .addComponent(TXTamount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
+                .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BTNdelete)
                     .addComponent(BTNupdate)
                     .addComponent(BTNadd))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         jSeparator1.setBackground(new java.awt.Color(153, 153, 153));
@@ -745,107 +802,6 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             }
         });
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Payment", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
-
-        jLabel24.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel24.setText("Payment Method    :");
-
-        CMBpaymentMethod.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cash", "Cheque", "Credit" }));
-        CMBpaymentMethod.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CMBpaymentMethodActionPerformed(evt);
-            }
-        });
-
-        jLabel25.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel25.setText("Amount                   :");
-
-        TXTPaymentAmount.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTPaymentAmountActionPerformed(evt);
-            }
-        });
-
-        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel27.setText("Credit Balance        :");
-
-        TXTcreditbalance.setEditable(false);
-        TXTcreditbalance.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTcreditbalanceActionPerformed(evt);
-            }
-        });
-
-        BTNpayment.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        BTNpayment.setText("Pay");
-        BTNpayment.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BTNpaymentActionPerformed(evt);
-            }
-        });
-
-        jLabel30.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel30.setText("Balance                   :");
-
-        TXTbalance.setEditable(false);
-        TXTbalance.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TXTbalanceActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(127, 127, 127)
-                .addComponent(BTNpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))
-                            .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)))
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TXTbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CMBpaymentMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TXTPaymentAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TXTcreditbalance, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel24)
-                    .addComponent(CMBpaymentMethod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel25)
-                    .addComponent(TXTPaymentAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel27)
-                    .addComponent(TXTcreditbalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TXTbalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel30))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(BTNpayment)
-                .addContainerGap())
-        );
-
         TXTstoreID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TXTstoreIDActionPerformed(evt);
@@ -887,7 +843,8 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                                 .addGap(25, 25, 25)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(640, 640, 640)
+                                        .addComponent(LBLcreditBal, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -996,17 +953,18 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(BTNsaveNew)
-                            .addComponent(BTNclear)))
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 332, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addComponent(LBLcreditBal, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(BTNsaveNew)
+                    .addComponent(BTNclear))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 360, Short.MAX_VALUE)
                 .addComponent(LBLpolineno, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(225, Short.MAX_VALUE))
+                .addContainerGap(229, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1063,7 +1021,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             }
 
             catch(Exception e){
-                    System.out.println(e);
+                    e.printStackTrace();
             }
             
             finally{
@@ -1077,7 +1035,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             
             catch(Exception e){
         
-                System.out.println(e);
+                e.printStackTrace();
         
         }
         
@@ -1130,7 +1088,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
 
             catch(Exception e)
             {
-                    System.out.println(e);
+                    e.printStackTrace();
             }
             
             finally{
@@ -1144,7 +1102,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             
             catch(Exception e){
         
-                System.out.println(e);
+                e.printStackTrace();
         
         }
         
@@ -1235,7 +1193,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         catch(Exception e) 
         {
             
-            System.out.println(e);
+            e.printStackTrace();
 
         }
          
@@ -1250,7 +1208,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             
             catch(Exception e){
         
-                System.out.println(e);
+                e.printStackTrace();
         
         }
         
@@ -1306,7 +1264,7 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             
             catch(Exception e){
         
-                System.out.println(e);
+                e.printStackTrace();
         
         }
         
@@ -1358,107 +1316,6 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         
         
     }//GEN-LAST:event_TXTquantityActionPerformed
-
-    private void TXTPaymentAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTPaymentAmountActionPerformed
-        
-        String storename = TXTstoreName.getText();
-        String storeid = TXTstoreID.getText();
-        String paymentmethod = CMBpaymentMethod.getSelectedItem().toString();
-        double amountpaid = Double.parseDouble(TXTPaymentAmount.getText());
-        double total = Double.parseDouble(TXTtotal.getText());
-        double balance = 0;
-        double creditbalance = 0;
-        double temp;
-        
-        
-        if(paymentmethod == "Cash" || paymentmethod == "Cheque"){
-        
-            if(amountpaid > total){
-            
-                balance = amountpaid - total;
-                             
-            }
-            
-            else if(amountpaid < total){
-            
-                creditbalance = total - amountpaid;
-                
-            }
-            
-            TXTbalance.setText(Double.toString(balance));
-            TXTcreditbalance.setText(Double.toString(creditbalance));
-            
-        }
-        
-        else if(paymentmethod == "Credit"){
-        
-            String sql = "SELECT creditAmount FROM store WHERE id = '"+ storeid +"'";
-            String q = "INSERT INTO store (creditAmount) VALUES ('"+ creditbalance +"') WHERE id = '"+ storeid +"'";
-            
-            
-            try {
-                pst = conn.prepareStatement(sql);
-                rs = pst.executeQuery();
-                
-                if(!rs.next()){
-                
-                    pst = conn.prepareStatement(q);
-                    rs = pst.executeQuery();
-                
-                }
-                
-                else{
-                
-                    String credit = rs.getString("creditAmount");
-                                        
-                    int y = JOptionPane.showConfirmDialog(null,storename+" already has a credit amount of "+ credit + ". Do you want to proceed with this transaction?");
-
-                    if(y==0)
-                    {
-                        temp = (Double.parseDouble(credit)) + creditbalance;
-                        
-                        String a = "INSERT INTO store (creditAmount) VALUES ('"+ temp +"') WHERE id = '"+ storeid +"'";
-                        
-                        pst = conn.prepareStatement(a);
-                        pst.execute();
-                
-                    }
-
-            
-                
-                }
-                
-            }
-            
-            catch (Exception e) {
-                System.out.println(e);
-            }
-            
-            finally{
-        
-            try{
-            
-                pst.close();
-                rs.close();
-                
-            
-            }
-            
-            catch(Exception e){
-        
-                System.out.println(e);
-        
-        }
-        
-        }
-        
-        }
-        
-    }//GEN-LAST:event_TXTPaymentAmountActionPerformed
-
-    private void TXTcreditbalanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTcreditbalanceActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TXTcreditbalanceActionPerformed
 
     private void TXTinvoiceNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTinvoiceNoActionPerformed
         // TODO add your handling code here:
@@ -1532,36 +1389,90 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
 
     private void BTNsaveNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNsaveNewActionPerformed
         
-        String itemcode = TXTitemCode.getText();
+        double total = Double.parseDouble(TXTtotal.getText());
+        //String itemcode = TXTitemCode.getText();
         String invoiceno = TXTinvoiceNo.getText();
-        String query = "INSERT INTO sales (invoiceno,itemcode,description,priceeach,quantity,amount) SELECT invoiceno,itemcode,description,priceeach,quantity,amount FROM invoice";
-        String date = "";
+        //System.out.println("kk");
+        String deliverto = TXTAdeliverTo.getText();
+        String discount = TXTdiscount.getText();
+        String insubtotal = TXTsubtotal.getText();
+        
+        System.out.println(total);
+        System.out.println(invoiceno);
+        
+//        
+        String date = (JDCdate.getDate()).toString();
+        double credBal = 0.0;
+        double temp = Double.parseDouble(TXTtotal.getText());
+        String stid = TXTstoreID.getText();
+        
+        System.out.println(date);
+        System.out.println(stid);
+        System.out.println(temp);
+        
+        updateCreditBalance();
         
         
         try
         {
-            
+            String query = "INSERT INTO sales (invoiceno,itemcode,description,priceeach,quantity,amount) SELECT invoiceno,itemcode,description,priceeach,quantity,amount FROM invoice";
                 pst = conn.prepareStatement(query);
                 pst.execute();
                 
-                String sql = "INSERT INTO (invoiceno,storeid,date,deliverto,subtotal,discounts,total) VALUES ('"+ TXTinvoiceNo.getText() +"','"+ TXTstoreID.getText() +"','"+ date +"','"+ TXTAdeliverTo.getText()+"',"+ TXTsubtotal.getText() +"',"+ TXTdiscount.getText() +"',"+ TXTtotal.getText() +"') ";
+            //Clear the Temporary Invoice Table
+                String q = "DELETE FROM invoice";
+                 pst3 = conn.prepareStatement(q);
+                 pst3.execute();
                 
                  //load Table
                 tableLoad();
                 
-                //Clear the Temporary Invoice Table
-                String q = "DELETE FROM invoice WHERE invoiceno = '"+ invoiceno +"' ";
-                pst = conn.prepareStatement(sql);
-                pst.execute();
+                String sql = "INSERT INTO invoiceSummary(invoiceno,storeid,date,deliverto,subtotal,discounts,total) VALUES(?,?,?,?,?,?,?) ";
                 
-                //clear the fields
-                clearItem();
+                pst1.setString(1,TXTinvoiceNo.getText());
+                pst1.setString(2,TXTstoreID.getText());
+                pst1.setString(3,(JDCdate.getDate()).toString());
+                pst1.setString(4,TXTAdeliverTo.getText());
+                pst1.setString(5,TXTsubtotal.getText());
+                pst1.setString(6,TXTdiscount.getText());
+                pst1.setString(7,TXTtotal.getText());
+                pst1 = conn.prepareStatement(sql);
+                pst1.execute();
+              
+                System.out.println("ll");
+                String query1 = "SELECT s.creditAmount FROM store s, invoiceSummary i WHERE i.storeid = s.id ";
+ 
+                pst2 = conn.prepareStatement(query1);
+                rs = pst2.executeQuery();
+
+                System.out.println("kk");
+                
+                while(rs.next()) {
+ System.out.println("mm");
+                    credBal = Double.parseDouble(rs.getString("creditAmount"));
+//                  LBLcreditBal.setText(Double.toString(credBal));
+//
+                    System.out.println("******");
+                    System.out.println(credBal);
+                    
+//                  credBal = Double.parseDouble(LBLcreditBal.getText());
+                    credBal = credBal + temp;
+                    System.out.println("yy");
+                    
+                    String query2 = "UPDATE store SET creditAmount='"+ credBal +"' WHERE id  = '"+ stid +"'";
+                    //String query2 = "INSERT INTO store (creditAmount) VALUES ('"+ credBal +"') WHERE id = '"+ stid +"'";
+
+                    pst4 = conn.prepareStatement(query2);
+                    pst4.execute();
+                
+                
         }
+    }
 
         catch(Exception e)
         {
 
-            System.out.println(e);
+            e.printStackTrace();
 
         }
         
@@ -1570,17 +1481,27 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             try{
             
                 pst.close();
-               
-            
+                pst1.close();
+                pst2.close();
+                pst3.close();
+                pst4.close();
+                rs.close();
             }
             
             catch(Exception e){
         
                 System.out.println(e);
-        
         }
         
         }
+        
+        
+        
+        //clear the fields
+        clearAll();
+        
+        
+        
         
     }//GEN-LAST:event_BTNsaveNewActionPerformed
 
@@ -1697,55 +1618,14 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_TXTstoreNameActionPerformed
 
-    private void CMBpaymentMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CMBpaymentMethodActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CMBpaymentMethodActionPerformed
-
     private void TXTstoreNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTstoreNameKeyTyped
         
         
         
     }//GEN-LAST:event_TXTstoreNameKeyTyped
 
-    private void BTNpaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNpaymentActionPerformed
-        
-        int paymentmethod = CMBpaymentMethod.getSelectedIndex();
-        String amountpaid = TXTPaymentAmount.getText();
-        double total = Double.parseDouble(TXTtotal.getText());
-        
-        if(paymentmethod == 0){
-        
-            
-            
-            
-            jPanel3.removeAll();
-            ProcessPayment pp = new ProcessPayment();
-            jPanel3.add(pp).setVisible(true);
-        
-        }
-        
-        else if (paymentmethod == 1){
-        
-            
-        
-        }
-        
-        else{
-        
-            
-        
-        }
-        
-        
-        
-    }//GEN-LAST:event_BTNpaymentActionPerformed
-
-    private void TXTbalanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TXTbalanceActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TXTbalanceActionPerformed
-
     private void TXTquantityKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTquantityKeyTyped
-       /* /String itemcode = TXTitemCode.getText();
+       /*String itemcode = TXTitemCode.getText();
         float quantity = Float.parseFloat(TXTquantity.getText());
         float quantityleft;
         
@@ -1768,7 +1648,32 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
             
             System.out.println(e);
         
+        }
+        
+        finally{
+        
+            try{
+            
+                pst.close();
+                rs.close();
+            
+            }
+            
+            catch(Exception e){
+            
+                System.out.println(e);
+            
+            }
+        
         }*/
+        
+        char c=evt.getKeyChar();
+
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Numbers");
+        }
     }//GEN-LAST:event_TXTquantityKeyTyped
 
     private void TXTdiscountKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTdiscountKeyTyped
@@ -1799,18 +1704,14 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
     private javax.swing.JButton BTNclear;
     private javax.swing.JButton BTNcopy;
     private javax.swing.JButton BTNdelete;
-    private javax.swing.JButton BTNpayment;
     private javax.swing.JButton BTNsaveNew;
     private javax.swing.JButton BTNupdate;
-    private javax.swing.JComboBox CMBpaymentMethod;
     private com.toedter.calendar.JDateChooser JDCdate;
+    private javax.swing.JLabel LBLcreditBal;
     private javax.swing.JLabel LBLpolineno;
     private javax.swing.JTextArea TXTAbillTo;
     private javax.swing.JTextArea TXTAdeliverTo;
-    private javax.swing.JTextField TXTPaymentAmount;
     private javax.swing.JTextField TXTamount;
-    private javax.swing.JTextField TXTbalance;
-    private javax.swing.JTextField TXTcreditbalance;
     private javax.swing.JTextField TXTdescription;
     private javax.swing.JTextField TXTdiscount;
     private javax.swing.JTextField TXTinvoiceNo;
@@ -1838,21 +1739,16 @@ public class ProcessOrder extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

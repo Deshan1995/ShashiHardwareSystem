@@ -85,6 +85,12 @@ public class StoreManagement extends javax.swing.JInternalFrame {
         }
     }
     
+    public void validate(){
+    
+        
+    
+    }
+    
      public void clear(){
     
             //CLEAR ALL TEXT FIELDS
@@ -171,6 +177,7 @@ public class StoreManagement extends javax.swing.JInternalFrame {
         BTNupdate = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        BTNupdate1 = new javax.swing.JButton();
 
         jPanel1.setForeground(new java.awt.Color(102, 51, 255));
 
@@ -391,6 +398,14 @@ public class StoreManagement extends javax.swing.JInternalFrame {
             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
         );
 
+        BTNupdate1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        BTNupdate1.setText("Clear");
+        BTNupdate1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BTNupdate1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -400,21 +415,23 @@ public class StoreManagement extends javax.swing.JInternalFrame {
                 .addContainerGap(227, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(27, 27, 27)
-                                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(BTNinsert, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(68, 68, 68)
-                                .addComponent(BTNdelete, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(90, 90, 90)
-                                .addComponent(BTNupdate, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(297, 297, 297))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41))))
+                        .addGap(41, 41, 41))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(297, 297, 297))))
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                .addGap(399, 399, 399)
+                .addComponent(BTNinsert, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68)
+                .addComponent(BTNdelete, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(81, 81, 81)
+                .addComponent(BTNupdate, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
+                .addComponent(BTNupdate1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -424,14 +441,15 @@ public class StoreManagement extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
+                .addGap(39, 39, 39)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BTNinsert, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BTNdelete, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BTNupdate, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
+                    .addComponent(BTNupdate, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BTNupdate1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(600, Short.MAX_VALUE))
+                .addContainerGap(604, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -449,7 +467,7 @@ public class StoreManagement extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BTNinsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNinsertActionPerformed
-        if(TXTid.getText().equals("") || TXTname.getText().equals("") || TXTAaddress.getText().equals("") || TXTcon.getText().equals("") || buttonGroup1.isSelected(null))
+        if(TXTname.getText().equals("") || TXTAaddress.getText().equals("") || TXTcon.getText().equals("") || buttonGroup1.isSelected(null)) 
         {
 
             JOptionPane.showMessageDialog(null,"All fields are required to be filled");
@@ -686,20 +704,41 @@ public class StoreManagement extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_TXTnameKeyTyped
 
     private void TXTconKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTconKeyTyped
+
         char c=evt.getKeyChar();
+        
+        String check = TXTcon.getText()+c;
 
         if(Character.isLetter(c))
         {
             evt.consume();
             JOptionPane.showMessageDialog(null,"Enter only Numbers");
         }
+        
+        else if(check.length() > 10){
+        
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Only 10 numbers are allowed");
+        
+        }
+            
+        
     }//GEN-LAST:event_TXTconKeyTyped
+
+    private void BTNupdate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNupdate1ActionPerformed
+        
+        
+        clear();
+        
+        
+    }//GEN-LAST:event_BTNupdate1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BTNdelete;
     private javax.swing.JButton BTNinsert;
     private javax.swing.JButton BTNupdate;
+    private javax.swing.JButton BTNupdate1;
     private javax.swing.JRadioButton RDBcement;
     private javax.swing.JRadioButton RDBfert;
     private javax.swing.JRadioButton RDBwater;

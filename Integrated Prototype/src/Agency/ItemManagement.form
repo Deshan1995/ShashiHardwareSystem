@@ -352,22 +352,27 @@
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Component id="jScrollPane2" min="-2" pref="1436" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="CMBproducttype" min="-2" pref="185" max="-2" attributes="0"/>
-                                  <Component id="jLabel56" min="-2" pref="159" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="CMBproducttype" min="-2" pref="185" max="-2" attributes="0"/>
+                                          <Component id="jLabel56" min="-2" pref="159" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="129" max="-2" attributes="0"/>
+                                      <Component id="jPanel8" min="-2" pref="375" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                                      <Component id="PNLfertilizers" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="473" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="BTNaddtostock" max="32767" attributes="0"/>
+                                          <Component id="BTNremovefromstock" min="-2" pref="282" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="129" max="-2" attributes="0"/>
-                              <Component id="jPanel8" min="-2" pref="375" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-                              <Component id="PNLfertilizers" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="473" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="BTNaddtostock" max="32767" attributes="0"/>
-                                  <Component id="BTNremovefromstock" min="-2" pref="282" max="-2" attributes="0"/>
-                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
@@ -544,9 +549,13 @@
                 <Component class="javax.swing.JTextField" name="TXTitemcode">
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TXTitemcodeActionPerformed"/>
+                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TXTitemcodeKeyTyped"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JTextField" name="TXTquantity">
+                  <Events>
+                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TXTquantityKeyTyped"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel57">
                   <Properties>
@@ -1050,6 +1059,7 @@
                 <Component class="javax.swing.JTextField" name="TXTcbrandname">
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TXTcbrandnameActionPerformed"/>
+                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TXTcbrandnameKeyTyped"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JTextField" name="TXTcsupid">
@@ -1185,6 +1195,7 @@
                 <Component class="javax.swing.JTextField" name="TXTccost">
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TXTccostActionPerformed"/>
+                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TXTccostKeyTyped"/>
                   </Events>
                 </Component>
               </SubComponents>

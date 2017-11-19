@@ -20,6 +20,11 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 import DBconnection.DBconnect;
+import static java.lang.String.format;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.text.DateFormat;
+
 
 /**
  *
@@ -609,6 +614,17 @@ public class ItemManagement extends javax.swing.JInternalFrame {
                 TXTitemcodeActionPerformed(evt);
             }
         });
+        TXTitemcode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTitemcodeKeyTyped(evt);
+            }
+        });
+
+        TXTquantity.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTquantityKeyTyped(evt);
+            }
+        });
 
         jLabel57.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel57.setText("Item Code         :");
@@ -780,17 +796,20 @@ public class ItemManagement extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1436, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(CMBproducttype, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(129, 129, 129)
-                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45)
-                        .addComponent(PNLfertilizers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(473, 473, 473)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(BTNaddtostock, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(BTNremovefromstock, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(CMBproducttype, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(129, 129, 129)
+                                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45)
+                                .addComponent(PNLfertilizers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(473, 473, 473)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(BTNaddtostock, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(BTNremovefromstock, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(73, 73, 73))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -931,6 +950,11 @@ public class ItemManagement extends javax.swing.JInternalFrame {
                 TXTcbrandnameActionPerformed(evt);
             }
         });
+        TXTcbrandname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTcbrandnameKeyTyped(evt);
+            }
+        });
 
         TXTcsupid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1017,6 +1041,11 @@ public class ItemManagement extends javax.swing.JInternalFrame {
         TXTccost.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TXTccostActionPerformed(evt);
+            }
+        });
+        TXTccost.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TXTccostKeyTyped(evt);
             }
         });
 
@@ -1254,6 +1283,8 @@ public class ItemManagement extends javax.swing.JInternalFrame {
 
     private void BTNcaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNcaddActionPerformed
 
+        if(TXTcitemcode.getText().equals("") || TXTcdescription.getText().equals("") || TXTccapacity.getText().equals("") || TXTcbrandname.getText().equals("") || TXTcsupid.getText().equals("") || TXTccost.getText().equals("") || TXTcdiscounts.getText().equals("") || TXTcdeliverycharge.getText().equals("") || TXTcsellingprice.getText().equals("")  );
+        
         int table = CMBcproducttype.getSelectedIndex();
 
         String itemcode = TXTcitemcode.getText();
@@ -1382,7 +1413,38 @@ public class ItemManagement extends javax.swing.JInternalFrame {
 
     private void BTNaddtostockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNaddtostockActionPerformed
 
-        int table = CMBproducttype.getSelectedIndex();
+        int table = CMBcproducttype.getSelectedIndex();
+        
+        if(TXTitemcode.getText().equals("") || TXTdescription.getText().equals("") || TXTquantity.getText().equals(""))
+        {
+            
+            JOptionPane.showMessageDialog(null,"All fields are required to be filled");
+        
+        }
+        
+        
+        
+        if(JDCexpdate.getDate().before(JDCmanudate.getDate()))
+        {
+        
+            JOptionPane.showMessageDialog(null, "Expiry date must be a date after the Manufactured date");
+        
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        else{
+            
+        
+            
+        
         
         String itemcode = TXTitemcode.getText();
         String quantity = TXTquantity.getText();
@@ -1449,7 +1511,7 @@ public class ItemManagement extends javax.swing.JInternalFrame {
         
         
     }//GEN-LAST:event_BTNaddtostockActionPerformed
-
+    }
     private void CMBproducttypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CMBproducttypeActionPerformed
 
         int temp = CMBproducttype.getSelectedIndex();
@@ -1790,6 +1852,64 @@ public class ItemManagement extends javax.swing.JInternalFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void TXTitemcodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTitemcodeKeyTyped
+        
+        int table = CMBproducttype.getSelectedIndex();
+        String delim;
+        
+        if(table == 0){
+        
+            delim = "FTZ";
+        
+        }
+        
+        else if(table == 1){
+        
+            delim = "WTK";
+        
+        }
+        
+        else{
+        
+            delim = "CMT";
+        
+        }
+        
+        
+    }//GEN-LAST:event_TXTitemcodeKeyTyped
+
+    private void TXTquantityKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTquantityKeyTyped
+        
+        char c=evt.getKeyChar();
+
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Digits");
+        }
+        
+    }//GEN-LAST:event_TXTquantityKeyTyped
+
+    private void TXTcbrandnameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTcbrandnameKeyTyped
+        char c=evt.getKeyChar();
+
+        if(Character.isDigit(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Letters");
+        }
+    }//GEN-LAST:event_TXTcbrandnameKeyTyped
+
+    private void TXTccostKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTccostKeyTyped
+        char c=evt.getKeyChar();
+
+        if(Character.isLetter(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(null,"Enter only Digits");
+        }
+    }//GEN-LAST:event_TXTccostKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
