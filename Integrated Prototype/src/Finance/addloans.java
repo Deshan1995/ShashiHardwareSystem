@@ -556,6 +556,7 @@ public void tableloadA()
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Loan ID");
 
+        lid.setEditable(false);
         lid.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lid.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
@@ -850,6 +851,7 @@ public void tableloadA()
         jDateChooser2.setDate(null);
         jTextField6.setText("");
         autoincrement();
+        tableload();
         //jComboBox1.setSelectedItem("Select");
     }//GEN-LAST:event_jButton2ActionPerformed
 
