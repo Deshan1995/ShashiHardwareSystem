@@ -72,7 +72,7 @@ String s;
         Calendar cal = Calendar.getInstance();
         String D1 = dateFormat.format(cal.getTime());
         
-        String sql = "select EID,status from Record where Date = '"+D1+"'";
+        String sql = "select EID,status,On_time,Off_time from Record where Date = '"+D1+"'";
         try{
         pst = conn.prepareStatement(sql);
         rs = pst.executeQuery();
@@ -107,6 +107,7 @@ String s;
 
         jPanel11 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         AEID = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
@@ -127,6 +128,17 @@ String s;
 
         jPanel1.setLayout(null);
 
+        jButton3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton3.setText("Mark Day End");
+        jButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 102)));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton3);
+        jButton3.setBounds(530, 360, 310, 100);
+
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Employee ID");
         jPanel1.add(jLabel1);
@@ -138,7 +150,7 @@ String s;
         AEID.setBounds(530, 170, 310, 60);
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Mark Attendace");
+        jButton1.setText("Mark Attendance");
         jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 102)));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,7 +158,7 @@ String s;
             }
         });
         jPanel1.add(jButton1);
-        jButton1.setBounds(530, 260, 310, 100);
+        jButton1.setBounds(530, 240, 310, 100);
 
         jTable1.setBackground(new java.awt.Color(204, 255, 204));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -185,7 +197,7 @@ String s;
         jLabel2.setForeground(new java.awt.Color(255, 0, 0));
         jLabel2.setText("Please make sure that the pc's current date and time are correct");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(340, 120, 360, 16);
+        jLabel2.setBounds(340, 120, 360, 14);
 
         jLabel6.setBackground(new java.awt.Color(0, 102, 102));
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
@@ -261,10 +273,10 @@ String s;
         if(rs1.next())
         {
             
-            if(rs1.getInt("Time")==0 && rs1.getInt("status")==0)
+            if(rs1.getInt("on_Time")==0 && rs1.getInt("status")==0)
             {
             try{
-            String addQuery = "update Record set Time = '"+T1+"',status = 1 where EID='"+eid+"' AND Date = '"+D1+"'";
+            String addQuery = "update Record set On_time = '"+T1+"',status = 1 where EID='"+eid+"' AND Date = '"+D1+"'";
             pst2=conn.prepareStatement(addQuery);
             pst2.executeUpdate();
             tableload();
@@ -343,7 +355,7 @@ String s;
         for(int i=0;i<list.size();i++)
         {
             try{
-            String addQuery = "Insert into Record values ('"+list.get(i)+"','"+D1+"',0,0)";
+            String addQuery = "Insert into Record values ('"+list.get(i)+"','"+D1+"',0,0,0)";
             pst2=conn.prepareStatement(addQuery);
             pst2.executeUpdate();
             tableload();
@@ -382,6 +394,76 @@ String s;
         
         AEID.setText(jTable1.getValueAt(row,0).toString());
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    try{
+        DateFormat dateFormat = new SimpleDateFormat("MM dd, yyyy");
+        Calendar cal = Calendar.getInstance();
+        String D1 = dateFormat.format(cal.getTime());
+        
+        Date d = new Date();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss a");
+        String T1 = timeFormat.format(d);
+        
+        String eid = AEID.getText();
+        try{
+        String sql1 = "SELECT * FROM Record where Date = '"+D1+"' AND EID = '"+eid+"'";
+        pst1 = conn.prepareStatement(sql1);
+        rs1 = pst1.executeQuery();
+        
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+        
+        
+        if(rs1.next())
+        {
+            if(rs1.getInt("Off_Time")==0 && rs1.getInt("status")==1)
+            {
+            if(rs1.getInt("Off_Time")==0)
+            {
+            try{
+            String addQuery = "update Record set Off_time = '"+T1+"' where EID='"+eid+"' AND Date = '"+D1+"'";
+            pst2=conn.prepareStatement(addQuery);
+            pst2.executeUpdate();
+            tableload();
+            }
+            catch(Exception e)
+            {
+                System.out.println(e);
+            }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,"Already Marked");
+            }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,"Invalid Operation");
+            }
+        
+            
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null,"Employee ID is required");
+        }
+        } catch (SQLException ex) {
+        Logger.getLogger(MarkAttendance1.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    finally{
+        try {
+            pst1.close();
+            rs1.close();
+            pst2.close();
+            
+        } catch (Exception e) {
+        }
+    }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -423,6 +505,7 @@ String s;
     private javax.swing.JTextField AEID;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

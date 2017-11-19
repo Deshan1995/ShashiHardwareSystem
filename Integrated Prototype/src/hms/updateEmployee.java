@@ -151,7 +151,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
     public void tableload()
     {
         
-        String sql = "select * from Employee";
+        String sql = "select employee_id,first_name,last_name,username,language,birth_day,age,nic_no,address,phone_no,designation,status,addded_date from Employee";
         try{
             
         pst = conn.prepareStatement(sql);
@@ -234,7 +234,6 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         ulname = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        ulang = new javax.swing.JTextField();
         uage = new javax.swing.JTextField();
         unic = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
@@ -245,6 +244,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         jLabel15 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         uaddr = new javax.swing.JTextArea();
+        udob = new javax.swing.JTextField();
         uphn = new javax.swing.JTextField();
         udesig = new javax.swing.JComboBox<>();
         uftime = new javax.swing.JRadioButton();
@@ -266,11 +266,13 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         usid = new javax.swing.JRadioButton();
         usname = new javax.swing.JRadioButton();
+        ulang = new javax.swing.JComboBox<>();
         uid = new javax.swing.JTextField();
         uws = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setPreferredSize(new java.awt.Dimension(1230, 685));
@@ -309,7 +311,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(uuname);
-        uuname.setBounds(200, 498, 260, 30);
+        uuname.setBounds(200, 475, 260, 30);
 
         ubc.setEditable(false);
         ubc.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
@@ -333,7 +335,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(ulname);
-        ulname.setBounds(340, 458, 120, 30);
+        ulname.setBounds(340, 440, 120, 30);
 
         jLabel3.setBackground(new java.awt.Color(204, 204, 255));
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -353,20 +355,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         getContentPane().add(jLabel2);
         jLabel2.setBounds(300, 288, 160, 150);
 
-        ulang.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        ulang.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ulangMouseClicked(evt);
-            }
-        });
-        ulang.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                ulangKeyTyped(evt);
-            }
-        });
-        getContentPane().add(ulang);
-        ulang.setBounds(200, 538, 260, 30);
-
+        uage.setEditable(false);
         uage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         uage.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -376,6 +365,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         getContentPane().add(uage);
         uage.setBounds(840, 498, 300, 30);
 
+        unic.setEditable(false);
         unic.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         unic.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -425,6 +415,20 @@ public class updateEmployee extends javax.swing.JInternalFrame {
 
         getContentPane().add(jScrollPane2);
         jScrollPane2.setBounds(840, 288, 300, 80);
+
+        udob.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        udob.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                udobMouseClicked(evt);
+            }
+        });
+        udob.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                udobKeyTyped(evt);
+            }
+        });
+        getContentPane().add(udob);
+        udob.setBounds(200, 547, 260, 30);
 
         uphn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         uphn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -505,19 +509,19 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         jButton2.setBounds(960, 598, 110, 50);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel8.setText("Language         :-");
+        jLabel8.setText("Date of birth    :-");
         getContentPane().add(jLabel8);
-        jLabel8.setBounds(30, 528, 140, 30);
+        jLabel8.setBounds(30, 540, 140, 30);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setText("Username         :-");
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(30, 498, 140, 30);
+        jLabel7.setBounds(30, 480, 140, 30);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Full name          :-   ");
         getContentPane().add(jLabel6);
-        jLabel6.setBounds(30, 458, 130, 30);
+        jLabel6.setBounds(30, 440, 130, 30);
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel13.setText("Basic  salary     :-");
@@ -536,7 +540,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(ufname);
-        ufname.setBounds(200, 458, 120, 30);
+        ufname.setBounds(200, 440, 120, 30);
 
         jButton3.setText("Back");
         jButton3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(51, 51, 51), 1, true));
@@ -602,6 +606,10 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         getContentPane().add(usname);
         usname.setBounds(350, 78, 80, 23);
 
+        ulang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sinhala", "Tamil" }));
+        getContentPane().add(ulang);
+        ulang.setBounds(200, 510, 120, 30);
+
         uid.setEditable(false);
         uid.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         uid.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -636,6 +644,11 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         getContentPane().add(jLabel12);
         jLabel12.setBounds(20, 278, 1130, 310);
 
+        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel20.setText("Language         :-");
+        getContentPane().add(jLabel20);
+        jLabel20.setBounds(30, 510, 140, 30);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -644,12 +657,8 @@ public class updateEmployee extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_ubcMouseClicked
 
     private void ulnameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ulnameMouseClicked
-        ulname.setText("");
+        
     }//GEN-LAST:event_ulnameMouseClicked
-
-    private void ulangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ulangMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ulangMouseClicked
 
     private void unicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_unicMouseClicked
         // TODO add your handling code here:
@@ -665,7 +674,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
 
     private void ufnameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ufnameMouseClicked
         // TODO add your handling code here:
-        ufname.setText("");
+        
     }//GEN-LAST:event_ufnameMouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
@@ -807,34 +816,45 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         ufname.setText(jTable1.getValueAt(row,1).toString());
         ulname.setText(jTable1.getValueAt(row,2).toString());
         uuname.setText(jTable1.getValueAt(row,3).toString());
-        ulang.setText(jTable1.getValueAt(row,4).toString());
-        uage.setText(jTable1.getValueAt(row,5).toString());
-        unic.setText(jTable1.getValueAt(row,6).toString());
-        uaddr.setText(jTable1.getValueAt(row,7).toString());
-        uphn.setText("0"+(jTable1.getValueAt(row,8).toString()));
-        udesig.setSelectedItem(jTable1.getValueAt(row,9));
-        uws.setText(jTable1.getValueAt(row,11).toString());
+        ulang.setSelectedItem(jTable1.getValueAt(row,4).toString());
+        udob.setText(jTable1.getValueAt(row,5).toString());
+        uage.setText(jTable1.getValueAt(row,6).toString());
+        unic.setText(jTable1.getValueAt(row,7).toString());
+        uaddr.setText(jTable1.getValueAt(row,8).toString());
+        uphn.setText((jTable1.getValueAt(row,9).toString()));
+        udesig.setSelectedItem(jTable1.getValueAt(row,10));
+        uws.setText(jTable1.getValueAt(row,12).toString());
         
         fname = jTable1.getValueAt(row,1).toString();
         lname = (jTable1.getValueAt(row,2).toString());
         uname = (jTable1.getValueAt(row,3).toString());
         language = (jTable1.getValueAt(row,4).toString());
-        age = (jTable1.getValueAt(row,5).toString());
-        nic = (jTable1.getValueAt(row,6).toString());
-        addr = (jTable1.getValueAt(row,7).toString()); 
-        phn = (jTable1.getValueAt(row,8).toString());
-        desig = (jTable1.getValueAt(row,9).toString());
+        age = (jTable1.getValueAt(row,6).toString());
+        nic = (jTable1.getValueAt(row,7).toString());
+        addr = (jTable1.getValueAt(row,8).toString()); 
+        phn = "0"+(jTable1.getValueAt(row,9).toString());
+        desig = (jTable1.getValueAt(row,10).toString());
+        
+        String sql4="SELECT * FROM usertype";
+           try {
+               pst = conn.prepareStatement(sql4);
+               rs=pst.executeQuery();
+               ubc.setText(Double.toString(rs.getDouble("basic_salary")));
+           } catch (SQLException ex) {
+               Logger.getLogger(updateEmployee.class.getName()).log(Level.SEVERE, null, ex);
+           }
         
         
         
         
-        if((jTable1.getValueAt(row,10).toString()).equals("Full Time"))
+        
+        if((jTable1.getValueAt(row,11).toString()).equals("Full Time"))
         {
             
             uftime.setSelected(true);
             status = "Full Time";
         }
-        else if((jTable1.getValueAt(row,10).toString()).equals("Part Time"))
+        else if((jTable1.getValueAt(row,11).toString()).equals("Part Time"))
         {
             uptime.setSelected(true);
             status = "Part Time";
@@ -845,16 +865,20 @@ public class updateEmployee extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
+        System.out.println(status);
         String cfname=ufname.getText(),r1=""; 
         String clname=ulname.getText(),r2="";
         String cuname=uuname.getText(),r3="";
-        String clang = ulang.getText(),r4="";
-        String cage= uage.getText(),r5="";
-        String cnic=unic.getText(),r6="";
+        String clang = ulang.getSelectedItem().toString(),r4="";
+//        String cage= uage.getText(),r5="";
+//        String cnic=unic.getText(),r6="";
         String caddr=uaddr.getText(),r7="";
         String cphn=uphn.getText(),r8="";
         String cdesig = udesig.getSelectedItem().toString(),r9="",r10="";
         String cstatus="";
+        
+        System.out.println(cstatus);
+        
         if(uftime.isSelected())
         {
             cstatus = "Full Time";
@@ -878,16 +902,16 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         }
         if(!language.equals(clang))
         {
-            r4="Language :- "+ulang+" to "+clang;
+            r4="Language :- "+language+" to "+clang;
         }
-        if(!age.equals(cage))
-        {
-            r5="Age :- "+age+" to "+cage;
-        }
-        if(!nic.equals(cnic))
-        {
-            r6="NIC no :- "+nic+" to "+cnic;
-        }
+//        if(!age.equals(cage))
+//        {
+//            r5="Age :- "+age+" to "+cage;
+//        }
+//        if(!nic.equals(cnic))
+//        {
+//            r6="NIC no :- "+nic+" to "+cnic;
+//        }
         if(!addr.equals(caddr))
         {
             r7="Address :- "+addr+" to "+caddr;
@@ -904,7 +928,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         {
             r10="Status :- "+status+" to "+cstatus;
         }
-            if(uid.getText().equals("")||ufname.getText().equals("")||ulname.getText().equals("")||uuname.getText().equals("")||ulang.getText().equals("")||uage.getText().equals("")|| unic.getText().equals("")|| uaddr.getText().equals("")||uphn.getText().equals("")||udesig.getSelectedItem().toString().equals(""))
+            if(uid.getText().equals("")||ufname.getText().equals("")||ulname.getText().equals("")||uuname.getText().equals("")||ulang.getSelectedItem().toString().equals("")||uage.getText().equals("")|| unic.getText().equals("")|| uaddr.getText().equals("")||uphn.getText().equals("")||udesig.getSelectedItem().toString().equals(""))
             {
                 
                 JOptionPane.showMessageDialog(null,"All the fields are required (except the optional fields)");
@@ -915,7 +939,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         {
                 if(me.phnCheck(uphn.getText()))
                 {
-        int x = JOptionPane.showConfirmDialog(null,"Are you sure want to update following changes? \n"+r1+"\n"+r2+"\n"+r3+"\n"+r4+"\n"+r5+"\n"+r6+"\n"+r7+"\n"+r8+"\n"+r9+"\n"+r10);
+        int x = JOptionPane.showConfirmDialog(null,"Are you sure want to update following changes? \n"+r1+"\n"+r2+"\n"+r3+"\n"+r4+"\n"+r7+"\n"+r8+"\n"+r9+"\n"+r10);
 
         
 
@@ -945,13 +969,13 @@ public class updateEmployee extends javax.swing.JInternalFrame {
             person_image = bos.toByteArray();
                 }
 
-            //Updating Values
+//            Updating Values
             
             
             if(x==0)
             {
 
-                String sql = "UPDATE Employee SET first_name = '"+cfname+"',last_name = '"+clname+"',username = '"+cuname+"',language = '"+clang+"',age = '"+cage+"',nic_no = '"+cnic+"',address = '"+caddr+"',phone_no = '"+cphn+"',designation = '"+cdesig+"',status = '"+cstatus+"' WHERE employee_id = '"+eid+"'";
+                String sql = "UPDATE Employee SET first_name = '"+cfname+"',last_name = '"+clname+"',username = '"+cuname+"',language = '"+clang+"',address = '"+caddr+"',phone_no = '"+cphn+"',designation = '"+cdesig+"',status = '"+cstatus+"' WHERE employee_id = '"+eid+"'";
 
                 pst = conn.prepareStatement(sql);
                 pst.executeUpdate();
@@ -1031,16 +1055,6 @@ public class updateEmployee extends javax.swing.JInternalFrame {
         }   
     }//GEN-LAST:event_ulnameKeyTyped
 
-    private void ulangKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ulangKeyTyped
-        char c = evt.getKeyChar();
-        
-        if(Character.isDigit(c))
-        {
-            evt.consume();
-         JOptionPane.showMessageDialog(null, "Numbers not allowed");
-        }   
-    }//GEN-LAST:event_ulangKeyTyped
-
     private void uphnKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_uphnKeyTyped
                 char c = evt.getKeyChar();
         
@@ -1081,6 +1095,14 @@ public class updateEmployee extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void udobMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_udobMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_udobMouseClicked
+
+    private void udobKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_udobKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_udobKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
@@ -1098,6 +1120,7 @@ public class updateEmployee extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1115,10 +1138,11 @@ public class updateEmployee extends javax.swing.JInternalFrame {
     private javax.swing.JTextField uage;
     private javax.swing.JTextField ubc;
     private javax.swing.JComboBox<String> udesig;
+    private javax.swing.JTextField udob;
     private javax.swing.JTextField ufname;
     private javax.swing.JRadioButton uftime;
     private javax.swing.JTextField uid;
-    private javax.swing.JTextField ulang;
+    private javax.swing.JComboBox<String> ulang;
     private javax.swing.JTextField ulname;
     private javax.swing.JTextField unic;
     private javax.swing.JTextField uphn;
