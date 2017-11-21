@@ -44,6 +44,7 @@ public class Stock extends javax.swing.JInternalFrame {
   String PexpDate = null,PitemID = null,Pmanudate = null,Pqty=null;
     public Stock() {
         initComponents();
+        lowQty();
         conn = DBconnect.connectDb();
         
         CSizeManu.disable();
@@ -1259,7 +1260,38 @@ public void Notify1(){
         }
     
 }
+String itemid,quan;
 
+public void lowQty(){
+double qty=0;
+	
+
+ try {
+	String sql = "SELECT ItemID,SUM(Qty) FROM StockQty GROUP BY ItemID HAVING SUM(Qty)";
+       
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            while(rs.next()){ 
+		itemid = rs.getString("ItemID");
+    		quan = rs.getString("SUM(Qty)");
+                qty=Double.parseDouble(quan); 
+                
+                System.out.println(itemid);
+                System.out.println(quan);
+           
+	
+
+	if(Double.compare(qty,10.0)<0){
+		String sql1 = "Insert into lowQty(ItemId,Quantity) values('"+ itemid +"','"+ quan +"')";
+		pst = conn.prepareStatement(sql1);
+            	pst.execute();
+	}
+            }
+}
+catch(Exception e){
+	   System.out.println(e);
+}
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

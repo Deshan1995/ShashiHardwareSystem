@@ -19,6 +19,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 
 /**
@@ -223,6 +231,8 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         jButton5 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
+        jButton6 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -399,6 +409,22 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         ));
         jScrollPane3.setViewportView(jTable3);
 
+        jButton6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton6.setText("General Report");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jButton8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton8.setText("Individual Report");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -440,21 +466,32 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(106, 106, 106)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(66, 66, 66)
+                .addComponent(jButton6)
+                .addGap(49, 49, 49)
+                .addComponent(jButton8)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton6)
+                            .addComponent(jButton8))))
+                .addGap(54, 54, 54)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
@@ -526,7 +563,7 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(jButton2);
-        jButton2.setBounds(496, 28, 87, 31);
+        jButton2.setBounds(496, 28, 85, 31);
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton4.setText("Refresh");
@@ -536,7 +573,7 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             }
         });
         jPanel2.add(jButton4);
-        jButton4.setBounds(1040, 28, 93, 31);
+        jButton4.setBounds(1040, 28, 91, 31);
 
         jPanel6.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -635,7 +672,7 @@ public class CreditPayables extends javax.swing.JInternalFrame {
         PaymentType1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         PaymentType1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cheque", "Cash" }));
         jPanel2.add(PaymentType1);
-        PaymentType1.setBounds(200, 640, 160, 30);
+        PaymentType1.setBounds(200, 640, 160, 28);
 
         PaymentDate1.setDateFormatString("dd-MM-yyyy");
         jPanel2.add(PaymentDate1);
@@ -995,6 +1032,50 @@ public class CreditPayables extends javax.swing.JInternalFrame {
             PaymentType1.setSelectedItem(pType1);
     }//GEN-LAST:event_jTable4MouseClicked
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        //String ID = jTable2.getValueAt(r, 0).toString();
+        
+        try{
+        String report = ".\\credit.jrxml";
+                        JasperDesign jd = JRXmlLoader.load(report);
+                        String sql1 = "select OrderID,CustomerID,SupplierID,Total,TotalPaidAmount,StartDate from CustomizedOrders";
+                        JRDesignQuery n = new JRDesignQuery();
+                        n.setText(sql1);
+                        jd.setQuery(n);
+                        JasperReport jr = JasperCompileManager.compileReport(jd);
+                        JasperPrint jp = JasperFillManager.fillReport(jr, null, conn1);
+                        JasperViewer.viewReport(jp, false);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        
+        int r=-1;
+        r = jTable1.getSelectedRow();       
+               
+        if(r==-1){
+            JOptionPane.showMessageDialog(null,"Please choose a order first!","No Input", JOptionPane.INFORMATION_MESSAGE);
+
+            return;
+        }
+        String ID = jTable1.getValueAt(r, 0).toString();
+        try{
+        String report = ".\\credit.jrxml";
+                        JasperDesign jd = JRXmlLoader.load(report);
+                        String sql1 = "select OrderID,CustomerID,SupplierID,Total,TotalPaidAmount,StartDate from CustomizedOrders where OrderID='"+ ID+ "'";
+                        JRDesignQuery n = new JRDesignQuery();
+                        n.setText(sql1);
+                        jd.setQuery(n);
+                        JasperReport jr = JasperCompileManager.compileReport(jd);
+                        JasperPrint jp = JasperFillManager.fillReport(jr, null, conn1);
+                        JasperViewer.viewReport(jp, false);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField InstallmentNo;
@@ -1011,7 +1092,9 @@ public class CreditPayables extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

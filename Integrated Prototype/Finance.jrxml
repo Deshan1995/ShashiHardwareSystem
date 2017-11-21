@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Finance" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="427e444f-1597-4a02-a970-5020ccd3fa8e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<queryString language="SQL">
+		<![CDATA[Select * from Cheque]]>
+	</queryString>
+	<field name="Cheque_No" class="java.lang.Object"/>
+	<field name="Bank_No" class="java.lang.Object"/>
+	<field name="Branch_No" class="java.lang.Object"/>
+	<field name="Account_No" class="java.lang.Object"/>
+	<field name="Bank_Name" class="java.lang.Object"/>
+	<field name="Amount" class="java.lang.Object"/>
+	<field name="Date" class="java.lang.Object"/>
+	<field name="Cheque_From" class="java.lang.Object"/>
+	<field name="Cheque_To" class="java.lang.Object"/>
+	<field name="Status" class="java.lang.Object"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<image>
+				<reportElement x="-20" y="0" width="595" height="64" uuid="474c7dab-9c66-43e9-a73e-b13f0ce769fd"/>
+				<imageExpression><![CDATA["wood.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="Title" x="0" y="5" width="263" height="33" uuid="7028fe52-0980-4444-b78a-3341424d112e"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Shashi Enterprise]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="63" y="39" width="200" height="22" forecolor="#FFFFFF" uuid="d93332c2-6d5d-41fc-9993-89b650eb4635"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Cheque Details]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="445f3b35-ef72-4dc5-9514-0be4b8ed918e"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="55" height="15" uuid="048b52fd-5c54-402f-9d04-ad42c6646735"/>
+				<text><![CDATA[Cheque_No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="55" y="19" width="55" height="15" uuid="c0803d3d-5874-47f8-a9f4-78a0f8f472c1"/>
+				<text><![CDATA[Bank_No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="110" y="19" width="55" height="15" uuid="8fa04770-013b-431d-9607-f18dc39a9293"/>
+				<text><![CDATA[Branch_No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="165" y="19" width="55" height="15" uuid="306979a5-c3e9-4b2b-bddf-098338b138bd"/>
+				<text><![CDATA[Account_No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="220" y="19" width="55" height="15" uuid="492a2ffa-d3e1-4b31-b61a-d19ccee0ebd6"/>
+				<text><![CDATA[Bank_Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="275" y="19" width="55" height="15" uuid="c9efb18d-7b3c-4c8c-b9e6-95b1caace406"/>
+				<text><![CDATA[Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="330" y="19" width="55" height="15" uuid="1f95e1db-6841-41b7-b6e0-f6c6728588e5"/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="385" y="19" width="55" height="15" uuid="7dbd4c6c-ba86-4188-9337-4250e20c2fff"/>
+				<text><![CDATA[Cheque_From]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="440" y="19" width="55" height="15" uuid="0b48af9e-4130-4620-ad84-fbb31211aad0"/>
+				<text><![CDATA[Cheque_To]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="495" y="19" width="55" height="15" uuid="6af61310-d750-49c5-85c2-722f545fa0a3"/>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="cd2abf4c-ec1c-4d34-b80b-c4354f70b44d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="55" height="15" uuid="b86b0ea2-2b9c-41c8-95e3-4444fa0d4727"/>
+				<textFieldExpression><![CDATA[""+$F{Cheque_No}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="55" y="0" width="55" height="15" uuid="70c29b6e-0cb5-4432-b190-a1e2c36e9700"/>
+				<textFieldExpression><![CDATA[""+$F{Bank_No}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="110" y="0" width="55" height="15" uuid="90185b21-08e9-4c26-b113-af72a42b611e"/>
+				<textFieldExpression><![CDATA[""+$F{Branch_No}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="165" y="0" width="55" height="15" uuid="5b38341a-875b-4777-8750-5296798769eb"/>
+				<textFieldExpression><![CDATA[""+$F{Account_No}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="220" y="0" width="55" height="15" uuid="4d23cb11-437e-423a-989d-d22260f6d5ba"/>
+				<textFieldExpression><![CDATA[""+$F{Bank_Name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="275" y="0" width="55" height="15" uuid="8fe7690e-bdf2-45f4-a760-a84f2fe50aae"/>
+				<textFieldExpression><![CDATA[""+$F{Amount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="330" y="0" width="55" height="15" uuid="1793c249-1d33-43e5-8847-b7d0d9042fe0"/>
+				<textFieldExpression><![CDATA[""+$F{Date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="385" y="0" width="55" height="15" uuid="0c4dadb1-9740-4c80-bbe2-9ca5a7f1d8d9"/>
+				<textFieldExpression><![CDATA[""+$F{Cheque_From}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="440" y="0" width="55" height="15" uuid="dc66069d-7cc5-4e71-b849-bd86b334cd2c"/>
+				<textFieldExpression><![CDATA[""+$F{Cheque_To}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="495" y="0" width="55" height="15" uuid="0a056bbf-5394-4dcc-b5eb-f5dd7815cec3"/>
+				<textFieldExpression><![CDATA[""+$F{Status}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="66c230e9-2aed-463b-9894-c7873258f5ba"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="aa9001a1-80d2-44c2-b885-63a5ab074ae1"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="df9a40a3-5855-4b97-af1a-c2b83d4859ca"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="a0be9850-b026-4a79-97ec-f2e5baa5c3b6"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

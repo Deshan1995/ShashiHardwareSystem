@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-//package Asset;
+package Asset;
 
 /**
  *
@@ -292,7 +292,7 @@ public void pay(){
         jPanel5 = new javax.swing.JPanel();
         btn_view = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
-        cmb_pay = new javax.swing.JComboBox<String>();
+        cmb_pay = new javax.swing.JComboBox<>();
         btn_update = new javax.swing.JButton();
         btn_delete = new javax.swing.JButton();
         btn_insert = new javax.swing.JButton();
@@ -307,6 +307,9 @@ public void pay(){
         btn_demo = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
+
+        payment.setPreferredSize(new java.awt.Dimension(850, 300));
+        payment.setSize(new java.awt.Dimension(850, 300));
 
         pay.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -349,7 +352,7 @@ public void pay(){
         paymentLayout.setHorizontalGroup(
             paymentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, paymentLayout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
+                .addContainerGap(28, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 769, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41))
             .addGroup(paymentLayout.createSequentialGroup()
@@ -441,6 +444,8 @@ public void pay(){
                 txt_DescriptionKeyPressed(evt);
             }
         });
+
+        purchase_date.setDateFormatString("yyyy-MM-dd");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -540,7 +545,7 @@ public void pay(){
         jLabel13.setText("Payment Type");
 
         cmb_pay.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        cmb_pay.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "<Select>", "Cash", "Cheque", "Loan" }));
+        cmb_pay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Select>", "Cash", "Cheque", "Loan" }));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -728,10 +733,11 @@ public void pay(){
                         .addContainerGap()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btn_search)
-                            .addComponent(btn_refresh)
-                            .addComponent(btn_demo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_demo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btn_search)
+                                .addComponent(btn_refresh))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

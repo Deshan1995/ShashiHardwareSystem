@@ -6,7 +6,7 @@ package Finance;
 
 import javax.swing.JFrame;
 import DBconnection.DBconnect;
-import Main1.Main;
+import Main.Main;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.sql.Connection;

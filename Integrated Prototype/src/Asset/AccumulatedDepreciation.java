@@ -135,10 +135,6 @@ PreparedStatement ps = null;
         jPanel4 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
 
-        revaluation.setLocation(new java.awt.Point(365, 0));
-        revaluation.setPreferredSize(new java.awt.Dimension(500, 750));
-        revaluation.setSize(new java.awt.Dimension(1000, 725));
-
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel6.setText("Net Book Value");
 
@@ -195,6 +191,8 @@ PreparedStatement ps = null;
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel13.setText("Revaluation Date");
+
+        revalueDate.setDateFormatString("yyyy-MM-dd");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -508,7 +506,7 @@ PreparedStatement ps = null;
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE))
         );
 
         pack();

@@ -228,7 +228,7 @@ public class viewAttendance extends javax.swing.JInternalFrame {
         String D2 = ((JTextField)todate.getDateEditor().getUiComponent()).getText();
         
         String sql = "SELECT EID, COUNT(EID) AS Attended_Days FROM Record WHERE status = 1 AND Date BETWEEN '"+D1+"' AND '"+D2+"'group by EID";
-        String sqll = "SELECT EID,Date,status From Record where status = 0";
+        String sqll = "SELECT EID,Date,status From Record where status = 0 order by EID";
         try {
             pst1 = conn.prepareStatement(sql);
             pst2 = conn.prepareStatement(sqll);

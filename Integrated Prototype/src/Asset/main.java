@@ -12,11 +12,13 @@ import javax.swing.JFrame;
  * @author User
  */
 public class main extends javax.swing.JFrame {
-
+int ty;
     /**
      * Creates new form main
      */
     public main() {
+        
+        
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
@@ -64,6 +66,11 @@ public class main extends javax.swing.JFrame {
         jButton3.setBackground(new java.awt.Color(255, 255, 255));
         jButton3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton3.setText("Back");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setBackground(new java.awt.Color(255, 255, 255));
         jButton4.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -177,6 +184,12 @@ public class main extends javax.swing.JFrame {
         Land p = new Land();
         jDesktopPane1.add(p).setVisible(true);
     }//GEN-LAST:event_btn_propertyActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        Main.Main m = new Main.Main();
+        m.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

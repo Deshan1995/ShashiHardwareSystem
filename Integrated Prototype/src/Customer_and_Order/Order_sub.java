@@ -3545,37 +3545,38 @@ public class Order_sub extends javax.swing.JInternalFrame {
 
     private void calbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calbuttonActionPerformed
         //Calculate delivery charges
-        if(totalTxt.getText().equals("")){
-            JOptionPane.showMessageDialog(rootPane, "Empty fields are not allowed", "Empty Fields", JOptionPane.ERROR_MESSAGE);
-        }
-        else{
-            
-            showCheckBoxes();
-            double price = calculateTotal(Double.parseDouble(distanceTxt.getText()));
-            totalTxt.setText(""+price);
-            totalTxt.setEditable(false);
-        }
+        showCheckBoxes();
+        double price = calculateTotal(Double.parseDouble(distanceTxt.getText()));
+        totalTxt.setText(""+price);
+        totalTxt.setEditable(false);
+        
     }//GEN-LAST:event_calbuttonActionPerformed
 
     private void confirmbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmbtnActionPerformed
         
-        this.delID = delivIdTxt.getText();
-        
-            showCheckBoxes();
+        if(totalTxt.getText().equals("")){
+            JOptionPane.showMessageDialog(rootPane, "Empty fields are not allowed", "Empty Fields", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            this.delID = delivIdTxt.getText();
 
-            int res= addDelivery();
-            if(res>0){
-                JOptionPane.showMessageDialog(this, "Added Successfully");
-            }
-            else{
-                JOptionPane.showMessageDialog(this, "Added Unsuccessfully");
-            }
+                showCheckBoxes();
+
+                int res= addDelivery();
+                if(res>0){
+                    JOptionPane.showMessageDialog(this, "Added Successfully");
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Added Unsuccessfully");
+                }
+
+            loadOrderDeliverTable();
         
-        loadOrderDeliverTable();
         
 //        this.delID = delivIdTxt.getText();
         txt_delID.setText(this.delID);
         clear();
+        }
     }//GEN-LAST:event_confirmbtnActionPerformed
 
     private void totalTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalTxtActionPerformed
@@ -4547,8 +4548,8 @@ public class Order_sub extends javax.swing.JInternalFrame {
     
     public String getMap(String destination){
         try {
-            //String origin= "Shashi+Enterprises,no+12,Nuwara+Eliya+Road,Kappetipola";
-            String origin = "SLIIT,Kandy+rd,Malabe";
+            String origin= "No+12,Nuwara+Eliya+Road,Keppetipola";
+            //String origin = "SLIIT,Kandy+rd,Malabe";
             destination = destination.replace(' ', '+');
             HttpURLConnection connection = null;
             URL url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="+origin+"&destinations="+destination+"&key="+API_KEY);

@@ -343,7 +343,7 @@ public void updateCreditBalance(){
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1570, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1780, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -458,7 +458,7 @@ public void updateCreditBalance(){
                         .addGap(88, 88, 88)
                         .addComponent(BTNcashaddpayment, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 224, Short.MAX_VALUE))
+                .addGap(0, 348, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Cash Payments", jPanel1);
@@ -778,7 +778,7 @@ public void updateCreditBalance(){
                         .addGap(18, 18, 18)
                         .addComponent(TXTcreditamount, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 812, Short.MAX_VALUE))
         );
 
         pack();
@@ -1101,16 +1101,7 @@ public void updateCreditBalance(){
     }//GEN-LAST:event_TXTchequepaymentActionPerformed
 
     private void TXTstoreidKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TXTstoreidKeyTyped
-        
-        
-        char c=evt.getKeyChar();
-
-        if(Character.isDigit(c))
-        {
-            evt.consume();
-            JOptionPane.showMessageDialog(null,"Enter only Letters");
-        }
-        
+       
         
     }//GEN-LAST:event_TXTstoreidKeyTyped
 

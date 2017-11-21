@@ -415,7 +415,7 @@ public class SupplierOrders extends javax.swing.JInternalFrame {
             }
         });
         jDialog1.getContentPane().add(jButton15);
-        jButton15.setBounds(950, 10, 81, 31);
+        jButton15.setBounds(950, 10, 79, 31);
 
         setPreferredSize(new java.awt.Dimension(1660, 1000));
 
@@ -961,9 +961,9 @@ public class SupplierOrders extends javax.swing.JInternalFrame {
        String sid=jTable1.getValueAt(row,1).toString();
        String oStatus=jTable1.getValueAt(row,2).toString();
        String pStatus=jTable1.getValueAt(row,3).toString();
-       String startDate=jTable1.getValueAt(row,4).toString();
-       String endDate=jTable1.getValueAt(row,5).toString();
-       String total=jTable1.getValueAt(row,6).toString();
+       String startDate=jTable1.getValueAt(row,5).toString();
+       String endDate=jTable1.getValueAt(row,6).toString();
+       String total=jTable1.getValueAt(row,4).toString();
        
        
        LableOID.setText(oid);
@@ -1041,7 +1041,7 @@ public class SupplierOrders extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jDialog1WindowClosing
 
     private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
-        TextItemID.setEditable(false);
+        TextItemID.setEditable(true);
         
         int row=jTable2.getSelectedRow();
     

@@ -33,6 +33,7 @@ public class Loginface extends javax.swing.JFrame {
         initComponents();
         conn=DBconnect.connectDb();
         error.hide();
+        jButton3.setVisible(false);
     }
 
     /**

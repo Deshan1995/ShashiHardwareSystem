@@ -643,6 +643,8 @@ public class assignSalaries extends javax.swing.JInternalFrame {
         {
             try {
                 
+                
+                
             } catch (Exception e) {
             }
         }
@@ -959,12 +961,14 @@ if(to.getDate().after(new Date())){
                 }finally
                 {
                     try {
-                        pst8.close();
+                    
+                    pst8.close();
                     pst7.close();
                     pst6.close();
                     pst5.close();
                     pst4.close();
                     pst9.close();
+                    pst3.close();
                     
                     rs3.close();
                     rs4.close();
@@ -972,6 +976,9 @@ if(to.getDate().after(new Date())){
                     rs6.close();
                     rs7.close();
                     rs8.close();
+                    rs.close();
+                    rs1.close();
+                    rs10.close();
                     
                     } catch (Exception e) {
                     }
@@ -1068,7 +1075,7 @@ if(to.getDate().after(new Date())){
                     pst3.close();
                     pst10.close();
                     pst1.close();
-                    pst.close();
+                    //pst.close();
                     
                 } catch (Exception e) {
                 } 

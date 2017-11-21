@@ -33,6 +33,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 import net.proteanit.sql.DbUtils;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 /**
  *
  * @author DELL-PC
@@ -47,6 +55,7 @@ public class viewSalaryReport extends javax.swing.JInternalFrame {
        byte [] ss;
        String selectedb=null;
        
+       String DD1,DD2;
 
     /**
      * Creates new form addEmployee
@@ -99,6 +108,7 @@ public class viewSalaryReport extends javax.swing.JInternalFrame {
         jButton6 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1218, 685));
         getContentPane().setLayout(null);
@@ -180,6 +190,15 @@ public class viewSalaryReport extends javax.swing.JInternalFrame {
         getContentPane().add(jLabel2);
         jLabel2.setBounds(30, 70, 350, 250);
 
+        jButton2.setText("Generate Salary Report");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2);
+        jButton2.setBounds(30, 340, 190, 40);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -189,6 +208,8 @@ public class viewSalaryReport extends javax.swing.JInternalFrame {
                String D1 =((JTextField)vfrom.getDateEditor().getUiComponent()).getText();
                String D2 = ((JTextField)vto.getDateEditor().getUiComponent()).getText();
                
+               DD1=D1;
+               DD2=D2;
                
                String sql2 = "SELECT * FROM Salary where Date BETWEEN '"+D1+"' AND '"+D2+"'";
                pst1 = conn.prepareStatement(sql2);
@@ -273,11 +294,30 @@ public class viewSalaryReport extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       
+        
+        try{
+        String report = ".\\salary.jrxml";
+                        JasperDesign jd = JRXmlLoader.load(report);
+                        String sql1 = "SELECT * FROM Salary where Date BETWEEN '"+DD1+"' AND '"+DD2+"' order by employee_id";
+                        JRDesignQuery n = new JRDesignQuery();
+                        n.setText(sql1);
+                        jd.setQuery(n);
+                        JasperReport jr = JasperCompileManager.compileReport(jd);
+                        JasperPrint jp = JasperFillManager.fillReport(jr, null, conn);
+                        JasperViewer.viewReport(jp, false);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel datevalid;
     private javax.swing.JTextField id;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
